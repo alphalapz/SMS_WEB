@@ -1,0 +1,21 @@
+     
+      Pendientes para SMS_WEB:
+
+	- Guerra para que dejen la cebolla.
+	- Vista Crédito y cobranza.
+		- Filtros
+		- Cambiar status 
+	- Vista transportista (indexTransportista).
+		- Tabla con sus folios
+	- Validaciones login y aprobación Credito y Cobranza.
+	- Modificación de Contraseña en caso de extravío u olvido de la misma (solo administrador)
+	- Pila para su reloj.
+	- Enlazar las páginas.
+	- BD poblada para pruebas.
+	- Datos a cargar en cada vista.
+	- $_SESSION['id_shipt'];
+	- Corregir las Query's en todas las vistas;
+	- *Acceso único a X Folio
+	- Carga de imágenes de X folios
+	- Crear 2 menus (Transportista y Crédito & Cobranza.
+	

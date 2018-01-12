@@ -1,0 +1,30 @@
+[
+	{
+		"url":"indexTransportista.php",
+		"permissions":[31]
+	},
+	{
+		"url":"indexCredit.php",
+		"permissions":[21]
+	},
+	{
+		"url":"panel-control.php",
+		"permissions":[11]
+	},
+	{
+		"url":"cargar.php",
+		"permissions":[21]
+	},
+	{
+		"url":"registry.php",
+		"permissions":[11]
+	},
+	{
+		"url":"changePassword.php",
+		"permissions":[31,21,11]
+	},
+	{
+		"url":"indexCredito.php",
+		"permissions":[21]
+	}
+]	
