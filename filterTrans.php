@@ -1,4 +1,3 @@
-
 <?php
 	session_start();
 
@@ -15,13 +14,14 @@ echo "<div class=\"container-fluid\">";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";
 		echo "<div class=\"col-xs-10\">";
+
 		if (!isset($_POST['btn1'])){
 			redirectPHP('index.php');
 		}
 		$sql = applyFiltersTrans($_POST['btn1']);
 
 		$result = $conexion->query($sql);
-		
+
 			$buttons = array(array('Ver Remisiones', 'btn btn-primary'));
 			$form = array('folios.php','');
 			$aNames = array();
@@ -33,7 +33,7 @@ echo "<div class=\"container-fluid\">";
 			$cont = 0;			
 		foreach ($info_field as $valor) {
 			$cont++;
-			if ($cont<=4){
+			if ($cont <= 4){
 				echo "<th class='hidden'>".$valor->name."</th>";
 			}else{
 				echo "<th>".$valor->name."</th>";
@@ -46,11 +46,11 @@ echo "<div class=\"container-fluid\">";
 		echo "<tbody>";
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
-				$text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
+				$text = $form[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
 				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
 				$names = array_reverse($aNames);
 			for ($i = 0; $i < $cont; $i++){
-				if ($i<4){
+				if ($i < 4){
 					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
 				} else{
 				echo "<td>";
@@ -67,7 +67,6 @@ echo "<div class=\"container-fluid\">";
 		}
 		echo "</tbody>";
 		echo "</table>";		
-		
 		echo "</div>";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";

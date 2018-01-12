@@ -110,6 +110,6 @@ $txtResult = "<body>
 		$txtResult = $txtResult . "</div>";
 	$txtResult = $txtResult . "</div>";
 	$txtResult = $txtResult . "</body>";
-$_SESSION['TEMP'] = $txtResult;
+$_SESSION['CONTENT'] = $txtResult;
 redirectPHP('result.php');
 ?>

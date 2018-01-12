@@ -19,7 +19,6 @@
 			$_SESSION['key'] = $_POST['web_key'];
 		}
 		if (!isset($_SESSION['TEMP'])){
-			echo "TEMP No existe <br>";
 			$sql ="
 			SELECT
 			  SH.number AS Embarque,
@@ -45,12 +44,7 @@
 
 			$_SESSION['TEMP'] = $sql;
 		}
-		echo "EsTE ES EL POST: <br><pre>";
-		var_dump($_POST);
-		echo "SQL:". $_SESSION['TEMP'];
-		echo "</pre>";
 			$result = $conexion->query($_SESSION['TEMP']);
-
 			$x = array(
 				array('Gestionar imagenes', 'btn btn-warning')
 			);
@@ -59,6 +53,13 @@
 		?>
 		</div>
 		<div class="col-xs-1">
+		</div>
+		<div class="row">
+			<div class="col-xs-3"></div>
+			<div class="col-xs-4">
+				<input type="button" class="btn btn-danger" value="VOLVER">
+			</div>
+			<div class="col-xs-5"></div>
 		</div>
 	</div>
 	<?php include 'footer.php';?>

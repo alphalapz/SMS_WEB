@@ -6,6 +6,9 @@
 	echo "<br>";
 	
 	canAccess($_SESSION['loggedin'], 'indexTransportista.php', $_SESSION['rol']);
+	if (isset($_SESSION['TEMP'])){
+		unset($_SESSION['TEMP']);
+	}
 ?>
 <body>
 <?php

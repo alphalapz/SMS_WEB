@@ -235,7 +235,7 @@
 		echo "<tbody>";
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
-				$text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
+				$text = $form[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
 				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
 				$names = array_reverse($aNames);
 			for ($i = 0; $i < $cont; $i++){
