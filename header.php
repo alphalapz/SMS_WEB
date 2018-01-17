@@ -1,4 +1,7 @@
-<?php error_reporting();?>
+<?php 
+	error_reporting();
+	date_default_timezone_set('America/Monterrey');
+?>
 <html lang="es">
 <head>
 	<title></title>
@@ -8,10 +11,15 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/validate.js"></script>
 	<script src="js/myJs.js"></script>
+	<script type="text/javascript" src="js/moment.min.js"></script>
 	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript" src="js/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/myCss.css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" media="screen" />	
+	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" href="css/daterangepicker.css" />
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon.png">
 	<script>
 		$(document).ready(function() {
@@ -37,4 +45,5 @@
 			
 		});
 	</script>
+
 </head>

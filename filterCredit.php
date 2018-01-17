@@ -10,62 +10,97 @@ echo "<div class=\"container-fluid\">";
 
 	include 'menuTransportista.php';
 	include 'logo.php';
-
+	echo "<div class='row'>";
+		echo "<div class='col-md-1'></div>";
+		echo "<div class='col-md-10 text-right'>";
+		echo "<br>";
+			echo "<form action='filterCredit.php' method='POST' >";
+				echo "<p><h2> Filtrar por fecha</h2></p>";
+				echo "<input type='text' name='daterange' value='' />";
+				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
+			echo "</form>";
+		echo "</div>";
+		
+		echo "<div class='col-md-1'></div>";
+	echo "</div>";
 	echo "<div class=\"row\">";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";
 		echo "<div class=\"col-xs-10\">";
 
-		$sql = applyFiltersTrans($_POST['btn1']);
+		if (!isset($_POST['btn1'])){
+			redirectPHP('index.php');
+		}
+		
+		if (isset($_POST['daterange'])){
+			echo "<div class='text-right'>";
+			echo "<br>FILTRO APLICADO:";
+			echo "<br>Inicio: <b>".$startDate = substr($_POST['daterange'],0,10)."</b>";
 
+			echo "<br>Fin: <b>".$endDate = substr($_POST['daterange'],-10)."</b>";
+
+			echo "<form action='filterCredit.php' method='POST' >";
+				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
+			echo "</form>";
+			echo "</div>";
+			$sql = applyFiltersCoDate($_POST['btn1'], $startDate, $endDate);
+		}
+		else{
+			$sql = applyFiltersCo($_POST['btn1']);
+		}
 		$result = $conexion->query($sql);
-		
-			$buttons = array(array('Ver Remisiones', 'btn btn-primary'));
-			$form = array('folios.php','');
-			$aNames = array();
-			$info_field = $result->fetch_fields();
-		
-		echo " <table class='table table-hover' style='background-color:#C1AE9D'>";
-			echo " <thead>";
-				echo "<tr>";
-			$cont=0;			
-		foreach ($info_field as $valor) {
-			$cont++;
-			if ($cont<=4){
-				echo "<th class='hidden'>".$valor->name."</th>";
-			}else{
-				echo "<th>".$valor->name."</th>";
-			}
-				array_push($aNames, $valor->name);
-		}
-		echo "<th>Acciones</th>";
-		echo " </tr>";
-		echo " </thead>";
-		echo "<tbody>";
-		while($row = $result->fetch_array(MYSQLI_NUM)) {
-			echo "<tr>";
-				$text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
-				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
-				$names = array_reverse($aNames);
-			for ($i = 0; $i < $cont; $i++){
-				if ($i<4){
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
-				} else{
-				echo "<td>";
-					echo $row[$i];
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
-				echo "</td>";
+		echo "<div class='myScrollH'>";
+			echo " <table class='table table-hover table-condensed myTable'>";
+					echo " <thead>";
+						echo "<tr>";
+							echo "<th>FOLIO</th>";
+							echo "<th>REMISION</th>";
+							echo "<th>IMAGEN</th>";
+							echo "<th>ESTATUS</th>";
+							echo "<th>TRANSPORTISTA</th>";
+							echo "<th>FECHA_EMBARQUE</th>";
+							echo "<th>FECHA_ENTREGA</th>";
+							echo "<th>FECHA_SUBIDA</th>";
+							echo "<th>FECHA_REVISION</th>";
+						echo " </tr>";
+					echo " </thead>";
+				
+					echo "<tbody>";
+					$cont=0;
+				while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+					$cont++;
+						echo "<tr>";
+							?>
+							<form enctype="multipart/form-data" action="changeStatus.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cambiar el estatus?')){return false;}">
+								<?php
+								echo "<input type='label' name='evidence' class='hidden' value='". $row['id_evidence'] ."'>";
+								echo "<td>".$row['number']."</td>";
+								echo "<td>".$row['delivery_number']."</td>";
+								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name']."'>
+									<img  src='" . $row['file_location'] . $row['file_name']."' style='width:50px;height:50px;''/></a></td>";
+								echo "<td>";
+								if($row['b_accept'] == false){
+									echo "<input type='submit' name='submit' class='btn btn-primary' value='Pendiente'/>";
+								}else {
+									echo "<label class='label label-warning'>Aprobado</label>";
+								}
+								echo "</td>";
+								echo "<td>".$row['driver_name'] ."</td>";
+								echo "<td>".$row['shipt_date']."</td>";
+								echo "<td>".$row['ts_usr_upload']."</td>";
+								echo "<td>".$row['ts_usr_accept']."</td>";
+								echo "<td>".$row['ts_usr_upd']."</td>";
+								?>
+							</form>
+							<?php
+						echo " </tr>";
 				}
-			}
-			foreach($buttons as $btn){
-				echo "<td><input type='submit' value='$btn[0]' class='$btn[1]'/></td>";
-			}
-				echo "</form>";
-			echo "</tr>";
-		}
-		echo "</tbody>";
-		echo "</table>";		
-		
+
+				echo "</tbody>";
+				echo "</table>";
+			echo "</div>";
 		echo "</div>";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";
@@ -73,3 +108,35 @@ echo "<div class=\"container-fluid\">";
 	 include 'footer.php';
 echo "</div>";
 ?>
+<script type="text/javascript">
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			"ranges": {
+			"Hoy": [
+				new Date(),
+				new Date(),
+			],
+			"Ultima Semana": [
+				moment().subtract('days', 7), moment(),
+				new Date(),
+			],
+			"Ultimo mes": [
+				moment().subtract('months', 1), moment(),
+				new Date(),
+			],
+			"Ultimo año": [
+				moment().subtract('years', 1), moment(),
+				new Date(),
+			],
+			},
+			"alwaysShowCalendars": false,
+			"startDate": new Date(),
+			"endDate": new Date(),
+			"opens": "left",
+			
+			locale: {
+				format: 'YYYY-MM-DD'
+			},
+		});
+	});
+</script>

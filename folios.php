@@ -28,7 +28,7 @@
 			  SHR.m2 as m2,
 			  SHR.kg as Kilogramos,
 			  SHR.bales as Pacas,
-			  DE.name as Destino,
+			  DE.name as Destino_Embarque,
 			  SHS.name AS Estatus,
 			  SHIP.id_shipper as idShipper,
 			  SHR.id_row AS Folio,
@@ -49,19 +49,27 @@
 				array('Gestionar imagenes', 'btn btn-warning')
 			);
 			$form = array('cargar.php','');
+			
 			printTableB($result, $x, $form);
 		?>
 		</div>
 		<div class="col-xs-1">
 		</div>
+		</div>
 		<div class="row">
 			<div class="col-xs-3"></div>
-			<div class="col-xs-4">
-				<input type="button" class="btn btn-danger" value="VOLVER">
+			<div class="col-xs-4 text-right">
+			<br>
+			<?php if (!isset($_SESSION['fake'])){?>
+				
+				<form action="filterTrans.php" method="POST">
+					<input type="text" name="btn1" class="hidden" value="<?php if(isset($_SESSION['btn'])){echo $_SESSION['btn'];}else{echo 1;}?>">
+					<input type="submit" class="btn btn-danger" value="VOLVER">
+				</form>
+			<?php }?>
 			</div>
 			<div class="col-xs-5"></div>
 		</div>
-	</div>
 	<?php include 'footer.php';?>
 </div>
 </body>

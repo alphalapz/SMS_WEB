@@ -11,6 +11,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="index.php"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+        <li class=""><a class="navbar-brand" ><?php echo strtoupper($_SESSION['username']);?></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Salir</a></li>

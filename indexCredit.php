@@ -15,16 +15,39 @@
 	<div class="container-fluid">
 	<?php include 'logo.php' ?>
 		<div class="row">
-			<div class="col-sm-1">
-
+			<div class="col-xs-1">
 			</div>
-			<div class="col-sm-10 text-center">
+			<div class="col-xs-10 text-center">
 				<br><br>
 				<h3>Bienvenido <?php echo strtoupper($_SESSION['username'])."!"; ?></h3>
 				<br><br>
 
 				<?php
-				echo " <table class='table'>";
+				$sql = "SELECT 
+							E.id_evidence,
+							SH.number,
+							SHR.delivery_number,
+							E.file_location,
+							E.file_name,
+							E.file_location,
+							E.file_name,
+							E.b_accept,
+							SH.driver_name,
+							ts_usr_upload,
+							E.ts_usr_accept,
+							E.ts_usr_upd
+						FROM 
+							S_EVIDENCE AS E
+							INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
+							INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT 
+						WHERE 
+							NOT E.b_del AND SH.fk_shipt_st=11 
+						GROUP BY 
+							E.id_evidence;";
+
+				$result = $conexion->query($sql);
+				
+				echo " <table class='table table-hover table-condensed'>";
 					echo " <thead>";
 						echo "<tr>";
 							echo "<th>FOLIO</th>";
@@ -38,13 +61,6 @@
 						echo " </tr>";
 					echo " </thead>";
 				
-				$sql = "SELECT * FROM S_EVIDENCE AS E  
-							INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
-							INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT 
-							WHERE NOT E.b_del AND SH.fk_shipt_st=11 
-							GROUP BY E.id_evidence;";
-
-				$result = $conexion->query($sql);
 					echo "<tbody>";
 					$cont=0;
 				while($row = $result->fetch_array(MYSQLI_ASSOC)) {
@@ -65,7 +81,7 @@
 									echo "<label class='label label-warning'>Aprobado</label>";
 								}
 								echo "</td>";
-								echo "<td>" .$row['driver_name'] ."</td>";
+								echo "<td>".$row['driver_name'] ."</td>";
 								echo "<td>".$row['ts_usr_upload']."</td>";
 								echo "<td>".$row['ts_usr_accept']."</td>";
 								echo "<td>".$row['ts_usr_upd']."</td>";
@@ -80,7 +96,7 @@
 				?>
 
 			</div>
-			<div class="col-sm-1">
+			<div class="col-xs-1">
 			</div>
 		</div>
 	<?php include 'footer.php' ?>

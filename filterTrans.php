@@ -5,29 +5,62 @@
 	require 'functionsphp.php';
 	include 'header.php';
 
-echo "<div class=\"container-fluid\">";
+echo "<div class='container-fluid'>";
 
 	include 'menuTransportista.php';
 	include 'logo.php';
-
-	echo "<div class=\"row\">";
-		echo "<div class=\"col-xs-1\">";
+	echo "<div class='row'>";
+		echo "<div class='col-md-1'></div>";
+		echo "<div class='col-md-10 text-right'>";
+		echo "<br>";
+			echo "<form action='filterTrans.php' method='POST' >";
+				echo "<p><h2> Filtrar por fecha</h2></p>";
+				echo "<input type='text' name='daterange' value='' />";
+				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
+			echo "</form>";
 		echo "</div>";
-		echo "<div class=\"col-xs-10\">";
+		
+		echo "<div class='col-md-1'></div>";
+	echo "</div>";
+	echo "<div class='row'>";
+		echo "<div class='col-xs-1'>";
+		echo "</div>";
+		echo "<div class='col-xs-10'>";
 
 		if (!isset($_POST['btn1'])){
 			redirectPHP('index.php');
+		}else{
+		$_SESSION['btn'] = $_POST['btn1'];
 		}
-		$sql = applyFiltersTrans($_POST['btn1']);
-
+		if (isset($_POST['daterange'])){
+			echo "<div class='text-right'>";
+			echo "<br>FILTRO APLICADO:";
+			echo "<br>Inicio: <b>".$startDate = substr($_POST['daterange'],0,10)."</b>";
+			
+			echo "<br>Fin: <b>".$endDate = substr($_POST['daterange'],-10)."</b>";
+			
+			echo "<form action='filterTrans.php' method='POST' >";
+				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
+			echo "</form>";
+			echo "</div>";
+			$sql = applyFiltersTransDate($_POST['btn1'], $startDate, $endDate);
+		}
+		else{
+			$sql = applyFiltersTrans($_POST['btn1']);
+		}
+		
 		$result = $conexion->query($sql);
-
+	
+// echo(date("Y-m-d H:i:s",time()));
+		
 			$buttons = array(array('Ver Remisiones', 'btn btn-primary'));
 			$form = array('folios.php','');
 			$aNames = array();
 			$info_field = $result->fetch_fields();
-		
-		echo " <table class='table table-hover' style='background-color:#C1AE9D'>";
+		echo "<div class='myScrollH'>";
+		echo " <table class='table table-hover table-condensed myTable'>";
 			echo " <thead>";
 				echo "<tr>";
 			$cont = 0;			
@@ -68,9 +101,54 @@ echo "<div class=\"container-fluid\">";
 		echo "</tbody>";
 		echo "</table>";		
 		echo "</div>";
-		echo "<div class=\"col-xs-1\">";
+		echo "</div>";
+		echo "<div class='col-xs-1'>";
+		echo "</div>";
+		
+	echo "</div>";
+	echo "<br><div class='row'>";
+		echo "<div class='col-xs-4'>";
+		echo "</div>";
+		echo "<div class='col-xs-4'>";
+			echo "<div class='text-right'>";
+				echo "<a href='index.php'><input type='button' class='btn btn-danger' value='Volver'></a>";
+			echo "</div>";
+		echo "</div>";
+		echo "<div class='col-xs-4'>";
 		echo "</div>";
 	echo "</div>";
 	 include 'footer.php';
 echo "</div>";
 	 ?>
+	<script type="text/javascript">
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			"ranges": {
+			"Hoy": [
+				new Date(),
+				new Date(),
+			],
+			"Ultima Semana": [
+				moment().subtract('days', 7), moment(),
+				new Date(),
+			],
+			"Ultimo mes": [
+				moment().subtract('months', 1), moment(),
+				new Date(),
+			],
+			"Ultimo año": [
+				moment().subtract('years', 1), moment(),
+				new Date(),
+			],
+			},
+			"alwaysShowCalendars": false,
+			"startDate": new Date(),
+			"endDate": new Date(),
+			"opens": "left",
+			
+			locale: {
+				format: 'YYYY-MM-DD'
+			},
+		});
+	});
+	</script>

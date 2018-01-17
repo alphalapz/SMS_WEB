@@ -91,7 +91,7 @@ $txtResult = "<body>
 									NOW(),NOW(),NOW(),NOW())";
 							$result = $conexion->query($sql);
 							$txtResult = $txtResult .'<th><br>Imagen ' .$j. ').<span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
-							$txtResult = $txtResult ."<img src=".$target_path." class='deleteClass'/><br></th>";
+							$txtResult = $txtResult ."<a id='single_image' href='".$target_path."'><img src=".$target_path." class='deleteClass'/></a><br></th>";
 							//Verify if all Remissions had evidences with status B_ACCEPT equal to 1.
 
 							validateIfAllRemissionsHadEvidence($_SESSION['Folio']);
@@ -107,6 +107,11 @@ $txtResult = "<body>
 			$txtResult = $txtResult . "</div>";
 			$txtResult = $txtResult . "<div class=\"col-md-4\">";
 			$txtResult = $txtResult . "</div>";
+			$txtResult = $txtResult . "<div class=\"row\">
+			<div class=\"col-md-12 text-center\">
+				<a href=\"index.php\"><span class=\"glyphicon glyphicon-home\"></span> Inicio</a>
+			</div>
+		</div>";
 		$txtResult = $txtResult . "</div>";
 	$txtResult = $txtResult . "</div>";
 	$txtResult = $txtResult . "</body>";

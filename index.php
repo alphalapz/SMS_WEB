@@ -10,7 +10,6 @@
 		if(isset($_SESSION['fake']) && $_SESSION['fake'] == true){
 			session_destroy();
 		}
-		var_dump($_SESSION);
 	?>
 <body>
 	<div class="container">
