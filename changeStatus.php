@@ -1,7 +1,9 @@
 <?php
 	session_start();
 	require 'database.php';
+	require 'functionsphp.php';
 	include 'header.php';
+	canAccess($_SESSION['loggedin'], 'changeStatus.php', $_SESSION['rol']);
 	$id_Selected = $_POST['evidence'];
 	
 

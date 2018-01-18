@@ -3,8 +3,12 @@
 	require 'functionsphp.php';
 	require 'database.php';
 	include 'header.php';
+	
 	echo "<br>";
 	echo "<br>";
+	if(!isset($_SESSION['loggedin'])){
+		redirectphp('noPermission.php');
+	}
 ?>
 <body>
 	<?php include 'menuChofer.php'; ?>
@@ -18,6 +22,7 @@
 		if (!isset($_SESSION['key'])){
 			$_SESSION['key'] = $_POST['web_key'];
 		}
+
 		if (!isset($_SESSION['TEMP'])){
 			$sql ="
 			SELECT

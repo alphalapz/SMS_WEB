@@ -51,6 +51,7 @@ $_SESSION['key'] = $_GET['key'];
 		$_SESSION['username'] = $row['Nombre_chofer'];
 		$_SESSION['fake'] = true;
 		$_SESSION['loggedin'] = true;
+		
 		redirectPHP('folios.php');
 	} else {
 		redirectPHP('isnAccepted.php');

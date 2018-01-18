@@ -2,17 +2,9 @@
 <?php
  include 'header.php';
  session_start();
- var_dump($_SESSION);
+ 
  	require 'functionsphp.php';
-		//Check if can view the views
-		// if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-			// if (!canView("indexTransportista.php", $_SESSION['rol'])){
-				// redirectPHP('noPermission.php');
-			// }
-		// }
-		// else{
-			// redirectPHP('noLogin.php');
-		// }
+	canAccess($_SESSION['loggedin'], 'changePassword.php', $_SESSION['rol']);
 ?>
 	
 <body>

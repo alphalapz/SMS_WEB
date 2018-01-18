@@ -1,5 +1,7 @@
 <?php
 	session_start();
+	require 'functionsphp.php';
+	canAccess($_SESSION['loggedin'], 'updatePassword.php', $_SESSION['rol']);
 	require 'database.php';
 	include 'header.php';
 	
@@ -13,6 +15,7 @@
 	
 	session_destroy();
 	if($result){
+		include 'logo.php';
 		echo "<div class='text-center'><h1> CONTRASEÑA CAMBIADA CON EXITO</h1><br>";
 		echo "<a href='index.php'><input type='button' class='btn btn-danger' value='INGRESAR'/></a>";
 		echo "</div>";

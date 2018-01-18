@@ -9,6 +9,14 @@ body {
 	background-color:#C1AE9D;
 }
 
+.myFooter{
+	background-color:black;
+	color: #BCBCBC;
+	font-weight: normal; 
+	line-height: 48px; 
+	margin: 0;
+}
+
 h1 {
 	font-family: 'Verdana', sans-serif; 
 	font-size: 45px; 
@@ -16,7 +24,6 @@ h1 {
 	line-height: 48px; 
 	margin: 0; 
 }
-
 
 h2 { 
 	

@@ -5,6 +5,7 @@
 	require 'database.php';
 	require 'functionsphp.php';
 	include 'header.php';
+	canAccess($_SESSION['loggedin'], 'filterCredit.php', $_SESSION['rol']);
 
 echo "<div class=\"container-fluid\">";
 

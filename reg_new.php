@@ -1,6 +1,7 @@
 <?php
  include 'database.php';
- 
+ session_start();
+ canAccess($_SESSION['loggedin'], 'reg_new.php', $_SESSION['rol']);
  $form_pass = $_POST['password'];
  
  $hash = password_hash($form_pass, PASSWORD_BCRYPT); 

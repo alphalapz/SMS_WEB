@@ -4,6 +4,11 @@ session_start();
 include 'header.php';
 require 'database.php';
 require 'functionsphp.php';
+if (!isset($_SESSION['loggedin'])){
+	redirectPHP('noPermission.php');
+}
+else{
+	
 
 $txtResult = "<body>
 <div class=\"container-fluid\">
@@ -117,4 +122,5 @@ $txtResult = "<body>
 	$txtResult = $txtResult . "</body>";
 $_SESSION['CONTENT'] = $txtResult;
 redirectPHP('result.php');
+}
 ?>

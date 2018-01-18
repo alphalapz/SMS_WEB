@@ -19,16 +19,18 @@
 			<div class="col-sm-4">
 				<img src="assets/logo.svg" style="margin-top:20px"><br>
 				<br><br>
-				<h1>Login de Usuarios</h1>
+				<h1>Acceso Usuario</h1>
 				<br><br>
 				<form class="form-group" action="checklogin.php" method="post" >
 					<label><span class="glyphicon glyphicon-user">&nbsp;</span>Nombre Usuario:</label><br>
 					<input name="username" class="form-control" type="text" id="username" placeholder="Nombre de usuario" required>
 					<br><br>
-					<label><span class="glyphicon glyphicon-lock">&nbsp;</span>Password:</label><br>
+					<label><span class="glyphicon glyphicon-lock">&nbsp;</span>Contraseña:</label><br>
 					<input name="password" class="form-control" type="password" id="password" placeholder="Contraseña">
 					<br><br>
-					<input class="btn btn-primary" type="submit" name="Submit" value="LOGIN">
+					<p class="text-right">
+					<input class="btn btn-primary" type="submit" name="Submit" value="Ingresar">
+					</p>
 				</form>
 			</div>
 			<div class="col-sm-4">

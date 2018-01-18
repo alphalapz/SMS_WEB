@@ -1,12 +1,12 @@
+<?php 
+	include 'header.php'; 
+	session_start();
+?>
 <html>
 <head>
 <title>
 	Sin modificaciones
 </title>
-<?php 
-	include 'header.php'; 
-	session_start();
-?>
 </head>
 <body>
 <div class="container-fluid">
@@ -15,7 +15,8 @@
 		<div class="col-sm-2">
 		</div>
 		<div class="col-sm-8 text-center">
-			<p> <h3> Las evidencias para el folio <?php echo " " .$_SESSION['id_shipt']." ";?> no se pueden modificar por el momento.</h3></p><br>	
+			<p> <h3> Las evidencias para este folio no se pueden modificar por el momento.</h3></p><br>
+			Contacta a los encargados del area correspondiente si tienes alguna duda.
 		</div>
 		<div class="col-sm-2">
 		</div>

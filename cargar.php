@@ -9,10 +9,15 @@
 		$_SESSION['Folio']=$myPost[0];
 		$_SESSION['Remision']=$myPost[1];
 		$_SESSION['id']=$_POST['ID'];
-	}else{
-		redirectPHP('index.php');
 	}
-		  ?>
+	if (isset($_SESSION['loggedin']) AND $_SESSION['loggedin'] = true) {
+
+	}else{
+		redirectphp('noPermission.php');
+	}
+		
+	
+	?>
     <script src="js/script.js"></script>
     <body>
 	<?php include 'menuChofer.php'; ?>
@@ -56,9 +61,9 @@
 			</div>
 		</div>
 		<div class="row">
-		<div class="col-xs-2">
+		<div class="col-md-2">
 		</div>
-		<div class="col-xs-8 text-left">
+		<div class="col-md-8 text-left">
 		<?php 
 		##VERIFICAR SI ESTA EN STATUS PARA PONER O QUITAR EL BOTON DE CARGA DE IMAGENES##
 		
@@ -69,7 +74,7 @@
 		$row = $result->fetch_array(MYSQLI_NUM);
 		if ($row[0] !=12 ){
 		?>
-			<div id="forxsiv"> 
+			<div class="text-center" id="forxsiv"> 
                 
                 <form enctype="multipart/form-data" action="upload.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cargar la(s) imagen(es)?')){return false;}">
                     <div id="filediv">
@@ -89,7 +94,7 @@
 			</div>
 		<?php } ?>
 		</div>
-		<div class="col-xs-2">
+		<div class="col-md-2">
 		</div>
 	</div>
 	<?php include 'footer.php'; ?>

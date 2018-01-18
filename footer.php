@@ -1,6 +1,6 @@
 <br>
 <br>
 <br>
-<footer class="footer text-center navbar-fixed-bottom" style="background-color:black; text-color: white">
-	<h4>Software Aplicado SA. de CV.<br><span> Derechos reservados® </span></h>
+<footer class="footer myFooter text-center navbar-fixed-bottom">
+	<h4>©Copyright Software Aplicado S.A. de C.V.<br><span> Derechos reservados SMS_WEB® </span></h>
 </footer>
