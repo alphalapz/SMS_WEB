@@ -19,7 +19,7 @@
 			</div>
 			<div class="col-xs-10 text-center">
 				<br><br>
-				<h3>Bienvenido <?php echo strtoupper($_SESSION['username'])."!"; ?></h3>
+				<h3>Bienvenido <?php echo strtoupper($_SESSION['username']) . "!"; ?></h3>
 				<br><br>
 
 				<?php
@@ -69,11 +69,11 @@
 							?>
 							<form enctype="multipart/form-data" action="changeStatus.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cambiar el estatus?')){return false;}">
 								<?php
-								echo "<input type='label' name='evidence' class='hidden' value='". $row['id_evidence'] ."'>";
-								echo "<td>".$row['number']."</td>";
-								echo "<td>".$row['delivery_number']."</td>";
-								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name']."'>
-									<img  src='" . $row['file_location'] . $row['file_name']."' style='width:50px;height:50px;''/></a></td>";
+								echo "<input type='label' name='evidence' class='hidden' value='" . $row['id_evidence'] . "'>";
+								echo "<td>" . $row['number'] . "</td>";
+								echo "<td>" . $row['delivery_number'] . "</td>";
+								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name']. "'>
+									<img  src='" . $row['file_location'] . $row['file_name'] . "' style='width:50px;height:50px;''/></a></td>";
 								echo "<td>";
 								if($row['b_accept'] == false){
 									echo "<input type='submit' name='submit' class='btn btn-primary' value='Pendiente'/>";
@@ -81,10 +81,10 @@
 									echo "<label class='label label-warning'>Aprobado</label>";
 								}
 								echo "</td>";
-								echo "<td>".$row['driver_name'] ."</td>";
-								echo "<td>".$row['ts_usr_upload']."</td>";
-								echo "<td>".$row['ts_usr_accept']."</td>";
-								echo "<td>".$row['ts_usr_upd']."</td>";
+								echo "<td>" . $row['driver_name'] . "</td>";
+								echo "<td>" . $row['ts_usr_upload'] . "</td>";
+								echo "<td>" . $row['ts_usr_accept'] . "</td>";
+								echo "<td>" . $row['ts_usr_upd'] . "</td>";
 								?>
 							</form>
 							<?php

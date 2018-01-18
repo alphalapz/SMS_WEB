@@ -17,14 +17,14 @@
 					break;
 			}
 	}
-	
+
 	function printAllImgD($dir){
 		// $directory = "./"; #Directorio raíz
 		$directory = "./$dir"; 
 
 		$images = glob($directory . "*.{jpg,png,gif}", GLOB_BRACE);
 		
-		while($row)
+		while($row){
 			?>
 			<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo <?php echo $image; ?> ?')){return false;}"> 
 				<a id="single-image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
@@ -32,8 +32,7 @@
 				<input type="submit" name='submit' id="btn" name="btn" class='btn btn-danger' value='ELIMINAR'/>
 			</form>
 			<?php 
-		
-		
+		}
 	}
 
 	function printAllImg($dir){
@@ -41,10 +40,9 @@
 		$directory = "./$dir"; 
 
 		$images = glob($directory . "*.{jpg,png,gif}", GLOB_BRACE);
-		
+
 		foreach($images as $image)
 		{
-				
 			?>
 			<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo?')){return false;}"> 
 				<a id="single-image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
@@ -55,7 +53,7 @@
 		}
 		
 	}
-	
+
 	function deleteFile($file, $dir, $file_file){
 		if (file_exists($file)) {
 			if (!unlink($file)) {
@@ -64,7 +62,7 @@
 			else {
 			  echo ("Se borro: $file");
 			  require 'database.php';
-			  $sql="UPDATE S_EVIDENCE as EVI SET EVI.b_del = 1 WHERE EVI.file_name='".$file_file."' AND EVI.file_location='".$dir."';";
+			  $sql="UPDATE S_EVIDENCE as EVI SET EVI.b_del = 1 WHERE EVI.file_name='" . $file_file . "' AND EVI.file_location='" . $dir . "';";
 			  $result = $conexion->query($sql);
 			  echo $sql;
 			  }
@@ -72,16 +70,16 @@
 			echo "EL ARCHIVO $file NO EXISTE!";			
 		}
 	}
-	
+
 	function redirectPHP($url){
 		?>
 			<script>
 			redirectjs('<?php echo $url;?>');
 			</script>
 		<?php
-		header('Location:'. $url);
+		header('Location:' . $url);
 	}
-	
+
 	function canAccess($Session, $url, $rol){
 		if ($Session == 1) {
 			$Session = true;
@@ -97,34 +95,33 @@
 			redirectPHP('noLogin.php');
 		}
 	}
-	
+
 	function canView($url, $rol_Session){
 		$string = file_get_contents("urls.json");
 		$json_a = json_decode($string, true);
-	
+
 		$encontrado = false;
-		
+
 		foreach($json_a as $item){
 			foreach ($item as $key){
 				if(is_array($key)) {
 					foreach ($key as $val){
-						if ($encontrado && $val==$rol_Session && $item['url']==$url){
+						if ($encontrado && $val == $rol_Session && $item['url'] == $url){
 							return true;
 						}
 					}
 				}
 				else{
-					if ($key==$url){
-						$encontrado=true;
+					if ($key == $url){
+						$encontrado = true;
 					}
-						
 				}
 			}
 		}	
 		// echo "NO ENCONTRADO!";
 		return false;
 	}
-	
+
 	function applyFiltersTransDate($type, $starDate, $endDate){
 		$sql = "
 		SELECT
@@ -155,30 +152,30 @@
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=2 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=11 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=12 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 4:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			default:
@@ -186,7 +183,7 @@
 		}
 		return $sql;
 	}
-	
+
 	function applyFiltersTrans($type){
 		$sql = "
 		SELECT
@@ -217,27 +214,27 @@
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=2 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 GROUP BY SH.ID_SHIPT;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=11 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 GROUP BY SH.ID_SHIPT;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND SHS.id_shipt_st=12 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 GROUP BY SH.ID_SHIPT;";
 				break;
 			case 4:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = ".$_SESSION['user_id']." AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) GROUP BY SH.ID_SHIPT;";
 				break;
 			default:
 			break;
@@ -271,32 +268,32 @@
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=11 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=12 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12) AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			default:
-				$sql= $sql. "GROUP BY E.id_evidence;";
+				$sql = $sql . "GROUP BY E.id_evidence;";
 				break;
 		}
 		return $sql;
 	}
-	
+
 	function applyFiltersCo($type){
 		$sql = "
 			SELECT 
@@ -320,21 +317,21 @@
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=11
 				GROUP BY E.id_evidence;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=12
 				GROUP BY E.id_evidence;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql= $sql. "
+				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12)
 				GROUP BY E.id_evidence;";
@@ -344,29 +341,29 @@
 		}
 		return $sql;
 	}
-	
+
 	function printTable($result){
 		$info_field = $result->fetch_fields();
 		
 		echo " <table class='table table-hover myTable'>";
 			echo " <thead>";
 				echo "<tr>";
-			$cont=0;			
+			$cont = 0;
 		foreach ($info_field as $valor) {
 			$cont++;
-			echo "<th>".$valor->name."</th>";
+			echo "<th>" . $valor->name . "</th>";
 		}
 		echo " </tr>";
 		echo " </thead>";
 		echo "<tbody>";
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
-			for ($i=0;$i<$cont;$i++){
-				echo "<td>".$row[$i]."</td>";
+			for ($i = 0; $i < $cont; $i++){
+				echo "<td>" . $row[$i] . "</td>";
 			}
 			echo "</tr>";
 		}
-		
+
 	}
 	//$buttons must be and array of arrays
 	//i.e: printableB
@@ -384,10 +381,10 @@
 			$cont = 0;			
 		foreach ($info_field as $valor) {
 			$cont++;
-			if ($cont<=4){
-				echo "<th class='hidden'>".$valor->name."</th>";
+			if ($cont <= 4){
+				echo "<th class='hidden'>" . $valor->name . "</th>";
 			}else{
-				echo "<th>".$valor->name."</th>";
+				echo "<th>" . $valor->name . "</th>";
 			}
 				array_push($aNames, $valor->name);
 		}
@@ -398,15 +395,15 @@
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
 				$text = $form[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
-				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
+				echo "<form class='form-control' action='$form[0]' method='POST' " . $text;
 				$names = array_reverse($aNames);
 			for ($i = 0; $i < $cont; $i++){
-				if ($i<4){
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+				if ($i < 4){
+					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				} else{
 				echo "<td>";
 					echo $row[$i];
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				echo "</td>";
 				}
 			}
@@ -420,67 +417,67 @@
 		echo "</table>";
 		echo "</div>";
 	}
-	
+
 	function printTableC($result, $buttons, $form, $hidden){
 		$aNames = array();
 		$info_field = $result->fetch_fields();
-		
+
 		echo " <table class='table table-hover table-condensed myTable'>";
 			echo " <thead>";
 				echo "<tr>";
 			$cont = 0;			
-		
+
 		foreach ($info_field as $valor) {
 			$cont++;
-			if ($cont<=$hidden){
-				echo "<th class='hidden'>".$valor->name."</th>";
+			if ($cont <= $hidden){
+				echo "<th class='hidden'>" . $valor->name . "</th>";
 			}else{
-				echo "<th>".$valor->name."</th>";
+				echo "<th>" . $valor->name . "</th>";
 			}
 				array_push($aNames, $valor->name);
 		}
-		
+
 		echo "<th>Acciones</th>";
 		echo " </tr>";
 		echo " </thead>";
 		echo "<tbody>";
-		
+
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
 				$text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
-				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
+				echo "<form class='form-control' action='$form[0]' method='POST' " . $text;
 				$names = array_reverse($aNames);
-			
+
 			for ($i = 0; $i < $cont; $i++){
-				if ($i<$hidden){
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+				if ($i < $hidden){
+					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				} else{
 				echo "<td>";
 					echo $row[$i];
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				echo "</td>";
 				}
 			}
-			
+
 			foreach($buttons as $btn){
 				echo "<td><input type='submit' value='$btn[0]' class='$btn[1]'/></td>";
 			}
-			
+
 				echo "</form>";
 			echo "</tr>";
 		}
-		
+
 		echo "</tbody>";
 		echo "</table>";
-		
+
 	}
-	
+
 	###############################################
 	## $folio = id_shipt of the table S_SHIPT_ROW #
 	###############################################
 	function validateIfAllRemissionsHadEvidence($folio){
 		require 'database.php';
-		$sql = "SELECT id_row FROM S_SHIPT_ROW WHERE id_shipt =". $folio ." GROUP BY id_row;";
+		$sql = "SELECT id_row FROM S_SHIPT_ROW WHERE id_shipt =" . $folio ." GROUP BY id_row;";
 		$result = $conexion->query($sql);
 		$sql2 = "SELECT fk_ship_row FROM S_EVIDENCE WHERE NOT b_del;";
 		$result2 = $conexion->query($sql2);
@@ -496,7 +493,7 @@
 				$found = true;
 			}
 			else{
-				echo "<br> El folio # : " .$row[0]." esta pendiente de que se suban evidencias :(";
+				echo "<br> El folio # : " . $row[0] . " esta pendiente de que se suban evidencias :(";
 				$completo = false;
 				break;
 			}
@@ -511,27 +508,30 @@
 			$result = $conexion->query($sql);
 		}
 	}
-	
-	function changeStatusToPorLiberarOsea2WhenBorrasOneRemisionEvidence($id){
+
+	function changeStatusRemisionEvidenceDelete($id){
 		require 'database.php';
 		$sql = "SELECT EVI.fk_ship_ship FROM S_EVIDENCE AS EVI WHERE id_evidence = $id;";
 		$result = $conexion->query($sql);
 		$row = $result->fetch_array(MYSQLI_NUM);
 		validateIfAllRemissionsHadEvidence($row[0]);
 	}
-	
+
+	//Validate json urls.json
 	function printJson(){
+		$string = file_get_contents("urls.json");
+		$json = json_decode($string, true);
 		foreach($json_a as $item){
 			foreach ($item as $key){
 				if(is_array($key)) {
 					foreach ($key as $val){
-						echo $val."<br>";
+						echo $val . "<br>";
 					}
 				}
 				else{
-					echo $key."<br>";
+					echo $key . "<br>";
 				}
 			}
 		}
-	}	
+	}
 ?>

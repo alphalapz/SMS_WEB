@@ -41,8 +41,8 @@
 						echo "<tr>";
 							echo "<td>FOLIO###</td>";
 							echo "<td>REMISION###</td>";
-							echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name']."'>
-								<img  src='" . $row['file_location'] . $row['file_name']."' style='width:50px;height:50px;''/></a></td>";
+							echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name'] . "'>
+								<img  src='" . $row['file_location'] . $row['file_name'] . "' style='width:50px;height:50px;''/></a></td>";
 							echo "<td>";
 							if($row['b_accept']){
 								echo "<label class='label label-success'>ON";
@@ -51,10 +51,10 @@
 							}
 							echo "</label>";
 							echo "</td>";
-							echo "<td>" .$row['driver_name'] ."</td>";
-							echo "<td>FECHA".$row['ts_usr_upload']."</td>";
-							echo "<td>FECHA".$row['ts_usr_accept']."</td>";
-							echo "<td>FECHA".$row['ts_usr_upd']."</td>";
+							echo "<td>" . $row['driver_name'] . "</td>";
+							echo "<td>FECHA" . $row['ts_usr_upload'] . "</td>";
+							echo "<td>FECHA" . $row['ts_usr_accept'] . "</td>";
+							echo "<td>FECHA" . $row['ts_usr_upd'] . "</td>";
 						echo " </tr>";
 				}
 

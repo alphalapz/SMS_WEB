@@ -7,7 +7,7 @@
 	echo "<br>";
 	echo "<br>";
 	if(!isset($_SESSION['loggedin'])){
-		redirectphp('noPermission.php');
+		redirectPHP('noPermission.php');
 	}
 ?>
 <body>
@@ -24,7 +24,7 @@
 		}
 
 		if (!isset($_SESSION['TEMP'])){
-			$sql ="
+			$sql = "
 			SELECT
 			  SH.number AS Embarque,
 			  SHR.delivery_number as Remision,

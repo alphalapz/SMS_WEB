@@ -137,22 +137,21 @@ span.psw {
 <body>
 <?php
 // $fecha = date('Y-m-j');
-echo "<br>Fecha Original: " .$fecha = "2018-05-24";
-echo "<br>Fecha en formato: " .$fecha = strtotime ( '+15 day' , strtotime ( $fecha ) ) ;
-echo "<br>Fecha final: " .$fecha = date ( 'Y-m-d' , $fecha )."<br><br>";
+	echo "<br>Fecha Original: " . $fecha = "2018-05-24";
+	echo "<br>Fecha en formato: " . $fecha = strtotime ( '+15 day' , strtotime ( $fecha ) ) ;
+	echo "<br>Fecha final: " . $fecha = date ( 'Y-m-d' , $fecha ) . "<br><br>";
 
+	$starDate="2018-01-11";
+	$endDate="2018-01-11";
+	echo "$starDate <-1<br>";
+	echo "$endDate <-1<br>";
 
-		$starDate="2018-01-11";
-		$endDate="2018-01-11";
-		echo "$starDate <-1<br>";
-		echo "$endDate <-1<br>";
-		
-		echo "<br>" .$starDate = strtotime ( '-1 day' , strtotime ( $starDate ) ) ;
-		echo "<br>" .$starDate = date ( 'Y-m-d' , $starDate );
-		echo "<br>" .$endDate = strtotime ( '+1 day' , strtotime ( $endDate ) ) ;
-		echo "<br>" .$endDate = date ( 'Y-m-d' , $endDate );
-		echo "<br>$starDate <-2<br>";
-		echo "$endDate <-2<br>";
+	echo "<br>" . $starDate = strtotime ( '-1 day' , strtotime ( $starDate ) ) ;
+	echo "<br>" . $starDate = date ( 'Y-m-d' , $starDate );
+	echo "<br>" . $endDate = strtotime ( '+1 day' , strtotime ( $endDate ) ) ;
+	echo "<br>" . $endDate = date ( 'Y-m-d' , $endDate );
+	echo "<br>$starDate <-2<br>";
+	echo "$endDate <-2<br>";
 ?>
 <div class="container-fluid">
 	<div class="row">

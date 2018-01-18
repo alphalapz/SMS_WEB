@@ -16,7 +16,7 @@ echo "<div class='container-fluid'>";
 			echo "<form action='filterTrans.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input type='text' name='daterange' value='' />";
-				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
@@ -36,12 +36,12 @@ echo "<div class='container-fluid'>";
 		if (isset($_POST['daterange'])){
 			echo "<div class='text-right'>";
 			echo "<br>FILTRO APLICADO:";
-			echo "<br>Inicio: <b>".$startDate = substr($_POST['daterange'],0,10)."</b>";
+			echo "<br>Inicio: <b>" . $startDate = substr($_POST['daterange'],0,10) . "</b>";
 			
-			echo "<br>Fin: <b>".$endDate = substr($_POST['daterange'],-10)."</b>";
+			echo "<br>Fin: <b>" . $endDate = substr($_POST['daterange'],-10) . "</b>";
 			
 			echo "<form action='filterTrans.php' method='POST' >";
-				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
 			echo "</form>";
 			echo "</div>";
@@ -53,8 +53,6 @@ echo "<div class='container-fluid'>";
 		
 		$result = $conexion->query($sql);
 	
-// echo(date("Y-m-d H:i:s",time()));
-		
 			$buttons = array(array('Ver Remisiones', 'btn btn-primary'));
 			$form = array('folios.php','');
 			$aNames = array();
@@ -67,9 +65,9 @@ echo "<div class='container-fluid'>";
 		foreach ($info_field as $valor) {
 			$cont++;
 			if ($cont <= 4){
-				echo "<th class='hidden'>".$valor->name."</th>";
+				echo "<th class='hidden'>" . $valor->name . "</th>";
 			}else{
-				echo "<th>".$valor->name."</th>";
+				echo "<th>" . $valor->name . "</th>";
 			}
 				array_push($aNames, $valor->name);
 		}
@@ -80,15 +78,15 @@ echo "<div class='container-fluid'>";
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
 				$text = $form[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
-				echo "<form class='form-control' action='$form[0]' method='POST' " .$text;
+				echo "<form class='form-control' action='$form[0]' method='POST' " . $text;
 				$names = array_reverse($aNames);
 			for ($i = 0; $i < $cont; $i++){
 				if ($i < 4){
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+					echo "<input type='text' class='hidden' name='" . array_pop($names). "' value='$row[$i]'/>";
 				} else{
 				echo "<td>";
 					echo $row[$i];
-					echo "<input type='text' class='hidden' name='". array_pop($names)."' value='$row[$i]'/>";
+					echo "<input type='text' class='hidden' name='" . array_pop($names). "' value='$row[$i]'/>";
 				echo "</td>";
 				}
 			}
@@ -119,7 +117,7 @@ echo "<div class='container-fluid'>";
 	echo "</div>";
 	 include 'footer.php';
 echo "</div>";
-	 ?>
+?>
 	<script type="text/javascript">
 	$(function() {
 		$('input[name="daterange"]').daterangepicker({

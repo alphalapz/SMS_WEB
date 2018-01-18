@@ -23,7 +23,7 @@
 			<div class="col-sm-4">
 			</div>
 			<div class="col-sm-4 ">
-			<h3 class="text-center">Bienvenido <?php echo " " . strtoupper($_SESSION['username'])."!"; ?></h3><br>
+			<h3 class="text-center">Bienvenido <?php echo " " . strtoupper($_SESSION['username']) . "!"; ?></h3><br>
 			<table class="table table-hover myTable">
 				<th>Id usuario</th>
 				<th>Nombre usuario</th>

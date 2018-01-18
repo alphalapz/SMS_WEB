@@ -9,7 +9,7 @@
 	
  	$hash = password_hash($form_pass, PASSWORD_BCRYPT); 
 	
-	$sql = "UPDATE `cu_usr` SET `pswd` = '" .$hash. "' WHERE `cu_usr`.`id_usr` = ". $_SESSION['user_id'].";";
+	$sql = "UPDATE `cu_usr` SET `pswd` = '" . $hash . "' WHERE `cu_usr`.`id_usr` = " . $_SESSION['user_id'] . ";";
 	
 	$result = $conexion->query($sql);
 	

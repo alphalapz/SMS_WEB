@@ -14,7 +14,7 @@
  $count = mysqli_num_rows($result);
 
  if ($count == 1) {
- echo "<br />". "El Nombre de Usuario ya esta tomado." . "<br />";
+ echo "<br>El Nombre de Usuario ya esta asignado a alguien mas.<br>";
 
  echo "<a href='index.php'>Por favor escoja otro Nombre</a>";
  }

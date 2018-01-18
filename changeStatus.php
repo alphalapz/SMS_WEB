@@ -5,17 +5,11 @@
 	include 'header.php';
 	canAccess($_SESSION['loggedin'], 'changeStatus.php', $_SESSION['rol']);
 	$id_Selected = $_POST['evidence'];
-	
 
- 	//ALPHALAPZ:Queda pendientes las validaciones y los updates correctos para esta parte (STATUS 0|1 && STATUS XACEPTAR 'X' | ACEPTADO 'X')
-	############################################################################################################################
-	###								THIS PART WORKS PERFECTLY									 							 ###
-	$sql = "UPDATE `S_EVIDENCE` SET `b_accept` = '1' WHERE `id_evidence` = $id_Selected;"; 	 	 							 ###
-	$result = $conexion->query($sql);														 								 ###
-	$sql = "UPDATE `S_EVIDENCE` SET `fk_usr_accept` =".$_SESSION['user_id']." WHERE `id_evidence` = $id_Selected;"; 	 	 ###
-	$result = $conexion->query($sql);														 	 							 ###
-	############################################################################################################################
-	//SABER SI TODAS LAS EVIDENCIAS DE LAS REMISIONES DE UN FOLIO X YA ESTAN APROBADAS
+	$sql = "UPDATE `S_EVIDENCE` SET `b_accept` = '1' WHERE `id_evidence` = $id_Selected;";
+	$result = $conexion->query($sql);
+	$sql = "UPDATE `S_EVIDENCE` SET `fk_usr_accept` =" . $_SESSION['user_id'] . " WHERE `id_evidence` = $id_Selected;";
+	$result = $conexion->query($sql);
 	
 	$sql = "SELECT SH.id_shipt as folio, SHR.id_row as remision, SH.fk_shipt_st as status
 		FROM S_EVIDENCE AS EVI

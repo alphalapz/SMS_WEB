@@ -1,4 +1,3 @@
-
 <?php
 	session_start();
 
@@ -18,7 +17,7 @@ echo "<div class=\"container-fluid\">";
 			echo "<form action='filterCredit.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input type='text' name='daterange' value='' />";
-				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
@@ -37,12 +36,12 @@ echo "<div class=\"container-fluid\">";
 		if (isset($_POST['daterange'])){
 			echo "<div class='text-right'>";
 			echo "<br>FILTRO APLICADO:";
-			echo "<br>Inicio: <b>".$startDate = substr($_POST['daterange'],0,10)."</b>";
+			echo "<br>Inicio: <b>" . $startDate = substr($_POST['daterange'],0,10) . "</b>";
 
-			echo "<br>Fin: <b>".$endDate = substr($_POST['daterange'],-10)."</b>";
+			echo "<br>Fin: <b>" . $endDate = substr($_POST['daterange'],-10) . "</b>";
 
 			echo "<form action='filterCredit.php' method='POST' >";
-				echo "<input type='text' class='hidden' name='btn1' value='".$_POST['btn1']."' >";
+				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
 			echo "</form>";
 			echo "</div>";
@@ -76,11 +75,11 @@ echo "<div class=\"container-fluid\">";
 							?>
 							<form enctype="multipart/form-data" action="changeStatus.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cambiar el estatus?')){return false;}">
 								<?php
-								echo "<input type='label' name='evidence' class='hidden' value='". $row['id_evidence'] ."'>";
-								echo "<td>".$row['number']."</td>";
-								echo "<td>".$row['delivery_number']."</td>";
-								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name']."'>
-									<img  src='" . $row['file_location'] . $row['file_name']."' style='width:50px;height:50px;''/></a></td>";
+								echo "<input type='label' name='evidence' class='hidden' value='" . $row['id_evidence'] ."'>";
+								echo "<td>" . $row['number'] . "</td>";
+								echo "<td>" . $row['delivery_number'] . "</td>";
+								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name'] . "'>
+									<img  src='" . $row['file_location'] . $row['file_name'] . "' style='width:50px;height:50px;''/></a></td>";
 								echo "<td>";
 								if($row['b_accept'] == false){
 									echo "<input type='submit' name='submit' class='btn btn-primary' value='Pendiente'/>";
@@ -88,11 +87,11 @@ echo "<div class=\"container-fluid\">";
 									echo "<label class='label label-warning'>Aprobado</label>";
 								}
 								echo "</td>";
-								echo "<td>".$row['driver_name'] ."</td>";
-								echo "<td>".$row['shipt_date']."</td>";
-								echo "<td>".$row['ts_usr_upload']."</td>";
-								echo "<td>".$row['ts_usr_accept']."</td>";
-								echo "<td>".$row['ts_usr_upd']."</td>";
+								echo "<td>" . $row['driver_name'] . "</td>";
+								echo "<td>" . $row['shipt_date'] . "</td>";
+								echo "<td>" . $row['ts_usr_upload'] . "</td>";
+								echo "<td>" . $row['ts_usr_accept'] . "</td>";
+								echo "<td>" . $row['ts_usr_upd'] . "</td>";
 								?>
 							</form>
 							<?php
@@ -117,11 +116,11 @@ echo "</div>";
 				new Date(),
 				new Date(),
 			],
-			"Ultima Semana": [
+			"Ultims 7 dias": [
 				moment().subtract('days', 7), moment(),
 				new Date(),
 			],
-			"Ultimo mes": [
+			"Ultimos 30 dias": [
 				moment().subtract('months', 1), moment(),
 				new Date(),
 			],
