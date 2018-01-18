@@ -3,9 +3,9 @@ var abc = 0;
     
 //};
 $(document).ready(function() {
-    $('#add_more').click(function() {//When Add More Files button Clicked these function Willbe Called (new file field is added dynamically)
+    $('#add_more').click(function() {//for Add More Files button Clicked these function Will be Called (new file field is added dynamically)
         $(this).before($("<div/>", {id: 'filediv'}).fadeIn('slow').append(
-                $("<input/>", {name: 'file[]', type: 'file', id: 'file'}),        
+                $("<input/>", {name: 'file[]', type: 'file', id: 'file', accept:'image/*'}),        
                 $("<br/><br/>")
                 ));
     });
@@ -41,7 +41,7 @@ $('body').on('change', '#file', function(){
         var name = $(":file").val();
         if (!name)
         {
-            alert("Se debe subir al menos una imagen");
+            alert("Se debe subir al menos una imagen!.");
             e.preventDefault();
         }
     });

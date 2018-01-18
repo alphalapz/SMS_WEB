@@ -154,28 +154,28 @@
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 4:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) AND SH.TS_USR_RELEASE BETWEEN '$starDate' AND '$endDate 23:59:59' 
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			default:
@@ -241,7 +241,7 @@
 		}
 		return $sql;
 	}
-	
+
 	function applyFiltersCoDate($type, $starDate, $endDate){
 
 		$starDate = str_replace('-', ':', $starDate);
@@ -363,8 +363,8 @@
 			}
 			echo "</tr>";
 		}
-
 	}
+
 	//$buttons must be and array of arrays
 	//i.e: printableB
 	// $buttons = array(

@@ -77,7 +77,7 @@
 					
 					<form enctype="multipart/form-data" action="upload.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cargar la(s) imagen(es)?')){return false;}">
 						<div id="filediv">
-							<input name="file[]" class="form-group" type="file" id="file"/>
+							<input name="file[]" class="form-group" type="file" id="file" accept="image/*"/>
 						</div>
 						<br/>
 						<p class="text-center">

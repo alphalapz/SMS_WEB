@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="col-sm-4">
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-4 wrapper">
 				<img src="assets/logo.svg" style="margin-top:20px"><br>
 				<br><br>
 				<h1>Acceso Usuario</h1>
@@ -29,7 +29,7 @@
 					<input name="password" class="form-control" type="password" id="password" placeholder="Contraseña">
 					<br><br>
 					<p class="text-right">
-					<input class="btn btn-primary" type="submit" name="Submit" value="Ingresar">
+					<input class="btn btn-lg btn-primary btn-block" type="submit" name="Submit" value="Ingresar">
 					</p>
 				</form>
 			</div>

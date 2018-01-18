@@ -52,7 +52,8 @@ echo "<div class=\"container-fluid\">";
 		}
 		$result = $conexion->query($sql);
 		echo "<div class='myScrollH'>";
-			echo " <table class='table table-hover table-condensed myTable'>";
+		echo "<div class='' onclick=\"$('#myInput01').focus();\">Filtrar por FOLIO: <input type='text' id='myInput01' onkeyup='filterTable(0)' placeholder='Buscar por folio...' title='Buscar Folio'></div>";
+			echo " <table class='table table-hover table-condensed myTable' id='myTable'>";
 					echo " <thead>";
 						echo "<tr>";
 							echo "<th>FOLIO</th>";
@@ -79,7 +80,7 @@ echo "<div class=\"container-fluid\">";
 								echo "<td>" . $row['number'] . "</td>";
 								echo "<td>" . $row['delivery_number'] . "</td>";
 								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name'] . "'>
-									<img  src='" . $row['file_location'] . $row['file_name'] . "' style='width:50px;height:50px;''/></a></td>";
+									<img class='img-rounded' src='" . $row['file_location'] . $row['file_name'] . "' style='width:30px;height:30px;border:2px solid transparent;border-color:white'/></a></td>";
 								echo "<td>";
 								if($row['b_accept'] == false){
 									echo "<input type='submit' name='submit' class='btn btn-primary' value='Pendiente'/>";
@@ -133,10 +134,27 @@ echo "</div>";
 			"startDate": new Date(),
 			"endDate": new Date(),
 			"opens": "left",
-			
+
 			locale: {
 				format: 'YYYY-MM-DD'
 			},
 		});
 	});
+	function filterTable(col) {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("myInput01");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[col];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
 </script>

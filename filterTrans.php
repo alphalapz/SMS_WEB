@@ -58,7 +58,8 @@ echo "<div class='container-fluid'>";
 			$aNames = array();
 			$info_field = $result->fetch_fields();
 		echo "<div class='myScrollH'>";
-		echo " <table class='table table-hover table-condensed myTable'>";
+		echo "Filtrar por transportista: <input type='text' id='myInput01' onkeyup='filterTable(4)' placeholder='Buscar folio...' title='Filtrar por folio...'>";
+		echo " <table class='tablesorter table table-hover table-condensed myTable' id='myTable'>";
 			echo " <thead>";
 				echo "<tr>";
 			$cont = 0;			
@@ -118,7 +119,14 @@ echo "<div class='container-fluid'>";
 	 include 'footer.php';
 echo "</div>";
 ?>
-	<script type="text/javascript">
+	<script>
+	
+	$(document).ready(function() { 
+    $("table") 
+    .tablesorter({widthFixed: true, widgets: ['zebra']}) 
+    .tablesorterPager({container: $("#pager")}); 
+});     
+
 	$(function() {
 		$('input[name="daterange"]').daterangepicker({
 			"ranges": {
@@ -149,4 +157,22 @@ echo "</div>";
 			},
 		});
 	});
+	
+	function filterTable(col) {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("myInput01");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[col];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
 	</script>
