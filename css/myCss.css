@@ -3,7 +3,29 @@ body {
 	background-color: #BCBCBC;
 	background-repeat: repeat;
 
-	}
+}
+td:hover{
+	background-color: #FF6A00;
+}
+
+.myBtnInputTex{
+	padding: 4px 5px 5px 2px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    border: black solid 2px;
+    box-shadow: 1px 1px 2px #000000;
+}
+.myBtnInputTex:hover{
+	background-color: #FF6A00;
+	box-shadow: 4px 4px 8px #000000;
+	
+	-moz-transform: translate(-1px, -1px);
+    -ms-transform: translate(-1px, -1px);
+    -o-transform: translate(-1px, -1px);
+    -webkit-transform: translate(-1px, -1px);
+    transform: translate(-1px, -1px)
+
+}
 	
 .myTable{
 	background-color:#C1AE9D;

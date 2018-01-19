@@ -16,7 +16,7 @@ echo "<div class=\"container-fluid\">";
 		echo "<br>";
 			echo "<form action='filterCredit.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
-				echo "<input type='text' name='daterange' value='' />";
+				echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
 				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
@@ -52,7 +52,13 @@ echo "<div class=\"container-fluid\">";
 		}
 		$result = $conexion->query($sql);
 		echo "<div class='myScrollH'>";
-		echo "<div class='' onclick=\"$('#myInput01').focus();\">Filtrar por FOLIO: <input type='text' id='myInput01' onkeyup='filterTable(0)' placeholder='Buscar por folio...' title='Buscar Folio'></div>";
+		echo "<div class='text-right' onclick=\"$('#myInput01').focus();\">
+				<label>
+				<input type='text' class='myBtnInputTex' id='myInput01' onkeyup='filterTable(0)' placeholder='Buscar por folio...' title='Buscar Folio'>
+				<span class='glyphicon glyphicon-search'>
+				</span>
+				</label> 
+			</div>";
 			echo " <table class='table table-hover table-condensed myTable' id='myTable'>";
 					echo " <thead>";
 						echo "<tr>";

@@ -22,7 +22,7 @@
 					if (isset($_POST['username']) OR (isset($_POST['password'])) ){
 						$user = $_POST['username'];
 						$password = $_POST['password'];
-						$sql = "SELECT * FROM $tbl_name WHERE name = '$user' AND b_web = 1";
+						$sql = "SELECT * FROM $tbl_name WHERE name = '$user' AND NOT b_del AND b_web = 1";
 						$result = $conexion->query($sql);
 						$row = $result->fetch_array(MYSQLI_ASSOC);
 
