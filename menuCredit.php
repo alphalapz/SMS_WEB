@@ -12,7 +12,8 @@
       <ul class="nav navbar-nav">
         
 		<li class="active"><a href="index.php"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <!--
+        <li class=""><a class="navbar-brand" ><?php echo strtoupper($_SESSION['username']);?></a></li>
+		<!--
 		<li class=""><a href="index.php"><span class="glyphicon glyphicon-filter"></span> Pendientes de subir</a></li>
         <li class=""><a href="index.php"><span class="glyphicon glyphicon-filter"></span> pendientes de aprobar</a></li>
         <li class=""><a href="index.php"><span class="glyphicon glyphicon-filter"></span> Evidencias aprobadas</a></li>

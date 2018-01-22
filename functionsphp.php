@@ -421,8 +421,7 @@
 	function printTableC($result, $buttons, $form, $hidden){
 		$aNames = array();
 		$info_field = $result->fetch_fields();
-
-		echo " <table class='table table-hover table-condensed myTable'>";
+		echo " <table id='myTable' class='table table-hover table-condensed myTable'>";
 			echo " <thead>";
 				echo "<tr>";
 			$cont = 0;			
@@ -444,7 +443,8 @@
 
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
-				$text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
+				// $text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
+				$text = ">";
 				echo "<form class='form-control' action='$form[0]' method='POST' " . $text;
 				$names = array_reverse($aNames);
 

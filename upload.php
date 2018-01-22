@@ -53,19 +53,22 @@ else{
 							$mxFileSize=1000000 * 12;
 
 							if ($_FILES["file"]["size"][$i] > $mxFileSize) { //12MB aprox files can be uploaded.
-							  $txtResult = $txtResult . 'Imagen ' . $j . ').<span class="error">La imagen excede el tamaño máximo permitido.' . $mxFileSize . '</span><br/><br/>';
-							  exit();
+								$txtResult = $txtResult . 'Imagen ' . $j . ').<span class="error">La imagen excede el tamaño máximo permitido.' . $mxFileSize . '</span><br/><br/>';
+								$_SESSION['CONTENT'] = $txtResult;
+								redirectPHP('result.php');
 							}
 							if (!in_array($file_extension, $validextensions)) {
 								is_dir($target_path)==false;
-							  $txtResult = $txtResult . "<br>Imagen ' .$j. ').<span class=\"error\">El archivo posee una extensión no válida</span><br/><br/>";
-							  exit();
+								$txtResult = $txtResult . "<br>Imagen ' .$j. ').<span class=\"error\">El archivo posee una extensión no válida</span><br/><br/>";
+								$_SESSION['CONTENT'] = $txtResult;
+								redirectPHP('result.php');
 							}
 							$location = $_SERVER['DOCUMENT_ROOT'] . "/" . basename(__DIR__). "/" . $target_path;
 
 							if(file_exists($location)){
 								$txtResult = $txtResult . "<br>El archivo " . $j . " ya existe!";
-								exit();
+								$_SESSION['CONTENT'] = $txtResult;
+								redirectPHP('result.php');
 							}
 
 							$yearFolder = "uploads/" . date("Y") . "/";
@@ -78,7 +81,7 @@ else{
 							}
 
 							if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $target_path)) {//if file moved to uploads folder
-								$sql = "SELECT COUNT(id_evidence) as num FROM S_EVIDENCE";
+								$sql = "SELECT id_evidence as num FROM S_EVIDENCE ORDER BY id_evidence DESC LIMIT 1;";
 								$result = $conexion->query($sql);
 								$row = $result->fetch_array(MYSQLI_ASSOC);
 								$max = $row['num'] + 1;
@@ -89,13 +92,15 @@ else{
 										ts_usr_upload, ts_usr_accept, ts_usr_ins, ts_usr_upd)
 									VALUES
 										(" . $max . ", '" . $file_name . "." . $file_extension . "' , '" . $target_path_dir . "' , 0, 0, 0," 
-										. $_SESSION['Folio'] . "," . $_SESSION['delivery_id'] . "," . $_SESSION['user_id'] . ",1,1,1,
+										. $_SESSION['Folio'] . "," . $_SESSION['delivery_id'] . "," . $_SESSION['user_id'] . ", 1, 1, " . $_SESSION['user_id'] . ",
 										NOW(),NOW(),NOW(),NOW())";
+// echo $sql;
+// exit();
 								$result = $conexion->query($sql);
 								$txtResult = $txtResult . '<th><br>Imagen ' . $j . ').<span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
 								$txtResult = $txtResult . "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></th>";
+								
 								//Verify if all Remissions had evidences with status B_ACCEPT equal to 1.
-
 								validateIfAllRemissionsHadEvidence($_SESSION['Folio']);
 
 							} else {//if file was not moved.

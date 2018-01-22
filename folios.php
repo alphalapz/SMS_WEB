@@ -3,7 +3,6 @@
 	require 'functionsphp.php';
 	require 'database.php';
 	include 'header.php';
-	
 	echo "<br>";
 	echo "<br>";
 	if(!isset($_SESSION['loggedin'])){
@@ -45,7 +44,7 @@
 			  INNER JOIN au_cus AS cu ON cu.id_cus = SHR.fk_customer
 			  INNER JOIN su_destin AS DE ON DE.id_destin = SHR.fk_destin
 			  INNER JOIN su_shipper AS SHIP ON SHIP.id_shipper = SH.fk_shipper
-			WHERE SH.web_key='" . $_POST['web_key'] . "'";
+			WHERE SH.web_key='" . $_POST['web_key'] . "' ORDER BY SHR.delivery_number";
 
 			$_SESSION['TEMP'] = $sql;
 		}
@@ -54,8 +53,10 @@
 				array('Gestionar imagenes', 'btn btn-warning')
 			);
 			$form = array('cargar.php','');
-			
-			printTableB($result, $x, $form);
+			echo "<div class='myScrollH'>";
+			echo "Filtrar: <input type='text' id='myInput01' onkeyup='filterTable(1)' placeholder='Buscar folio...' title='Filtrar por folio...'>";
+			printTableC($result, $x, $form,0);
+			echo "</div>";
 		?>
 		</div>
 		<div class="col-xs-1">
@@ -69,7 +70,7 @@
 				
 				<form action="filterTrans.php" method="POST">
 					<input type="text" name="btn1" class="hidden" value="<?php if(isset($_SESSION['btn'])){echo $_SESSION['btn'];}else{echo 1;}?>">
-					<input type="submit" class="btn btn-danger" value="VOLVER">
+					<input type="submit" class="btn btn-primary" value="VOLVER">
 				</form>
 			<?php }?>
 			</div>
@@ -77,4 +78,6 @@
 		</div>
 	<?php include 'footer.php';?>
 </div>
+	<?php include 'applyfilter.php';?>
+
 </body>

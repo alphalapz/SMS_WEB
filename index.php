@@ -23,10 +23,10 @@
 				<br><br>
 				<form class="form-group" action="checklogin.php" method="post" >
 					<label><span class="glyphicon glyphicon-user">&nbsp;</span>Nombre Usuario:</label><br>
-					<input name="username" class="form-control" type="text" id="username" placeholder="Nombre de usuario" required>
+					<input name="username" class="form-control" type="text" id="username" placeholder="Usuario" required>
 					<br><br>
 					<label><span class="glyphicon glyphicon-lock">&nbsp;</span>Contraseña:</label><br>
-					<input name="password" class="form-control" type="password" id="password" placeholder="Contraseña">
+					<input name="password" class="form-control myFocus" type="password" id="password" placeholder="Contraseña">
 					<br><br>
 					<p class="text-right">
 					<input class="btn btn-lg btn-primary btn-block" type="submit" name="Submit" value="Ingresar">
