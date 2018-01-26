@@ -3,7 +3,7 @@
 	var_dump($_POST);
 	
 	if (isset($_POST['id']) and isset($_POST['actionT'])){
-		if ($_POST['actionT'] == 'inactive'){
+		if ($_POST['actionT'] == 0){
 			$sql = "UPDATE `cu_usr` SET `b_del` = '1' WHERE `cu_usr`.`id_usr` = " . $_POST['id'] . ";";
 			//$sql = "DELETE FROM `cu_usr` WHERE `cu_usr`.`id_usr` = " . $_POST['id'] . ";";
 			echo $sql;
@@ -14,7 +14,7 @@
 			}
 		}
 		else {
-			if ($_POST['actionT'] == 'active'){
+			if ($_POST['actionT'] == 1){
 				$sql = "UPDATE `cu_usr` SET `b_del` = '0' WHERE `cu_usr`.`id_usr` = " . $_POST['id'] . ";";
 				//$sql = "DELETE FROM `cu_usr` WHERE `cu_usr`.`id_usr` = " . $_POST['id'] . ";";
 				echo $sql;

@@ -11,12 +11,17 @@
 	$sql = "UPDATE `S_EVIDENCE` SET `fk_usr_accept` =" . $_SESSION['user_id'] . " WHERE `id_evidence` = $id_Selected;";
 	$result = $conexion->query($sql);
 	
-	$sql = "SELECT SH.id_shipt as folio, SHR.id_row as remision, SH.fk_shipt_st as status
-		FROM S_EVIDENCE AS EVI
+	$sql = "
+	SELECT SH.id_shipt as folio, 
+		SHR.id_row as remision, 
+		SH.fk_shipt_st as status
+	FROM S_EVIDENCE AS EVI
 		INNER JOIN S_SHIPT_ROW AS SHR ON EVI.fk_ship_row = SHR.id_row
 		INNER JOIN S_SHIPT AS SH ON EVI.fk_ship_ship = SH.id_shipt
-		WHERE EVI.id_evidence=$id_Selected AND NOT EVI.b_del AND NOT SH.b_del
-		GROUP BY EVI.id_evidence;";
+	WHERE EVI.id_evidence=$id_Selected 
+		AND NOT EVI.b_del 
+		AND NOT SH.b_del
+	GROUP BY EVI.id_evidence;";
 				
 	$result = $conexion->query($sql);
 	
@@ -25,7 +30,11 @@
 	$remision = $row[1];
 	$status = $row[2];
 	
-	$sql = "SELECT b_accept FROM S_EVIDENCE WHERE NOT b_del AND fk_ship_ship=$folio;";# AND fk_ship_row=$remision;";
+	$sql = "
+	SELECT b_accept 
+	FROM S_EVIDENCE 
+	WHERE NOT b_del 
+		AND fk_ship_ship=$folio;";# AND fk_ship_row=$remision;";
 	
 	$result = $conexion->query($sql);
 	$evidenceArray = array();
@@ -46,17 +55,16 @@
 ?>
 
 <div class="Myouter">
-  <div class="Mymiddle">
-    <div class="Myinner">
-	 <h3>Cargando</h3>
-     <div class="progress text-center">
-	  <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
-	  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:85%">
-	  <p> Aprobando evidencia:</p>
-	  </div>
+	<div class="Mymiddle">
+		<div class="Myinner">
+			<h3>Cargando</h3>
+			<div class="progress text-center">
+				<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:85%">
+					<p> Aprobando evidencia:</p>
+				</div>
+			</div>
+		</div>
 	</div>
-    </div>
-  </div>
 </div>
 <script>
 	redirectjs("IndexCredit.php");

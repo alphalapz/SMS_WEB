@@ -1,17 +1,14 @@
+<?php
+	session_start();
+	include 'database.php';
+	include 'header.php';
+	include 'functionsphp.php';
 
-	<?php
-		session_start();
-		include 'database.php';
-		include 'header.php';
-		include 'functionsphp.php';
-
-		canAccess($_SESSION['loggedin'], 'indexCredit.php', $_SESSION['rol']);
-	?>
+	canAccess($_SESSION['loggedin'], 'indexCredit.php', $_SESSION['rol']);
+?>
 
 <body>
-<?php	include 'menuCredit.php';
-
-?>
+<?php	include 'menuCredit.php';?>
 	<div class="container-fluid">
 	<?php include 'logo.php' ?>
 		<div class="row">
@@ -23,27 +20,28 @@
 				<br><br>
 
 				<?php
-				$sql = "SELECT 
-							E.id_evidence,
-							SH.number,
-							SHR.delivery_number,
-							E.file_location,
-							E.file_name,
-							E.file_location,
-							E.file_name,
-							E.b_accept,
-							SH.driver_name,
-							ts_usr_upload,
-							E.ts_usr_accept,
-							E.ts_usr_upd
-						FROM 
-							S_EVIDENCE AS E
-							INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
-							INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT 
-						WHERE 
-							NOT E.b_del AND SH.fk_shipt_st=11 
-						GROUP BY 
-							E.id_evidence;";
+				$sql = "
+					SELECT 
+						E.id_evidence,
+						SH.number,
+						SHR.delivery_number,
+						E.file_location,
+						E.file_name,
+						E.file_location,
+						E.file_name,
+						E.b_accept,
+						SH.driver_name,
+						ts_usr_upload,
+						E.ts_usr_accept,
+						E.ts_usr_upd
+					FROM 
+						S_EVIDENCE AS E
+						INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
+						INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT 
+					WHERE 
+						NOT E.b_del AND SH.fk_shipt_st=11 
+					GROUP BY 
+						E.id_evidence;";
 
 				$result = $conexion->query($sql);
 				
@@ -102,4 +100,3 @@
 	<?php include 'footer.php' ?>
 	</div>
 </body>
-</html>

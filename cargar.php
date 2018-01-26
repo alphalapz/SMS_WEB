@@ -5,8 +5,8 @@
 	session_start(); 
 
 	if (!empty($_POST)){
-		$_SESSION['Folio'] = $_POST['Embarque'];
-		$_SESSION['Remision'] = $_POST['Remision'];
+		$_SESSION['Folio'] = $_POST['EMBARQUE'];
+		$_SESSION['Remision'] = $_POST['REMISION'];
 		$_SESSION['id'] = $_POST['ID'];
 	}
 	if (isset($_SESSION['loggedin']) AND $_SESSION['loggedin'] = true){
@@ -25,8 +25,8 @@
 			<div class="col-xs-12 text-center">
 				<h2>Remision #:&nbsp<b><?php echo $_SESSION['Remision'];?> </b></h2>
 				<form action="folios.php" method="POST">
-						<input type="text" class="hidden" value="<?php echo $_SESSION['web_key'];?>">
-						<input type="submit" class="btn btn-danger" value="VOLVER">
+					<input type="text" class="hidden" value="<?php echo $_SESSION['web_key'];?>">
+					<input type="submit" class="btn btn-danger" value="VOLVER">
 				</form>
 			</div>
 		</div>
@@ -41,9 +41,19 @@
 				<div id="imgs" class="text-center">
 				
 					<?php
+						$sql = "
+						SELECT 
+							EVI.file_location, 
+							EVI.file_name, 
+							EVI.id_evidence, 
+							EVI.b_accept 
+						FROM S_EVIDENCE as EVI 
+							INNER JOIN S_SHIPT_ROW as SHR ON EVI.fk_ship_row=SHR.id_row 
+						WHERE SHR.DELIVERY_NUMBER=" . $_SESSION['Remision'] . " 
+							AND SHR.id_shipt=" . $_SESSION['id'] . " 
+							AND NOT EVI.b_del 
+						GROUP BY SHR.delivery_number, EVI.file_name;";
 						
-						
-						$sql = "SELECT EVI.file_location, EVI.file_name, EVI.id_evidence, EVI.b_accept FROM S_EVIDENCE as EVI INNER JOIN S_SHIPT_ROW as SHR ON EVI.fk_ship_row=SHR.id_row WHERE SHR.DELIVERY_NUMBER=" . $_SESSION['Remision'] . " AND SHR.id_shipt=" . $_SESSION['id'] . " AND NOT EVI.b_del GROUP BY SHR.delivery_number, EVI.file_name;";
 						$result = $conexion->query($sql);
 						while($row = $result->fetch_array(MYSQLI_NUM)){
 							$image = $row[0] . $row[1];
@@ -61,6 +71,7 @@
 							<?php 	
 						}
 					?>
+
 				</div>
 			</div>
 			<div class="col-xs-4">
@@ -76,11 +87,16 @@
 			</div>
 			<div class="col-md-4">
 				<?php 
-				##VERIFICAR SI ESTA EN STATUS PARA PONER O QUITAR EL BOTON DE CARGA DE IMAGENES##
+				##//Verify if the status is 0 or 1 for insert or not the button of Load Images\\##
 				
-				$sql = "SELECT SH.fk_shipt_st FROM S_SHIPT_ROW AS SHR 
+				$sql = "
+				SELECT 
+					SH.fk_shipt_st 
+				FROM S_SHIPT_ROW AS SHR 
 					INNER JOIN S_SHIPT AS SH ON SH.id_shipt = SHR.id_shipt 
-					WHERE SHR.DELIVERY_NUMBER=" . $_SESSION['Remision'] . " AND SH.id_shipt=" . $_SESSION['id'] . ";";
+					WHERE SHR.DELIVERY_NUMBER=" . $_SESSION['Remision'] . " 
+					AND SH.id_shipt=" . $_SESSION['id'] . ";";
+					
 				$result = $conexion->query($sql);
 				$row = $result->fetch_array(MYSQLI_NUM);
 				if ($row[0] != 12 ){

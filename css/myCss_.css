@@ -2,38 +2,8 @@ body {
 	/* background-image: url("../assets/fondo.jpg"); */
 	background-color: #BCBCBC;
 	background-repeat: repeat;
-
 }
-td:hover{
-	background-color: #FF6A00;
-}
-
-.myBtnInputTex{
-	padding: 4px 5px 5px 2px;
-    border-radius: 12px;
-    -moz-border-radius: 12px;
-    border: black solid 2px;
-    box-shadow: 1px 1px 2px #000000;
-}
-.myBtnInputTex:hover{
-	background-color: #FF6A00;
-	box-shadow: 4px 4px 8px #000000;
 	
-	-moz-transform: translate(-1px, -1px);
-    -ms-transform: translate(-1px, -1px);
-    -o-transform: translate(-1px, -1px);
-    -webkit-transform: translate(-1px, -1px);
-    transform: translate(-1px, -1px)
-
-}
-.myFocus:focus{
-	box-shadow: 0 0 20px rgba(35, 173, 278, 1);
-}
-
-.myFocus:hover{
-	box-shadow: 0 0 20px rgba(35, 173, 278, 1);
-}
-
 .myTable{
 	background-color:#C1AE9D;
 }
@@ -86,6 +56,8 @@ h2 {
 
 .myScrollH {
     width: 100%;
+	max-height: 70%;
+    overflow-y: auto;
     overflow-x: auto;
     white-space: nowrap;
 	background-color: #ff6600;

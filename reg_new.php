@@ -6,8 +6,7 @@
  
  $hash = password_hash($form_pass, PASSWORD_BCRYPT); 
 
- $buscarUsuario = "SELECT * FROM $tbl_name
- WHERE user = '$_POST[username]' ";
+ $buscarUsuario = "SELECT * FROM $tbl_name WHERE user = '$_POST[username]' ";
 
  $result = $conexion->query($buscarUsuario);
 

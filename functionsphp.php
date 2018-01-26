@@ -1,40 +1,55 @@
 <?php
+
+###AUTOR: ALPHALAPZ AND DEINIS AND GIL ENOC
+include 'const.php';
+	/*
+	 * Redirect according to the type of user.
+	 */
 	function checkRol($rol){
 		switch($rol){
-				case 11:
-					// echo "Rol admin <br>";
-					redirectPHP('panel-control.php');
-					break;
-				case 21:
-					// echo "Rol Crédito y cobranza<br>";
-					redirectPHP('indexCredito.php');
-					break;
-				case 31:
-					// echo "Rol Transportista <br>";
-					redirectPHP('indexTransportista.php');
-					break;
-				default:
-					break;
+			case ROL_ADMIN:
+				// echo "Rol admin <br>";
+				redirectPHP('panel-control.php');
+				break;
+			case ROL_CREDIT:
+				// echo "Rol Crédito y cobranza<br>";
+				redirectPHP('indexCredito.php');
+				break;
+			case ROL_TRANS:
+				// echo "Rol Transportista <br>";
+				redirectPHP('indexTransportista.php');
+				break;
+			default:
+				break;
 			}
 	}
-
-	function printAllImgD($dir){
-		// $directory = "./"; #Directorio raíz
-		$directory = "./$dir"; 
-
-		$images = glob($directory . "*.{jpg,png,gif}", GLOB_BRACE);
-		
-		while($row){
-			?>
-			<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo <?php echo $image; ?> ?')){return false;}"> 
-				<a id="single-image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
-				<input type="text" class="hidden" name="MyFile" id="MyFile" value="<?php echo $image; ?>"/>
-				<input type="submit" name='submit' id="btn" name="btn" class='btn btn-danger' value='ELIMINAR'/>
-			</form>
-			<?php 
+	
+	/*
+	 *	Check the value of the initial row for the queries
+	 */
+	function pagerStartRow(){
+		if (!isset($_GET['startrow']) or !is_numeric($_GET['startrow'])) {
+		  return DEF_START_ROW_VALUE;
+		} else {
+		  return (int)$_GET['startrow'];
 		}
 	}
-
+	
+	/*
+	 *	Check the value of the range values por the paginate.
+	 */
+	function pagerNumOfRows(){
+		if (!isset($_GET['range']) or !is_numeric($_GET['range'])) {
+		  return DEF_RANGE_VALUE;
+		} else {
+		  return (int)$_GET['range'];
+		}
+	}
+	
+	/*
+	 *	Print all images of a specific directory, include this function the fancyBox JS
+	 *	$dir = myDir/subdir/
+	 */
 	function printAllImg($dir){
 		// $directory = "./"; #Directorio raíz
 		$directory = "./$dir"; 
@@ -53,33 +68,46 @@
 		}
 		
 	}
-
-	function deleteFile($file, $dir, $file_file){
-		if (file_exists($file)) {
-			if (!unlink($file)) {
-			  echo ("Error borrando: $file");
-			  }
+	
+	/*
+	 *	Delete the file
+	 *	$full_path = Full URL and file name including the extension of the file
+	 *	$dir = the path of the file to delete but excluding the name of the file and its extension
+	 *	$file_name = The name of the file including its extension.
+	 */
+	function deleteFile($full_path, $dir, $file_name){
+		if (file_exists($full_path)){
+			if (!unlink($full_path)){
+				echo ("Error borrando: $full_path");
+			}
 			else {
-			  echo ("Se borro: $file");
-			  require 'database.php';
-			  $sql="UPDATE S_EVIDENCE as EVI SET EVI.b_del = 1 WHERE EVI.file_name='" . $file_file . "' AND EVI.file_location='" . $dir . "';";
-			  $result = $conexion->query($sql);
-			  echo $sql;
-			  }
+				echo ("Se borro: $full_path");
+				require 'database.php';
+				$sql="UPDATE S_EVIDENCE as EVI SET EVI.b_del = 1 WHERE EVI.file_name='" . $file_name . "' AND EVI.file_location='" . $dir . "';";
+				$result = $conexion->query($sql);
+				echo $sql;
+			}
 		} else {
-			echo "EL ARCHIVO $file NO EXISTE!";			
+			echo "EL ARCHIVO $full_path NO EXISTE!";			
 		}
 	}
 
+	/*
+	 *	redirect to the URL
+	 *	$url = the url to redirect the current page.
+	 */
 	function redirectPHP($url){
 		?>
 			<script>
-			redirectjs('<?php echo $url;?>');
+			window.location.replace('<?php echo $url;?>');
 			</script>
 		<?php
 		header('Location:' . $url);
 	}
 
+	/*
+	 *	Verify if the current user can access to the current view.
+	 */
 	function canAccess($Session, $url, $rol){
 		if ($Session == 1) {
 			$Session = true;
@@ -96,6 +124,9 @@
 		}
 	}
 
+	/*
+	 * Verify in the file urls.json if the current user can view the requested view. 
+	 */
 	function canView($url, $rol_Session){
 		$string = file_get_contents("urls.json");
 		$json_a = json_decode($string, true);
@@ -118,10 +149,19 @@
 				}
 			}
 		}	
-		// echo "NO ENCONTRADO!";
 		return false;
 	}
 
+	/*
+	 *	Apply the date filter for carrier view
+	 *	$type = The button pressed
+	 *	$starDate = The initial date range
+	 *	$endDate = The final date range
+	 *	$type = 1 ::::: Evidence for uploading
+	 *  $type = 2 ::::: Evidence for accepting
+	 *  $type = 3 ::::: Accepted evidence
+	 *  $type = 4 ::::: All the evidences
+	 */
 	function applyFiltersTransDate($type, $starDate, $endDate){
 		$sql = "
 		SELECT
@@ -154,28 +194,28 @@
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			case 4:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ") AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY SH.ID_SHIPT;";
 				break;
 			default:
@@ -184,6 +224,14 @@
 		return $sql;
 	}
 
+	/*
+	 *	Show the data using the selected filter view carrier
+	 *	$type = The button pressed
+	 *  $type = 1 ::::: Evidence for uploading
+	 *  $type = 2 ::::: Evidence for accepting
+	 *  $type = 3 ::::: Accepted evidence
+	 *  $type = 4 ::::: All the evidences
+	 */
 	function applyFiltersTrans($type){
 		$sql = "
 		SELECT
@@ -216,25 +264,25 @@
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=2 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " GROUP BY SH.ID_SHIPT;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=11 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " GROUP BY SH.ID_SHIPT;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=12 GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO . " GROUP BY SH.ID_SHIPT;";
 				break;
 			case 4:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=12 OR SHS.id_shipt_st=11 OR SHS.id_shipt_st=2) GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ") GROUP BY SH.ID_SHIPT;";
 				break;
 			default:
 			break;
@@ -242,6 +290,16 @@
 		return $sql;
 	}
 
+	/*
+	 *	Apply the date filter for Credit and collection view
+	 *	$type = The button pressed
+	 *	$starDate = The initial date range
+	 *	$endDate = The final date range
+	 *	$type = 1 ::::: Evidence for uploading
+	 *  $type = 2 ::::: Evidence for accepting
+	 *  $type = 3 ::::: Accepted evidence
+	 *  $type = 4 ::::: All the evidences
+	 */
 	function applyFiltersCoDate($type, $starDate, $endDate){
 
 		$starDate = str_replace('-', ':', $starDate);
@@ -256,7 +314,7 @@
 				E.file_location,
 				E.file_name,
 				E.b_accept,
-				SH.driver_name,
+				SHP.name,
 				SH.shipt_date,
 				E.ts_usr_upload,
 				E.ts_usr_accept,
@@ -264,27 +322,29 @@
 			FROM 
 				S_EVIDENCE AS E
 				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
-				INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT ";
+				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
+					AND SHR.ID_SHIPT = SH.ID_SHIPT
+				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=11 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=12 AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12) AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
+					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ") AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			default:
@@ -294,6 +354,14 @@
 		return $sql;
 	}
 
+	/*
+	 *	Show the data using the selected filter view Credit and collection
+	 *	$type = The button pressed
+	 *  $type = 1 ::::: Evidence for uploading
+	 *  $type = 2 ::::: Evidence for accepting
+	 *  $type = 3 ::::: Accepted evidence
+	 *  $type = 4 ::::: All the evidences
+	 */
 	function applyFiltersCo($type){
 		$sql = "
 			SELECT 
@@ -305,7 +373,7 @@
 				E.file_location,
 				E.file_name,
 				E.b_accept,
-				SH.driver_name,
+				SHP.name,
 				SH.shipt_date,
 				E.ts_usr_upload,
 				E.ts_usr_accept,
@@ -313,27 +381,29 @@
 			FROM 
 				S_EVIDENCE AS E
 				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
-				INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT ";
+				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
+					AND SHR.ID_SHIPT = SH.ID_SHIPT
+				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
 			case 1:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=11
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . "
 				GROUP BY E.id_evidence;";
 				break;
 			case 2:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=12
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . "
 				GROUP BY E.id_evidence;";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12)
+					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ")
 				GROUP BY E.id_evidence;";
 				break;
 			default:
@@ -342,6 +412,9 @@
 		return $sql;
 	}
 
+	/*
+	 *	Print table from a query
+	 */
 	function printTable($result){
 		$info_field = $result->fetch_fields();
 		
@@ -363,6 +436,7 @@
 			}
 			echo "</tr>";
 		}
+		echo "</table>";
 	}
 
 	//$buttons must be and array of arrays
@@ -417,9 +491,18 @@
 		echo "</table>";
 		echo "</div>";
 	}
-
-	function printTableC($result, $buttons, $form, $hidden){
+	
+	//	$buttons must be and array of arrays
+	//	i.e: printableB
+	//		$buttons = array(
+	//			array('Texto del boton', 'btn btn-warning') 
+	//		);
+	//		$form = array('test.php','¿Seguro?');
+	//		$hidden = Integer for hide the columns (initial column = 1) 
+	##IF DONT NEED TO HIDE USE THE printTableB FUNCTION OR SET $HIDDEN TO 0
+	function printTableC($result, $buttons, $form, $hidden, $index){
 		$aNames = array();
+		$formAction = $hidden + 2;
 		$info_field = $result->fetch_fields();
 		echo " <table id='myTable' class='table table-hover table-condensed myTable'>";
 			echo " <thead>";
@@ -433,10 +516,11 @@
 			}else{
 				echo "<th>" . $valor->name . "</th>";
 			}
+			if ($cont == $formAction){
+				echo "<th>ACCIONES</th>";
+			}
 				array_push($aNames, $valor->name);
 		}
-
-		echo "<th>Acciones</th>";
 		echo " </tr>";
 		echo " </thead>";
 		echo "<tbody>";
@@ -449,6 +533,19 @@
 				$names = array_reverse($aNames);
 
 			for ($i = 0; $i < $cont; $i++){
+
+				##ACTION FORM ADDED HERE
+				if ($i==$formAction){
+					foreach($buttons as $btn){
+						echo "<td><button type='submit' class='$btn[1]'>$btn[2]</button></td>";
+					}
+				}
+				## FORMAT FIELD WHEN IS NUMBER (FLOAT)
+				// if ($i == $hidden+3 || $i == $hidden+4){
+				if (in_array($i,$index, true)){
+					$row[$i] = strcmp('double',getType($row[$i])) ? number_format($row[$i], 2, ".", ",") : $row[$i];
+				} 
+
 				if ($i < $hidden){
 					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				} else{
@@ -457,12 +554,8 @@
 					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
 				echo "</td>";
 				}
-			}
 
-			foreach($buttons as $btn){
-				echo "<td><input type='submit' value='$btn[0]' class='$btn[1]'/></td>";
 			}
-
 				echo "</form>";
 			echo "</tr>";
 		}
@@ -472,12 +565,19 @@
 
 	}
 
-	###############################################
-	## $folio = id_shipt of the table S_SHIPT_ROW #
-	###############################################
+	/*
+	 *Validate if all remissions have at least one evidence
+	 */
+	 ###############################################
+	 ## $folio = id_shipt of the table S_SHIPT_ROW #
+	 ###############################################
 	function validateIfAllRemissionsHadEvidence($folio){
 		require 'database.php';
-		$sql = "SELECT id_row FROM S_SHIPT_ROW WHERE id_shipt =" . $folio ." GROUP BY id_row;";
+		$sql = "
+			SELECT id_row 
+			FROM S_SHIPT_ROW 
+			WHERE id_shipt =" . $folio ." 
+			GROUP BY id_row;";
 		$result = $conexion->query($sql);
 		$sql2 = "SELECT fk_ship_row FROM S_EVIDENCE WHERE NOT b_del;";
 		$result2 = $conexion->query($sql2);
@@ -499,16 +599,19 @@
 			}
 		}
 		if($completo){
-			$sql = "UPDATE S_SHIPT SET fk_shipt_st = 11 WHERE id_shipt=$folio";
+			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_POR_ACEPTAR . " WHERE id_shipt=$folio";
 			$result = $conexion->query($sql);
 			echo "<br>EL FOLIO ESTA COMPLETO,<br> TODAS LAS REMISIONES POSEEN AL MENOS UNA EVIDENCIA.<br>Favor de esperar respuesta por parte de crédito y cobranza.";
 		}
 		else{
-			$sql = "UPDATE S_SHIPT SET fk_shipt_st = 2 WHERE id_shipt=$folio";
+			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_LIBERADO . " WHERE id_shipt=$folio";
 			$result = $conexion->query($sql);
 		}
 	}
 
+	/*
+	 *	Change Status of Shipping order when Remission Evidence is Delete
+	 */
 	function changeStatusRemisionEvidenceDelete($id){
 		require 'database.php';
 		$sql = "SELECT EVI.fk_ship_ship FROM S_EVIDENCE AS EVI WHERE id_evidence = $id;";
@@ -517,7 +620,8 @@
 		validateIfAllRemissionsHadEvidence($row[0]);
 	}
 
-	//Validate json urls.json
+	//Validate the json 'urls.json'
+	##PRINT ALL JSON WITH THE ACCESS PERMISSIONS
 	function printJson(){
 		$string = file_get_contents("urls.json");
 		$json = json_decode($string, true);

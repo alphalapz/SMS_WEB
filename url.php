@@ -16,8 +16,6 @@ if ($_GET['key']==null){
 
 require 'database.php';
 $_SESSION['key'] = $_GET['key'];
-
-// $sql="SELECT id_shipt, id_row, number FROM S_SHIPT as S INNER JOIN SS_SHIPT_ST as TP ON S.fk_shipt_st = TP.id_shipt_st WHERE S.web_key='" . $key. "' AND TP.id_shipt_st=2";
 	$sql ="
 		SELECT
 			SH.number AS Embarque,
@@ -41,7 +39,7 @@ $_SESSION['key'] = $_GET['key'];
 			INNER JOIN su_shipper AS SHIP ON SHIP.id_shipper = SH.fk_shipper
 		WHERE SH.web_key=	'" . $_SESSION['key'] . "'";
 
-		$_SESSION['TEMP'] = $sql;		
+		//$_SESSION['TEMP'] = $sql;
 		$result = $conexion->query($sql);
 	echo "<br>";
 	mysqli_num_rows($result);
@@ -51,7 +49,7 @@ $_SESSION['key'] = $_GET['key'];
 		$_SESSION['username'] = $row['Nombre_chofer'];
 		$_SESSION['fake'] = true;
 		$_SESSION['loggedin'] = true;
-		
+
 		redirectPHP('folios.php');
 	} else {
 		redirectPHP('isnAccepted.php');

@@ -94,8 +94,6 @@ else{
 										(" . $max . ", '" . $file_name . "." . $file_extension . "' , '" . $target_path_dir . "' , 0, 0, 0," 
 										. $_SESSION['Folio'] . "," . $_SESSION['delivery_id'] . "," . $_SESSION['user_id'] . ", 1, 1, " . $_SESSION['user_id'] . ",
 										NOW(),NOW(),NOW(),NOW())";
-// echo $sql;
-// exit();
 								$result = $conexion->query($sql);
 								$txtResult = $txtResult . '<th><br>Imagen ' . $j . ').<span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
 								$txtResult = $txtResult . "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></th>";

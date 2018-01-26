@@ -50,6 +50,7 @@ echo "<div class=\"container-fluid\">";
 		else{
 			$sql = applyFiltersCo($_POST['btn1']);
 		}
+
 		$result = $conexion->query($sql);
 		echo "<div class='myScrollH'>";
 		echo "<div class='text-right' onclick=\"$('#myInput01').focus();\">
@@ -94,7 +95,7 @@ echo "<div class=\"container-fluid\">";
 									echo "<label class='label label-warning'>Aprobado</label>";
 								}
 								echo "</td>";
-								echo "<td>" . $row['driver_name'] . "</td>";
+								echo "<td>" . $row['name'] . "</td>";
 								echo "<td>" . $row['shipt_date'] . "</td>";
 								echo "<td>" . $row['ts_usr_upload'] . "</td>";
 								echo "<td>" . $row['ts_usr_accept'] . "</td>";

@@ -22,17 +22,31 @@
 					if (isset($_POST['username']) OR (isset($_POST['password'])) ){
 						$user = $_POST['username'];
 						$password = $_POST['password'];
-						$sql = "SELECT * FROM $tbl_name WHERE name = '$user' AND NOT b_del AND b_web = 1";
+						$sql = "
+							SELECT 
+								USR.pswd AS pswd,
+								USR.id_usr AS id_usr,
+								USR.fk_web_role AS fk_web_role,
+								USR.name AS name,
+								SHP.name AS name2,
+								USR.b_del AS b_del
+							FROM CU_USR AS USR
+							INNER JOIN SU_SHIPPER AS SHP ON USR.id_usr = SHP.fk_usr
+							WHERE USR.name = '$user' 
+								AND NOT USR.b_del 
+								AND USR.b_web = 1";
+
 						$result = $conexion->query($sql);
 						$row = $result->fetch_array(MYSQLI_ASSOC);
 
 						 if ((strlen($row['pswd'])== 0) && $result->num_rows > 0){
-							 
-								 $_SESSION['loggedin'] = true;			
-								 $_SESSION['username'] = $user;
-								 $_SESSION['user_id'] = $row['id_usr'];
-								 $_SESSION['rol'] = $row['fk_web_role'];
-								 redirectPHP('changePassword.php');
+
+							$_SESSION['loggedin'] = true;			
+							$_SESSION['username'] = $user;
+							$_SESSION['user_id'] = $row['id_usr'];
+							$_SESSION['rol'] = $row['fk_web_role'];
+							$_SESSION['name'] = $row ['name2'];
+							redirectPHP('changePassword.php');
 						 }
 						 
 						 if (password_verify($password, $row['pswd'])) {
@@ -47,21 +61,20 @@
 							$_SESSION['user_id'] = $row['id_usr'];
 							$_SESSION['start'] = time();
 							$_SESSION['rol'] = $row['fk_web_role'];
-							// $_SESSION['expire'] = $_SESSION['start'] + (5 * 60);
+							$_SESSION['name'] = $row ['name2'];
 							
 							checkRol($_SESSION['rol']);
-							
-							
+
 							echo "Bienvenido! " . $_SESSION['username'];
 							echo "<br><br><a href=panel-control.php>Panel de Control</a>"; 
-						
+
 						} else {
 						   echo "Usuario o Contraseña incorrectos.";
 						   echo "<br>";
 						   echo "<br>";
 						   echo "<a href='index.php'><input type='button' class='btn btn-danger' value='Intentar de nuevo'/></a>";
 						}
-						
+
 						mysqli_close($conexion); 
 					} else {
 						redirectPHP('index.php');
