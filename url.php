@@ -1,6 +1,6 @@
 <?php include 'header.php';?>
 <?php require 'functionsphp.php';?>
-<?php include 'menuChofer.php'; ?>
+<?php include 'menu.php'; ?>
 <div class="container-fluid">
 <?php include 'logo.php';?>
 	<div class="row">

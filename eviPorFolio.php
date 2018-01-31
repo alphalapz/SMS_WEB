@@ -1,23 +1,23 @@
-<?php
-	session_start();
+<?php 
+session_start();
+echo "<title>";
+echo "Evidencias | Folio";
+echo "</title>";
+include 'header.php';
+require 'database.php';
+require 'functionsphp.php';
+canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
+	echo "<div class=\"container-fluid\">";
 
-	require 'database.php';
-	require 'functionsphp.php';
-	include 'header.php';
-	canAccess($_SESSION['loggedin'], 'filterCredit.php', $_SESSION['rol']);
-
-echo "<div class=\"container-fluid\">";
-
-	include 'menuCredit.php';
+	include 'menu.php';
 	include 'logo.php';
 	echo "<div class='row'>";
 		echo "<div class='col-md-1'></div>";
 		echo "<div class='col-md-10 text-right'>";
 		echo "<br>";
-			echo "<form action='filterCredit.php' method='POST' >";
+			echo "<form action='eviPorFolio.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_REQUEST['btn1'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
@@ -28,31 +28,68 @@ echo "<div class=\"container-fluid\">";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";
 		echo "<div class=\"col-xs-10\">";
-
-		if (!isset($_REQUEST['btn1'])){
-			redirectPHP('indexCredito.php');
-		}
-		
-		if (isset($_REQUEST['daterange'])){
+	if (isset($_REQUEST['daterange'])){
 			echo "<div class='text-right'>";
-			echo "<br>FILTRO APLICADO:";
-			echo "<br>Inicio: <b>" . $startDate = substr($_REQUEST['daterange'],0,10) . "</b>";
-
-			echo "<br>Fin: <b>" . $endDate = substr($_REQUEST['daterange'],-10) . "</b>";
-
-			echo "<form action='filterCredit.php' method='POST' >";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_REQUEST['btn1'] . "' >";
-				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
-			echo "</form>";
+				echo "<br>FILTRO APLICADO:";
+				echo "<br>Inicio: <b>" . $startDate = substr($_REQUEST['daterange'],0,10) . "</b>";
+				echo "<br>Fin: <b>" . $endDate = substr($_REQUEST['daterange'],-10) . "</b>";
+					echo "<form action='eviPorFolio.php' method='POST' >";
+						echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
+					echo "</form>";
 			echo "</div>";
-			$sql = applyFiltersCoDate($_REQUEST['btn1'], $startDate, $endDate);
+			$sql = "
+			SELECT
+				E.id_evidence,
+				SH.number,
+				SHR.delivery_number,
+				E.file_location,
+				E.file_name,
+				E.file_location,
+				E.file_name,
+				E.b_accept,
+				SHP.name,
+				SH.shipt_date,
+				E.ts_usr_upload,
+				E.ts_usr_accept,
+				E.ts_usr_upd
+			FROM
+				S_EVIDENCE AS E
+				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt
+				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
+				AND SHR.ID_SHIPT = SH.ID_SHIPT
+				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper
+			WHERE
+				NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12) AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'
+			GROUP BY E.id_evidence;";
 		}
 		else{
-			$sql = applyFiltersCo($_REQUEST['btn1']);
+			$sql = "
+			SELECT
+				E.id_evidence,
+				SH.number,
+				SHR.delivery_number,
+				E.file_location,
+				E.file_name,
+				E.file_location,
+				E.file_name,
+				E.b_accept,
+				SHP.name,
+				SH.shipt_date,
+				E.ts_usr_upload,
+				E.ts_usr_accept,
+				E.ts_usr_upd
+			FROM
+				S_EVIDENCE AS E
+				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt
+				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
+				AND SHR.ID_SHIPT = SH.ID_SHIPT
+				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper
+			WHERE
+				NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12)
+			GROUP BY E.id_evidence;";
 		}
-
 		$result = $conexion->query($sql);
-		echo "<div class='myScrollH'>";
+	echo "<div class='myScrollH'>";
 		echo "<div class='text-right' onclick=\"$('#myInput01').focus();\">
 				<label>
 				<input type='text' class='myBtnInputTex' id='myInput01' onkeyup='filterTable(1)' placeholder='Buscar por remision...' title='Buscar remision'>
@@ -112,11 +149,13 @@ echo "<div class=\"container-fluid\">";
 		echo "</div>";
 		echo "<div class=\"col-xs-1\">";
 		echo "</div>";
-		btnBack('indexCredito.php');
+		btnBack('eviFolios.php');
 	echo "</div>";
 	 include 'footer.php';
 echo "</div>";
 ?>
+
+
 <script type="text/javascript">
 	$(function() {
 		$('input[name="daterange"]').daterangepicker({

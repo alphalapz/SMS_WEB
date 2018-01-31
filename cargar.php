@@ -1,4 +1,7 @@
 	<?php
+	echo "<title>";
+	echo "CARGA DE EVIDENCIAS";
+	echo "</title>";
 	include 'header.php'; 
 	require 'functionsphp.php';
 	require 'database.php';
@@ -18,7 +21,7 @@
 
     <script src="js/script.js"></script>
 <body>
-	<?php include 'menuChofer.php'; ?>
+	<?php include 'menu.php'; ?>
 	<div class="container-fluid">
 		<?php include 'logo.php';?>
 		<div class="row">
@@ -30,16 +33,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<h2>Evidencias cargadas</h2>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-4"></div>
-			<div class="col-xs-4">
-				<div id="imgs" class="text-center">
-				
+		
 					<?php
 						$sql = "
 						SELECT 
@@ -52,31 +46,47 @@
 						WHERE SHR.DELIVERY_NUMBER=" . $_SESSION['Remision'] . " 
 							AND SHR.id_shipt=" . $_SESSION['id'] . " 
 							AND NOT EVI.b_del 
-						GROUP BY SHR.delivery_number, EVI.file_name;";
+						GROUP BY SHR.delivery_number, EVI.file_name ORDER BY EVI.b_accept DESC;";
 						
 						$result = $conexion->query($sql);
-						while($row = $result->fetch_array(MYSQLI_NUM)){
-							$image = $row[0] . $row[1];
-							?>
-							<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo <?php echo $image; ?> ?')){return false;}"> 
-								<a id="single_image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
-								<input type="text" class="hidden" name="MyFile" value="<?php echo $image; ?>"/>
-								<input type="text" class="hidden" name="MyFileDir" value="<?php echo $row[0]; ?>"/>
-								<input type="text" class="hidden" name="MyFileFile" value="<?php echo $row[1]; ?>"/>
-								<input type="text" class="hidden" name="del_id" value="<?php echo $row[2]; ?>"/>
-								<?php if(!$row[3]){ ?>
-									<input type="submit" name='submit' id="btn" name="btn" class='btn btn-danger' value='ELIMINAR'/>
-								<?php } ?>
-							</form>
-							<?php 	
+						if ($result->num_rows > 0){
+							
+						echo "<div class='row'>";
+							echo "<div class='col-xs-12 text-center'>";
+								echo "<h2>Evidencias cargadas</h2>";
+							echo "</div>";
+						echo "</div>";
+						echo "<div class='row'>";
+							echo "<div class='col-xs-4'></div>";
+							echo "<div class='col-xs-4'>";
+								echo "<div id='imgs' class='text-center'>";
+								
+							while($row = $result->fetch_array(MYSQLI_NUM)){
+								$image = $row[0] . $row[1];
+								?>
+								<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo <?php echo $image; ?> ?')){return false;}"> 
+									<a id="single_image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
+									<input type="text" class="hidden" name="MyFile" value="<?php echo $image; ?>"/>
+									<input type="text" class="hidden" name="MyFileDir" value="<?php echo $row[0]; ?>"/>
+									<input type="text" class="hidden" name="MyFileFile" value="<?php echo $row[1]; ?>"/>
+									<input type="text" class="hidden" name="del_id" value="<?php echo $row[2]; ?>"/>
+									<?php if(!$row[3]){ ?>
+										<input type="submit" name='submit' id="btn" name="btn" class='btn btn-danger' value='ELIMINAR'/>
+									<?php }else{ ?>
+										<input type="button" class='btn btn-success' value='ACEPTADA' disabled/>
+									<?php } ?>
+								</form>
+								<?php 	
+							}
 						}
+						echo "</div>";
+							echo "</div>";
+							echo "<div class='col-xs-4'>";
+							echo "</div>";
+						echo "</div>";
 					?>
 
-				</div>
-			</div>
-			<div class="col-xs-4">
-			</div>
-		</div>
+				
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<h3>Evidencias por cargar.</h3>

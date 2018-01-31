@@ -1,9 +1,34 @@
 body {
 	/* background-image: url("../assets/fondo.jpg"); */
 	background-color: #BCBCBC;
-	background-repeat: repeat;
+	/* background-repeat: repeat; */
 
 }
+
+@media(max-width:767px){
+	h1{
+		font-size: 50px;
+	}
+}
+
+@media(min-width:768px){
+	h1{
+		font-size: 40px;
+	}
+}
+
+@media(min-width:992px){
+	h1{
+		font-size: 30px;
+	}
+}
+
+@media(min-width:1200px){
+	h1{
+		font-size: 20px;
+	}
+}
+
 th:hover{
 	background-color: #FFFFFF;
 }
@@ -12,6 +37,10 @@ tr:hover{
 }
 td:hover{
 	background-color: #FF6A00;
+}
+
+.error{
+	color:red;
 }
 
 .myBtnInputTex{

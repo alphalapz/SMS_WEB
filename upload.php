@@ -1,28 +1,22 @@
-
 <?php
 session_start();
 include 'header.php';
 require 'database.php';
 require 'functionsphp.php';
+
 if (!isset($_SESSION['loggedin'])){
 	redirectPHP('noPermission.php');
 }
 else{
 	$txtResult = "<body>
-	<div class=\"container-fluid\">
-		<div class=\"row\">
-			<div class=\"col-md-12 text-center\">
-				<img src=\"assets/logo.svg\" style=\"margin-top:20px\"><br>
-				<br><br>
-				<h1> RESULTADO DE LA CARGA DE EVIDENCIAS</h1>
-			</div>
-		</div>
-		<div class=\"row\">
+	<div class=\"container-fluid\">";
+
+	$txtResult = $txtResult . "<div class=\"row\">
 			<div class=\"col-md-4\">
 			</div>
 			<div class=\"col-md-4\">
 				<table>";
-
+					// validate $_POST 
 					if (isset($_POST['submit'])) {
 						//get the delivery_id
 						$sql3 = "SELECT id_row FROM S_SHIPT_ROW WHERE delivery_number = " . $_SESSION['Remision'] . " GROUP BY delivery_id;";

@@ -12,6 +12,10 @@
 		"permissions":[21]
 	},
 	{
+		"url":"eviPorFolio.php",
+		"permissions":[21]
+	},
+	{
 		"url":"filterCredit.php",
 		"permissions":[21]
 	},

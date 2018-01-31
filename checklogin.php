@@ -22,25 +22,22 @@
 					if (isset($_POST['username']) OR (isset($_POST['password'])) ){
 						$user = $_POST['username'];
 						$password = $_POST['password'];
-						$sql = "
-							SELECT 
+						$sql = "SELECT 
 								USR.pswd AS pswd,
 								USR.id_usr AS id_usr,
 								USR.fk_web_role AS fk_web_role,
 								USR.name AS name,
-								SHP.name AS name2,
 								USR.b_del AS b_del
 							FROM CU_USR AS USR
-							INNER JOIN SU_SHIPPER AS SHP ON USR.id_usr = SHP.fk_usr
 							WHERE USR.name = '$user' 
 								AND NOT USR.b_del 
-								AND USR.b_web = 1";
+								AND USR.b_web";
 
 						$result = $conexion->query($sql);
 						$row = $result->fetch_array(MYSQLI_ASSOC);
 
 						 if ((strlen($row['pswd'])== 0) && $result->num_rows > 0){
-
+							echo "value 1: " . $row['fk_web_role'];
 							$_SESSION['loggedin'] = true;			
 							$_SESSION['username'] = $user;
 							$_SESSION['user_id'] = $row['id_usr'];
@@ -48,25 +45,54 @@
 							$_SESSION['name'] = $row ['name2'];
 							redirectPHP('changePassword.php');
 						 }
-						 
+
 						 if (password_verify($password, $row['pswd'])) {
 							 if ($row['b_del']){
-							
-								 echo "Estas inactivo <br>";
-								 echo "<a href='index.php'><input type='button' class='btn btn-danger' value='Volver'/></a>";
+
+								echo "Estas inactivo <br>";
+								echo "<a href='index.php'><input type='button' class='btn btn-danger' value='Volver'/></a>";
 
 							 }
+							 echo "value 2: " . $row['fk_web_role'];
 							$_SESSION['loggedin'] = true;
 							$_SESSION['username'] = $user;
 							$_SESSION['user_id'] = $row['id_usr'];
 							$_SESSION['start'] = time();
 							$_SESSION['rol'] = $row['fk_web_role'];
-							$_SESSION['name'] = $row ['name2'];
 							
-							checkRol($_SESSION['rol']);
+							switch ($_SESSION['rol']) {
+								case ROL_ADMIN:
+									$_SESSION['name'] = "ADMINISTRADOR" ;
+									break;
+								case ROL_CREDIT:
+									$_SESSION['name'] = "CREDITO Y COBRANZA" ;
+								break;
+								case ROL_TRANS:
+									$sql = "
+									SELECT 
+										USR.pswd AS pswd,
+										USR.id_usr AS id_usr,
+										USR.fk_web_role AS fk_web_role,
+										USR.name AS name,
+										SHP.name AS name2,
+										USR.b_del AS b_del
+									FROM CU_USR AS USR
+									INNER JOIN SU_SHIPPER AS SHP ON USR.id_usr = SHP.fk_usr
+									WHERE USR.name = '$user' 
+										AND NOT USR.b_del 
+										AND USR.b_web";
 
-							echo "Bienvenido! " . $_SESSION['username'];
-							echo "<br><br><a href=panel-control.php>Panel de Control</a>"; 
+									$result = $conexion->query($sql);
+									$row = $result->fetch_array(MYSQLI_ASSOC);
+									echo "value 3: " . $row['fk_web_role'];
+									$_SESSION['name'] = $row ['name2'];
+								break;
+								default:
+									echo "NO PUEDES PASAR";
+									exit();
+									break;
+							}
+							checkRol($_SESSION['rol']);
 
 						} else {
 						   echo "Usuario o Contraseña incorrectos.";

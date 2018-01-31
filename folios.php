@@ -2,6 +2,9 @@
 	session_start();
 	require 'functionsphp.php';
 	require 'database.php';
+	echo "<title>";
+	echo "REMISIONES";
+	echo "</title>";
 	include 'header.php';
 	echo "<br>";
 	echo "<br>";
@@ -10,7 +13,7 @@
 	}
 ?>
 <body>
-	<?php include 'menuChofer.php'; ?>
+	<?php include 'menu.php'; ?>
 <div class="container-fluid">
 	<?php include 'logo.php'; ?>
 	<div class="row">
@@ -25,9 +28,14 @@
 			if (isset($_POST['web_key']))
 			$_SESSION['key'] = $_POST['web_key'];
 		}
+
+
 			$sql = "
 			SELECT
+			  SHR.delivery_id AS delivery_id,
+			  SH.number AS EMBARQUE,
 			  SH.id_shipt AS ID,
+			  SHR.id_row AS Folio,
 			  SHR.delivery_number AS REMISION,
 			  SH.shipt_date AS FECHA,
 			  DE.name AS DESTINO_EMBARQUE,
@@ -45,15 +53,15 @@
 
 			$result = $conexion->query($sql);
 			$buttons = array(
-				array('↑', 'btn btn-success',"<span class='glyphicon glyphicon-upload'></span>&nbsp;&nbsp;&nbsp;<span class='glyphicon glyphicon-camera'></span>")
-			);
-			$index = array(5, 6);
+						array('↑', 'btn btn-success',"<span class='glyphicon glyphicon-upload'></span>&nbsp;&nbsp;&nbsp;<span class='glyphicon glyphicon-camera'></span>")
+					);
+			$index = array(8, 9);
 			$form = array('cargar.php','');
 			echo "<div class='myScrollH'>";
-			echo "Filtrar: <input type='text' id='myInput01' onkeyup='filterTable(0)' placeholder='Buscar folio...' title='Filtrar por folio...'>";
-			printTableC($result, $buttons, $form, 1, $index);
+			echo "Filtrar: <input type='text' id='myInput01' onkeyup='filterTable(0)' placeholder='Buscar...' title='Filtrar...'>";
+			printTableC($result, $buttons, $form, 4, $index);
 			echo "</div>";
-			
+
 		?>
 		</div>
 		<div class="col-xs-1">

@@ -36,7 +36,7 @@ include 'const.php';
 	}
 	
 	/*
-	 *	Check the value of the range values por the paginate.
+	 *	Check the value of the range values for the paginate.
 	 */
 	function pagerNumOfRows(){
 		if (!isset($_GET['range']) or !is_numeric($_GET['range'])) {
@@ -67,6 +67,25 @@ include 'const.php';
 			<?php 
 		}
 		
+	}
+	
+	function btnBack($url){
+		echo "<br>";
+		echo "<div class='row'>";
+		echo "<div class='col-xs-4'>";
+		echo "</div>";
+		echo "<div class='col-xs-4'>";
+			echo "<div class='text-right'>";
+				echo "<form action='$url' metod='POST'>";
+			foreach($_REQUEST as $req){
+				echo "<input type='text' class='hidden' value='" . $req . "'/>";
+			}
+				echo "<button type='submit' onclick=\"window.location='$url';\"; class='btn btn-danger btn-lg'><span class='glyphicon glyphicon-triangle-left'></span>&nbsp;Volver";
+			echo "</div>";
+		echo "</div>";
+		echo "<div class='col-xs-4'>";
+		echo "</div>";
+		echo "</div>";
 	}
 	
 	/*
@@ -173,7 +192,7 @@ include 'const.php';
 			SH.DRIVER_NAME AS NOMBRE_CHOFER,
 			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
 			SH.SHIPT_DATE AS FECHA_CREACION,
-			SHIP.NAME AS TRANSPORTISTA,
+			
 			SHS.NAME AS ESTATUS,
 			SHP.NAME AS FLETE,
 			sum(SHR.ORDERS) AS N_ORDENES,
@@ -191,7 +210,12 @@ include 'const.php';
 			INNER JOIN SU_SHIPPER AS SHIP ON SHIP.ID_SHIPPER = SH.FK_SHIPPER ";
 		switch ($type) {
 			case 1:
-			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
+			echo "<div class='hidden-md-up'>";
+			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>
+					</div>";
+			echo "<div class='hidden-md-down'>";
+			echo "<h3 class='text-center'>Evidencias por subir:</h3><br>
+					</div>";
 				$sql = $sql . "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
@@ -240,10 +264,9 @@ include 'const.php';
 			SHR.delivery_number as Remision,
 			sh.web_key as web_key,
 			SH.NUMBER AS FOLIO,
-			SH.DRIVER_NAME AS NOMBRE_CHOFER,
-			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
 			SH.SHIPT_DATE AS FECHA_CREACION,
-			SHIP.NAME AS TRANSPORTISTA,
+			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
+			SH.DRIVER_NAME AS NOMBRE_CHOFER,
 			SHS.NAME AS ESTATUS,
 			SHP.NAME AS FLETE,
 			sum(SHR.ORDERS) AS N_ORDENES,
@@ -261,7 +284,12 @@ include 'const.php';
 			INNER JOIN SU_SHIPPER AS SHIP ON SHIP.ID_SHIPPER = SH.FK_SHIPPER ";
 		switch ($type) {
 			case 1:
-			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>";
+			echo "<div class='hidden-xs'>";
+			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>
+					</div>";
+			echo "<div class='visible-xs'>";
+			echo "<h3 class='text-center'>Evidencias por subir:</h3><br>
+					</div>";
 				$sql = $sql . "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " GROUP BY SH.ID_SHIPT;";
@@ -327,14 +355,14 @@ include 'const.php';
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
 			case 1:
-			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
+			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
 				GROUP BY E.id_evidence;";
 				break;
 			case 2:
-			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
+			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
@@ -345,12 +373,13 @@ include 'const.php';
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ") AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY E.id_evidence;";
+				GROUP BY E.id_evidence ";
 				break;
 			default:
 				$sql = $sql . "GROUP BY E.id_evidence;";
 				break;
 		}
+		$sql = $sql . "ORDER BY delivery_number";
 		return $sql;
 	}
 
@@ -386,29 +415,30 @@ include 'const.php';
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
 			case 1:
-			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
+			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . "
-				GROUP BY E.id_evidence;";
+				GROUP BY E.id_evidence ";
 				break;
 			case 2:
-			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
+			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . "
-				GROUP BY E.id_evidence;";
+				GROUP BY E.id_evidence ";
 				break;
 			case 3:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
 					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ")
-				GROUP BY E.id_evidence;";
+				GROUP BY E.id_evidence ";
 				break;
 			default:
 				break;
 		}
+		$sql = $sql . "ORDER BY delivery_number";
 		return $sql;
 	}
 
@@ -499,12 +529,12 @@ include 'const.php';
 	//		);
 	//		$form = array('test.php','¿Seguro?');
 	//		$hidden = Integer for hide the columns (initial column = 1) 
-	##IF DONT NEED TO HIDE USE THE printTableB FUNCTION OR SET $HIDDEN TO 0
+	##	IF YOU DONT NEED TO HIDE ELEMENTS, CAN USE THE printTableB FUNCTION OR SET $HIDDEN TO ZERO
 	function printTableC($result, $buttons, $form, $hidden, $index){
 		$aNames = array();
 		$formAction = $hidden + 2;
 		$info_field = $result->fetch_fields();
-		echo " <table id='myTable' class='table table-hover table-condensed myTable'>";
+		echo " <table id='myTable' class='table table-hover table-condensed myTable tablesorter'>";
 			echo " <thead>";
 				echo "<tr>";
 			$cont = 0;			
@@ -517,7 +547,7 @@ include 'const.php';
 				echo "<th>" . $valor->name . "</th>";
 			}
 			if ($cont == $formAction){
-				echo "<th>ACCIONES</th>";
+				echo "<th>ACCION</th>";
 			}
 				array_push($aNames, $valor->name);
 		}
@@ -541,7 +571,7 @@ include 'const.php';
 					}
 				}
 				## FORMAT FIELD WHEN IS NUMBER (FLOAT)
-				// if ($i == $hidden+3 || $i == $hidden+4){
+				// TAKE the $index value for
 				if (in_array($i,$index, true)){
 					$row[$i] = strcmp('double',getType($row[$i])) ? number_format($row[$i], 2, ".", ",") : $row[$i];
 				} 
@@ -606,6 +636,49 @@ include 'const.php';
 		else{
 			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_LIBERADO . " WHERE id_shipt=$folio";
 			$result = $conexion->query($sql);
+		}
+	}
+	/*
+	 *	This function is called when some evidence status change or if some evidence is deleted
+	 */
+	function ifNecesaryChangeStatus($del_id) {
+		require 'database.php';
+		$sql = "
+		SELECT SH.id_shipt as folio, 
+			SHR.id_row as remision, 
+			SH.fk_shipt_st as status
+		FROM S_EVIDENCE AS EVI
+			INNER JOIN S_SHIPT_ROW AS SHR ON EVI.fk_ship_row = SHR.id_row
+			INNER JOIN S_SHIPT AS SH ON EVI.fk_ship_ship = SH.id_shipt
+		WHERE EVI.id_evidence=$del_id 
+			
+			AND NOT SH.b_del
+		GROUP BY EVI.id_evidence;";
+
+		$result = $conexion->query($sql);
+
+		$row = $result->fetch_array(MYSQLI_NUM);
+		$folio = $row[0];
+		$remision = $row[1];
+		$status = $row[2];
+
+		$sql = "
+		SELECT b_accept 
+		FROM S_EVIDENCE 
+		WHERE NOT b_del 
+			AND fk_ship_ship=$folio;";
+
+		$result = $conexion->query($sql);
+		$evidenceArray = array();
+		while ($row2 = $result->fetch_array(MYSQLI_NUM)){
+			array_push($evidenceArray,$row2[0]);
+		}
+
+		if(!in_array(0, $evidenceArray) && $status == S_ST_POR_ACEPTAR){
+			$completo = false;
+			echo "<br>Folio completado.";
+			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_ACEPTADO . " WHERE id_shipt=$folio";
+			$result = $conexion->query($sql);		
 		}
 	}
 

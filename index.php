@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
+	<title>
+	INICIO DE SESSION
+	</title>
 	<?php
 		include 'header.php'; 
 		include 'functionsphp.php'; 

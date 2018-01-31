@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-
 <html lang="es">
 <?php
+	echo "<title>";
+	echo "REGISTRO | NUEVO";
+	echo "</title>";
 	include 'header.php';
 	require 'functionsphp.php';
 	session_start();
@@ -49,7 +50,8 @@
 					<input name="rol" type="radio" value="4">Chofer</input><br>
 
 					<br>
-					<!--<input type="reset" class="btn btn-danger" name="clear" value="Borrar">-->
+					<!--	UNCOMENT THIS LINE IF YOU NEED TO CLEAR THE FORM -->
+					<!--	<input type="reset" class="btn btn-danger" name="clear" value="Borrar">	-->
 					<input type="submit" class="btn btn-primary" name="submit" value="Registrar">
 				</form>
 				<br>

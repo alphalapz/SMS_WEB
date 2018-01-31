@@ -6,51 +6,10 @@
 	canAccess($_SESSION['loggedin'], 'changeStatus.php', $_SESSION['rol']);
 	$id_Selected = $_POST['evidence'];
 
-	$sql = "UPDATE `S_EVIDENCE` SET `b_accept` = '1' WHERE `id_evidence` = $id_Selected;";
-	$result = $conexion->query($sql);
-	$sql = "UPDATE `S_EVIDENCE` SET `fk_usr_accept` =" . $_SESSION['user_id'] . " WHERE `id_evidence` = $id_Selected;";
-	$result = $conexion->query($sql);
-	
-	$sql = "
-	SELECT SH.id_shipt as folio, 
-		SHR.id_row as remision, 
-		SH.fk_shipt_st as status
-	FROM S_EVIDENCE AS EVI
-		INNER JOIN S_SHIPT_ROW AS SHR ON EVI.fk_ship_row = SHR.id_row
-		INNER JOIN S_SHIPT AS SH ON EVI.fk_ship_ship = SH.id_shipt
-	WHERE EVI.id_evidence=$id_Selected 
-		AND NOT EVI.b_del 
-		AND NOT SH.b_del
-	GROUP BY EVI.id_evidence;";
-				
-	$result = $conexion->query($sql);
-	
-	$row = $result->fetch_array(MYSQLI_NUM);
-	$folio = $row[0];
-	$remision = $row[1];
-	$status = $row[2];
-	
-	$sql = "
-	SELECT b_accept 
-	FROM S_EVIDENCE 
-	WHERE NOT b_del 
-		AND fk_ship_ship=$folio;";# AND fk_ship_row=$remision;";
-	
-	$result = $conexion->query($sql);
-	$evidenceArray = array();
-	while ($row2 = $result->fetch_array(MYSQLI_NUM)){
-		array_push($evidenceArray,$row2[0]);
-	}
-	
-	if(!in_array(0, $evidenceArray) && $status == 11){
-		$completo = false;
-		echo "<br>Folio completado.";
-		$sql = "UPDATE S_SHIPT SET fk_shipt_st = 12 WHERE id_shipt=$folio";
-		$result = $conexion->query($sql);		
-	}else{
-		
-	}
+	$sql = "UPDATE `S_EVIDENCE` SET `b_accept` = '1', `fk_usr_accept` =" . $_SESSION['user_id'] . " WHERE `id_evidence` = $id_Selected;";
 
+	$result = $conexion->query($sql);
+	ifNecesaryChangeStatus($id_Selected);
 	include 'logo.php';
 ?>
 
@@ -67,6 +26,6 @@
 	</div>
 </div>
 <script>
-	redirectjs("IndexCredit.php");
+	redirectjs("filterCredit.php?btn1=1");
 </script>
 <?php include 'footer.php'; ?>
