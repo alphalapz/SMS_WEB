@@ -1,5 +1,3 @@
-
-
 <?php 
 session_start();
 echo "<title>";
@@ -8,11 +6,12 @@ echo "</title>";
 include 'header_p.php';
 require 'database.php';
 require 'functionsphp.php';
+
 canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
-if (!isset($_REQUEST['btn1'])){
+if (!isset($_REQUEST['bf1dc'])){
 	redirectPHP('indexCredito.php');
 }
-switch ($_REQUEST['btn1']){
+switch ($_REQUEST['bf1dc']){
 	case 1:
 		$sql =
 			"SELECT
@@ -98,9 +97,7 @@ echo "<div class=\"container-fluid\">";
 	 include 'footer.php';
 echo "</div>";
 ?>
-
-
-<script type="text/javascript">
+<script>
 	function filterTable(col) {
 		var input, filter, table, tr, td, i;
 		input = document.getElementById("myInput01");

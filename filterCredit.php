@@ -8,7 +8,7 @@
 
 echo "<div class=\"container-fluid\">";
 
-	include 'menuCredit.php';
+	include 'menu.php';
 	include 'logo.php';
 	echo "<div class='row'>";
 		echo "<div class='col-md-1'></div>";
@@ -17,7 +17,7 @@ echo "<div class=\"container-fluid\">";
 			echo "<form action='filterCredit.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_REQUEST['btn1'] . "' >";
+				echo "<input type='text' class='hidden' name='bf1dc' value='" . $_REQUEST['bf1dc'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
@@ -29,7 +29,7 @@ echo "<div class=\"container-fluid\">";
 		echo "</div>";
 		echo "<div class=\"col-xs-10\">";
 
-		if (!isset($_REQUEST['btn1'])){
+		if (!isset($_REQUEST['bf1dc'])){
 			redirectPHP('indexCredito.php');
 		}
 		
@@ -41,14 +41,14 @@ echo "<div class=\"container-fluid\">";
 			echo "<br>Fin: <b>" . $endDate = substr($_REQUEST['daterange'],-10) . "</b>";
 
 			echo "<form action='filterCredit.php' method='POST' >";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_REQUEST['btn1'] . "' >";
+				echo "<input type='text' class='hidden' name='bf1dc' value='" . $_REQUEST['bf1dc'] . "' >";
 				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
 			echo "</form>";
 			echo "</div>";
-			$sql = applyFiltersCoDate($_REQUEST['btn1'], $startDate, $endDate);
+			$sql = applyFilterCredit($_REQUEST['bf1dc'], $startDate, $endDate);
 		}
 		else{
-			$sql = applyFiltersCo($_REQUEST['btn1']);
+			$sql = applyFilterCredit($_REQUEST['bf1dc'], null, null);
 		}
 
 		$result = $conexion->query($sql);

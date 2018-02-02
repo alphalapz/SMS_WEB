@@ -6,7 +6,7 @@ session_start();
 // Validate if $_SESSION['CONTENT'] was established ELSE REDIRECT TO INDEX
 if(isset($_SESSION['CONTENT'])){
 	include 'logo.php';
-    include 'menuChofer.php';
+    include 'menu.php';
 	//print the result of the upload
 	echo $_SESSION['CONTENT'];
 	//clear the $_SESSION['CONTENT']

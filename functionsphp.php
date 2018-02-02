@@ -1,31 +1,34 @@
 <?php
-
-###AUTOR: ALPHALAPZ AND DEINIS AND GIL ENOC
+###AUTOR: Alfredo Perez (ALPHALAPZ)
 include 'const.php';
 	/*
 	 * Redirect according to the type of user.
+	 *
+	 *	The possibles roles are:
+	 *		ROL_ADMIN = 11;
+	 *		ROL_CREDIT = 21;
+	 *		ROL_TRANS = 31;
+	 *		ROL_CHOFER = 99; This is a temporal role, only simulate that is a role
+	 *
 	 */
 	function checkRol($rol){
 		switch($rol){
 			case ROL_ADMIN:
-				// echo "Rol admin <br>";
 				redirectPHP('panel-control.php');
 				break;
 			case ROL_CREDIT:
-				// echo "Rol Crédito y cobranza<br>";
 				redirectPHP('indexCredito.php');
 				break;
 			case ROL_TRANS:
-				// echo "Rol Transportista <br>";
 				redirectPHP('indexTransportista.php');
 				break;
 			default:
 				break;
-			}
+		}
 	}
 	
 	/*
-	 *	Check the value of the initial row for the queries
+	 *	RETURN the value of the initial row for the queries when paginate apply
 	 */
 	function pagerStartRow(){
 		if (!isset($_GET['startrow']) or !is_numeric($_GET['startrow'])) {
@@ -36,7 +39,7 @@ include 'const.php';
 	}
 	
 	/*
-	 *	Check the value of the range values for the paginate.
+	 *	RETURN the value of the range for the queries when paginate apply
 	 */
 	function pagerNumOfRows(){
 		if (!isset($_GET['range']) or !is_numeric($_GET['range'])) {
@@ -47,11 +50,10 @@ include 'const.php';
 	}
 	
 	/*
-	 *	Print all images of a specific directory, include this function the fancyBox JS
-	 *	$dir = myDir/subdir/
+	 *	Print all images of a specific directory, include the function of the fancyBox JS
+	 *	$dir = myPath/.../...
 	 */
 	function printAllImg($dir){
-		// $directory = "./"; #Directorio raíz
 		$directory = "./$dir"; 
 
 		$images = glob($directory . "*.{jpg,png,gif}", GLOB_BRACE);
@@ -69,6 +71,10 @@ include 'const.php';
 		
 	}
 	
+	/*
+	 *	This print a button into a form with all the $_REQUEST values for go back.
+	 *	i.e: $url = "www.myWeb.com.mx/myLastPage.php"
+	 */
 	function btnBack($url){
 		echo "<br>";
 		echo "<div class='row'>";
@@ -113,19 +119,21 @@ include 'const.php';
 
 	/*
 	 *	redirect to the URL
-	 *	$url = the url to redirect the current page.
+	 *	$URL = the URL to redirect the current page.
 	 */
 	function redirectPHP($url){
-		?>
-			<script>
+	?>
+		<script>
 			window.location.replace('<?php echo $url;?>');
-			</script>
-		<?php
+		</script>
+	<?php
 		header('Location:' . $url);
 	}
 
 	/*
 	 *	Verify if the current user can access to the current view.
+	 *	$Session = ROL_XXX
+	 *	
 	 */
 	function canAccess($Session, $url, $rol){
 		if ($Session == 1) {
@@ -134,7 +142,6 @@ include 'const.php';
 		//Check if can view the views
 		if (isset($Session) && $Session == true) {
 			if (!canView($url, $rol)){
-				echo "DEBE REDIRECCIONAR!";
 				redirectPHP('noPermission.php');
 			}
 		}
@@ -144,7 +151,9 @@ include 'const.php';
 	}
 
 	/*
-	 * Verify in the file urls.json if the current user can view the requested view. 
+	 *	Verify in the file urls.json if the current user can view the requested view. 
+	 *	i.e:	$URL = "myPage.php"
+	 *			$rol_Session = ROL_ADMIN
 	 */
 	function canView($url, $rol_Session){
 		$string = file_get_contents("urls.json");
@@ -176,12 +185,12 @@ include 'const.php';
 	 *	$type = The button pressed
 	 *	$starDate = The initial date range
 	 *	$endDate = The final date range
-	 *	$type = 1 ::::: Evidence for uploading
-	 *  $type = 2 ::::: Evidence for accepting
-	 *  $type = 3 ::::: Accepted evidence
-	 *  $type = 4 ::::: All the evidences
+	 *	$type = OPT_ONE		:::::	Evidence for uploading
+	 *  $type = OPT_TWO		:::::	Evidence for accepting
+	 *  $type = OPT_THREE	:::::	Accepted evidence
+	 *  $type = OPT_FOUR	:::::	All the evidences
 	 */
-	function applyFiltersTransDate($type, $starDate, $endDate){
+	function applyFiltersTrans($type, $starDate, $endDate){
 		$sql = "
 		SELECT
 			SHR.ID_ROW as REMISION,
@@ -189,14 +198,13 @@ include 'const.php';
 			SHR.delivery_number as Remision,
 			sh.web_key as web_key,
 			SH.NUMBER AS FOLIO,
-			SH.DRIVER_NAME AS NOMBRE_CHOFER,
-			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
 			SH.SHIPT_DATE AS FECHA_CREACION,
-			
+			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
+			SH.DRIVER_NAME AS NOMBRE_CHOFER,
 			SHS.NAME AS ESTATUS,
 			SHP.NAME AS FLETE,
 			sum(SHR.ORDERS) AS N_ORDENES,
-			SH.m2 AS M2,			
+			SH.m2 AS M2,
 			SH.kg AS KILOGRAMOS
 		FROM S_SHIPT AS SH
 			INNER JOIN SS_SHIPT_ST AS SHS ON SHS.ID_SHIPT_ST = SH.FK_SHIPT_ST
@@ -209,7 +217,7 @@ include 'const.php';
 			INNER JOIN SU_DESTIN AS DE ON DE.ID_DESTIN = SHR.FK_DESTIN
 			INNER JOIN SU_SHIPPER AS SHIP ON SHIP.ID_SHIPPER = SH.FK_SHIPPER ";
 		switch ($type) {
-			case 1:
+			case OPT_ONE:
 			echo "<div class='hidden-md-up'>";
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>
 					</div>";
@@ -218,102 +226,35 @@ include 'const.php';
 					</div>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO;
 				break;
-			case 2:
+			case OPT_TWO:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
-			case 3:
+			case OPT_THREE:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO;
 				break;
-			case 4:
+			case OPT_FOUR:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ") AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY SH.ID_SHIPT;";
+					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ")";
 				break;
 			default:
 			break;
 		}
-		return $sql;
-	}
-
-	/*
-	 *	Show the data using the selected filter view carrier
-	 *	$type = The button pressed
-	 *  $type = 1 ::::: Evidence for uploading
-	 *  $type = 2 ::::: Evidence for accepting
-	 *  $type = 3 ::::: Accepted evidence
-	 *  $type = 4 ::::: All the evidences
-	 */
-	function applyFiltersTrans($type){
-		$sql = "
-		SELECT
-			SHR.ID_ROW as REMISION,
-			SH.ID_SHIPT AS FOLIO_EMBARQUE,
-			SHR.delivery_number as Remision,
-			sh.web_key as web_key,
-			SH.NUMBER AS FOLIO,
-			SH.SHIPT_DATE AS FECHA_CREACION,
-			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
-			SH.DRIVER_NAME AS NOMBRE_CHOFER,
-			SHS.NAME AS ESTATUS,
-			SHP.NAME AS FLETE,
-			sum(SHR.ORDERS) AS N_ORDENES,
-			SH.m2 AS M2,			
-			SH.kg AS KILOGRAMOS
-		FROM S_SHIPT AS SH
-			INNER JOIN SS_SHIPT_ST AS SHS ON SHS.ID_SHIPT_ST = SH.FK_SHIPT_ST
-			INNER JOIN SU_SHIPT_TP AS SHP ON SHP.ID_SHIPT_TP = SH.FK_SHIPT_TP
-			INNER JOIN SU_CARGO_TP AS CA ON CA.ID_CARGO_TP = SH.FK_CARGO_TP
-			INNER JOIN SU_HANDG_TP AS HA ON HA.ID_HANDG_TP = SH.FK_HANDG_TP
-			INNER JOIN SU_VEHIC_TP AS VE ON VE.ID_VEHIC_TP = SH.FK_VEHIC_TP
-			INNER JOIN S_SHIPT_ROW AS SHR ON SHR.ID_SHIPT = SH.ID_SHIPT
-			INNER JOIN AU_CUS AS CU ON CU.ID_CUS = SHR.FK_CUSTOMER
-			INNER JOIN SU_DESTIN AS DE ON DE.ID_DESTIN = SHR.FK_DESTIN
-			INNER JOIN SU_SHIPPER AS SHIP ON SHIP.ID_SHIPPER = SH.FK_SHIPPER ";
-		switch ($type) {
-			case 1:
-			echo "<div class='hidden-xs'>";
-			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>
-					</div>";
-			echo "<div class='visible-xs'>";
-			echo "<h3 class='text-center'>Evidencias por subir:</h3><br>
-					</div>";
-				$sql = $sql . "
-				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO . " GROUP BY SH.ID_SHIPT;";
-				break;
-			case 2:
-			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " GROUP BY SH.ID_SHIPT;";
-				break;
-			case 3:
-			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO . " GROUP BY SH.ID_SHIPT;";
-				break;
-			case 4:
-			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ") GROUP BY SH.ID_SHIPT;";
-				break;
-			default:
-			break;
+		
+		if ($starDate == null OR $endDate == null){
+			$sql = $sql . " GROUP BY SH.ID_SHIPT;";
+		}
+		else {
+			$sql = $sql . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY SH.ID_SHIPT;";
 		}
 		return $sql;
 	}
@@ -323,13 +264,12 @@ include 'const.php';
 	 *	$type = The button pressed
 	 *	$starDate = The initial date range
 	 *	$endDate = The final date range
-	 *	$type = 1 ::::: Evidence for uploading
-	 *  $type = 2 ::::: Evidence for accepting
-	 *  $type = 3 ::::: Accepted evidence
-	 *  $type = 4 ::::: All the evidences
+	 *	$type = OPT_ONE		:::::	Evidence for uploading
+	 *  $type = OPT_TWO		:::::	Evidence for accepting
+	 *  $type = OPT_THREE	:::::	Accepted evidence
+	 *  $type = OPT_FOUR	:::::	All the evidences
 	 */
-	function applyFiltersCoDate($type, $starDate, $endDate){
-
+	function applyFilterCredit($type, $starDate, $endDate){
 		$starDate = str_replace('-', ':', $starDate);
 		$endDate = str_replace('-', ':', $endDate);
 		$sql = "
@@ -354,96 +294,39 @@ include 'const.php';
 					AND SHR.ID_SHIPT = SH.ID_SHIPT
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
-			case 1:
+			case OPT_ONE:
 			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY E.id_evidence;";
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
-			case 2:
+			case OPT_TWO:
 			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY E.id_evidence;";
+					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO;
 				break;
-			case 3:
+			case OPT_THREE:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql = $sql . "
 				WHERE
-					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ") AND SH.shipt_date BETWEEN '$starDate' AND '$endDate'
-				GROUP BY E.id_evidence ";
-				break;
-			default:
-				$sql = $sql . "GROUP BY E.id_evidence;";
-				break;
-		}
-		$sql = $sql . "ORDER BY delivery_number";
-		return $sql;
-	}
-
-	/*
-	 *	Show the data using the selected filter view Credit and collection
-	 *	$type = The button pressed
-	 *  $type = 1 ::::: Evidence for uploading
-	 *  $type = 2 ::::: Evidence for accepting
-	 *  $type = 3 ::::: Accepted evidence
-	 *  $type = 4 ::::: All the evidences
-	 */
-	function applyFiltersCo($type){
-		$sql = "
-			SELECT 
-				E.id_evidence,
-				SH.number,
-				SHR.delivery_number,
-				E.file_location,
-				E.file_name,
-				E.file_location,
-				E.file_name,
-				E.b_accept,
-				SHP.name,
-				SH.shipt_date,
-				E.ts_usr_upload,
-				E.ts_usr_accept,
-				E.ts_usr_upd
-			FROM 
-				S_EVIDENCE AS E
-				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
-				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
-					AND SHR.ID_SHIPT = SH.ID_SHIPT
-				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
-		switch ($type) {
-			case 1:
-			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . "
-				GROUP BY E.id_evidence ";
-				break;
-			case 2:
-			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO . "
-				GROUP BY E.id_evidence ";
-				break;
-			case 3:
-			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql = $sql . "
-				WHERE
-					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ")
-				GROUP BY E.id_evidence ";
+					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ")";
 				break;
 			default:
 				break;
 		}
-		$sql = $sql . "ORDER BY delivery_number";
+		if ($starDate == null OR $endDate == null){
+			$sql = $sql . " GROUP BY E.id_evidence;";
+		}
+		else {
+			$sql = $sql . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY E.id_evidence;";
+		}
 		return $sql;
 	}
 
+
 	/*
-	 *	Print table from a query
+	 *	Print table from a query result
 	 */
 	function printTable($result){
 		$info_field = $result->fetch_fields();
@@ -469,12 +352,15 @@ include 'const.php';
 		echo "</table>";
 	}
 
-	//$buttons must be and array of arrays
-	//i.e: printableB
-	// $buttons = array(
-	// 		array('Texto del boton', 'btn btn-warning') 
-	// );
-	// $form = array('test.php','¿Seguro?');
+	/*
+	 *	Print table from a query result
+	 *	$buttons must be and array of arrays
+	 *	i.e: printableB
+	 *	$buttons = array(
+	 *	array('buttonText', 'button class') 
+	 *	);
+	 *	$form = array('action','Message?');
+	 */
 	function printTableB($result, $buttons, $form){
 		$aNames = array();
 		$info_field = $result->fetch_fields();
@@ -525,9 +411,9 @@ include 'const.php';
 	//	$buttons must be and array of arrays
 	//	i.e: printableB
 	//		$buttons = array(
-	//			array('Texto del boton', 'btn btn-warning') 
+	//			array('Text Button', 'Class Button') 
 	//		);
-	//		$form = array('test.php','¿Seguro?');
+	//		$form = array('function.php','Warning Message?');
 	//		$hidden = Integer for hide the columns (initial column = 1) 
 	##	IF YOU DONT NEED TO HIDE ELEMENTS, CAN USE THE printTableB FUNCTION OR SET $HIDDEN TO ZERO
 	function printTableC($result, $buttons, $form, $hidden, $index){
@@ -549,7 +435,7 @@ include 'const.php';
 			if ($cont == $formAction){
 				echo "<th>ACCION</th>";
 			}
-				array_push($aNames, $valor->name);
+			array_push($aNames, $valor->name);
 		}
 		echo " </tr>";
 		echo " </thead>";
@@ -557,8 +443,8 @@ include 'const.php';
 
 		while($row = $result->fetch_array(MYSQLI_NUM)) {
 			echo "<tr>";
-				// $text = $row[1] == '' ? ">" : "onsubmit=\"if(!confirm('Ver remisiones para el embarque $row[1]?')){return false;}\" >";
-				$text = ">";
+				$text = empty($form[1]) ? ">" : "onsubmit=\"if(!confirm('$form[1]')){return false;}\" >";
+
 				echo "<form class='form-control' action='$form[0]' method='POST' " . $text;
 				$names = array_reverse($aNames);
 
@@ -638,8 +524,10 @@ include 'const.php';
 			$result = $conexion->query($sql);
 		}
 	}
+	
 	/*
 	 *	This function is called when some evidence status change or if some evidence is deleted
+	 *	$del_id = etla_com.s_evidence.id_evidence 
 	 */
 	function ifNecesaryChangeStatus($del_id) {
 		require 'database.php';
@@ -691,6 +579,61 @@ include 'const.php';
 		$result = $conexion->query($sql);
 		$row = $result->fetch_array(MYSQLI_NUM);
 		validateIfAllRemissionsHadEvidence($row[0]);
+	}
+	
+	/*
+	 *	Send Message via console use it for debug
+	 */
+	function debug_to_console( $data ) {
+		$output = $data;
+		if ( is_array( $output ) ){
+			$output = implode( ',', $output);
+		}
+		echo "<script>console.log( 'Debug: " . $output . "' );</script>";
+	}
+	
+	/*
+	 *	Transaction queries mysqli
+	 *	Receive 2 queries, the first one is for validate at least one result row
+	 *	The second query is the action for example: UPDATE | DELETE | INSERT
+	 */
+	function transactionphp($sql1, $sql2){
+		require 'database.php';
+		mysqli_autocommit($conexion, false);
+			// This flag is for check if the queries can commit or roll back
+			$flag = true;
+
+			$result = mysqli_query($conexion, $sql1);
+			$row = $result->fetch_array(MYSQLI_ASSOC);
+			$numRows = $result->num_rows;
+
+			if (!$result) {
+				$flag = false;
+				echo "Error details: " . mysqli_error($conexion) . ".";
+			}
+			// Validate length password
+			if ($numRows <= 0){
+				$flag = false;
+			}
+
+			$result = mysqli_query($conexion, $sql2);
+
+			if (!$result) {
+				$flag = false;
+				echo "Error details: " . mysqli_error($conexion) . ".";
+			}
+
+			if ($flag) {
+				// It´s OK and commit.
+				mysqli_commit($conexion);
+				debug_to_console('Transaction done');
+			} else {
+				// An error surprise the user
+				mysqli_rollback($conexion);
+				debug_to_console('NO transaction');
+			}
+				//Destroy the temporal Session, necessary for the user to access using his new password
+		mysqli_close($conexion);
 	}
 
 	//Validate the json 'urls.json'

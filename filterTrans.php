@@ -20,7 +20,7 @@ echo "<div class='container-fluid'>";
 			echo "<form action='filterTrans.php' method='POST' >";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input class='myBtnInputTex' type='text' name='daterange' value='' />";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
+				echo "<input type='text' class='hidden' name='bf1dc' value='" . $_REQUEST['bf1dc'] . "' >";
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
@@ -32,10 +32,10 @@ echo "<div class='container-fluid'>";
 		echo "</div>";
 		echo "<div class='col-xs-10'>";
 
-		if (!isset($_POST['btn1'])){
+		if (!isset($_REQUEST['bf1dc'])){
 			redirectPHP('index.php');
 		}else{
-		$_SESSION['btn'] = $_POST['btn1'];
+		$_SESSION['btn'] = $_REQUEST['bf1dc'];
 		}
 		if (isset($_POST['daterange'])){
 			echo "<div class='text-right'>";
@@ -43,16 +43,16 @@ echo "<div class='container-fluid'>";
 			echo "<br>Inicio: <b>" . $startDate = substr($_POST['daterange'],0,10) . "</b>";
 			echo "<br>Fin: <b>" . $endDate = substr($_POST['daterange'],-10) . "</b>";
 			echo "<form action='filterTrans.php' method='POST' >";
-				echo "<input type='text' class='hidden' name='btn1' value='" . $_POST['btn1'] . "' >";
+				echo "<input type='text' class='hidden' name='bf1dc' value='" . $_REQUEST['bf1dc'] . "' >";
 				echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
 			echo "</form>";
 			echo "</div>";
-			$sql = applyFiltersTransDate($_POST['btn1'], $startDate, $endDate);
+			$sql = applyFiltersTrans($_REQUEST['bf1dc'], $startDate, $endDate);
 		}
 		else{
-			$sql = applyFiltersTrans($_POST['btn1']);
+			$sql = applyFiltersTrans($_REQUEST['bf1dc'], null, null);
 		}
-		
+
 		$result = $conexion->query($sql);
 
 			$info_field = $result->fetch_fields();
@@ -63,6 +63,9 @@ echo "<div class='container-fluid'>";
 			$form = array('folios.php','');
 
 			$info_field = $result->fetch_fields();
+			##	THE VALUES for $index refers to the next values
+				// 8 = SH.m2 AS M2,
+				// 9 = SH.kg AS KILOGRAMOS
 			$index = array(11,12);
 
 			printTableC($result, $buttons, $form, 4, $index);

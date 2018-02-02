@@ -26,6 +26,6 @@
 	</div>
 </div>
 <script>
-	redirectjs("filterCredit.php?btn1=1");
+	redirectjs("filterCredit.php?bf1dc=1");
 </script>
 <?php include 'footer.php'; ?>

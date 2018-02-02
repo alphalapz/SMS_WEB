@@ -21,7 +21,7 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
 			echo "</form>";
 		echo "</div>";
-		
+
 		echo "<div class='col-md-1'></div>";
 	echo "</div>";
 	echo "<div class=\"row\">";
@@ -111,7 +111,6 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 							echo "<th>FECHA_REVISION</th>";
 						echo " </tr>";
 					echo " </thead>";
-				
 					echo "<tbody>";
 					$cont=0;
 				while($row = $result->fetch_array(MYSQLI_ASSOC)) {
@@ -155,7 +154,6 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 echo "</div>";
 ?>
 
-
 <script type="text/javascript">
 	$(function() {
 		$('input[name="daterange"]').daterangepicker({
@@ -188,20 +186,20 @@ echo "</div>";
 		});
 	});
 	function filterTable(col) {
-	  var input, filter, table, tr, td, i;
-	  input = document.getElementById("myInput01");
-	  filter = input.value.toUpperCase();
-	  table = document.getElementById("myTable");
-	  tr = table.getElementsByTagName("tr");
-	  for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[col];
-		if (td) {
-		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			tr[i].style.display = "";
-		  } else {
-			tr[i].style.display = "none";
-		  }
-		}       
-	  }
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("myInput01");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("myTable");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[col];
+			if (td) {
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			}       
+		}
 	}
 </script>

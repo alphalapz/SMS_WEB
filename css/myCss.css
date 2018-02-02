@@ -40,9 +40,13 @@ td:hover{
 }
 
 .error{
-	color:red;
+	color: red;
 }
-
+.btnMenu{
+	color: white;
+	border: 1px;
+	border-color: red;
+}
 .myBtnInputTex{
 	padding: 4px 5px 5px 2px;
     border-radius: 12px;
@@ -50,6 +54,7 @@ td:hover{
     border: black solid 2px;
     box-shadow: 1px 1px 2px #000000;
 }
+
 .myBtnInputTex:hover{
 	background-color: #FF6A00;
 	box-shadow: 4px 4px 8px #000000;
@@ -61,6 +66,7 @@ td:hover{
     transform: translate(-1px, -1px)
 
 }
+
 .myFocus:focus{
 	box-shadow: 0 0 20px rgba(0, 250, 0, 1);
 }

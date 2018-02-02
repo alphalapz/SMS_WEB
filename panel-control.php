@@ -19,7 +19,6 @@
 			<h3 class="text-center">Bienvenido <?php echo " " . strtoupper($_SESSION['username']) . "!"; ?></h3><br>
 			<div class="myScrollH">
 				<table class="table table-hover table-condensed myTable">
-					
 					<th>Nombre de usuario</th>
 					<th>Tipo de usuario</th>
 					<th>Acciones</th>
@@ -27,7 +26,6 @@
 						//THIS 2 LINES FOR INCLUDE THE PAGER
 						$startrow = pagerStartrow();
 						$numOfrows = pagerNumOfRows();
-						$sqlCount = "SELECT count(*) WHERE b_web";
 						$sql = "SELECT
 									CU.id_usr AS id,
 									CU.b_del AS b_del,
@@ -38,9 +36,9 @@
 								FROM cu_usr AS CU
 									INNER JOIN SS_WEB_ROLE AS WR ON CU.fk_web_role = WR.id_web_role
 								WHERE CU.b_web LIMIT $startrow, $numOfrows;";
-						
+
 						$result = $conexion->query($sql);
-						
+
 						## VALIDATE IF HAD 0 ROWS THE $result, this indicate no more records and go back to the last "page";
 						$totalRows = $result->num_rows;
 						if ($totalRows == 0){
@@ -58,7 +56,6 @@
 						// RUN THE QUERY AGAIN FOR GET THE SAME LAST RESULT
 						$result = $conexion->query($sql);
 						}
-
 
 			$buttons = array(
 						array('↑', 'btn btn-success',"<span class='glyphicon glyphicon-refresh'></span>&nbsp;&nbsp;&nbsp;")

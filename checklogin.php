@@ -37,7 +37,6 @@
 						$row = $result->fetch_array(MYSQLI_ASSOC);
 
 						 if ((strlen($row['pswd'])== 0) && $result->num_rows > 0){
-							echo "value 1: " . $row['fk_web_role'];
 							$_SESSION['loggedin'] = true;			
 							$_SESSION['username'] = $user;
 							$_SESSION['user_id'] = $row['id_usr'];
@@ -53,7 +52,6 @@
 								echo "<a href='index.php'><input type='button' class='btn btn-danger' value='Volver'/></a>";
 
 							 }
-							 echo "value 2: " . $row['fk_web_role'];
 							$_SESSION['loggedin'] = true;
 							$_SESSION['username'] = $user;
 							$_SESSION['user_id'] = $row['id_usr'];
@@ -84,7 +82,6 @@
 
 									$result = $conexion->query($sql);
 									$row = $result->fetch_array(MYSQLI_ASSOC);
-									echo "value 3: " . $row['fk_web_role'];
 									$_SESSION['name'] = $row ['name2'];
 								break;
 								default:

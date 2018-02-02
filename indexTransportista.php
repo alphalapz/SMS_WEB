@@ -33,14 +33,14 @@
 		  <div class="col-md-4">
 			<form action="filterTrans.php" method="POST" onSubmit="disableAllInputs()">
 				<input type="submit" class="btn btn-danger3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Por subir">
-					<input type="text" class="hidden" value="1" name="btn1"/>
+					<input type="text" class="hidden" value="1" name="bf1dc"/>
 				</input>
 			</form>
 		  </div>
 			<div class="col-md-4">
 			  <form action="filterTrans.php" method="POST" onSubmit="disableAllInputs()">
 				<input type="submit" class="btn btn-warning3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Por aceptar">
-					<input type="text" class="hidden" value="2" name="btn1"/>
+					<input type="text" class="hidden" value="2" name="bf1dc"/>
 				</input>
 			</form>
 			</div>
@@ -51,14 +51,14 @@
 		  <div class="col-md-4">
 			<form action="filterTrans.php" method="POST" onSubmit="disableAllInputs()">
 				<input type="submit" class="btn btn-success3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Aceptadas">
-					<input type="text" class="hidden" value="3" name="btn1"/>
+					<input type="text" class="hidden" value="3" name="bf1dc"/>
 				</input>
 			</form>
 		  </div>
 			<div class="col-md-4">
 			  <form action="filterTrans.php" method="POST" onSubmit="disableAllInputs()">
 				<input type="submit" class="btn btn-primary3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Mostrar todas">
-					<input type="text" class="hidden" value="4" name="btn1"/>
+					<input type="text" class="hidden" value="4" name="bf1dc"/>
 				</input>
 			</form>
 			</div>
