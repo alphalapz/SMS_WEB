@@ -16,6 +16,10 @@
 		"permissions":[21]
 	},
 	{
+		"url":"em.php",
+		"permissions":[11]
+	},
+	{
 		"url":"filterCredit.php",
 		"permissions":[21]
 	},

@@ -10,7 +10,7 @@
 
 	$result = $conexion->query($sql);
 	ifNecesaryChangeStatus($id_Selected);
-	include 'logo.php';
+	
 ?>
 
 <div class="Myouter">
@@ -26,6 +26,8 @@
 	</div>
 </div>
 <script>
-	redirectjs("filterCredit.php?bf1dc=1");
+	// redirectjs("filterCredit.php?bf1dc=1");
 </script>
-<?php include 'footer.php'; ?>
+<?php include 'footer.php'; 
+	header('Location: ' . $_SERVER['HTTP_REFERER']);
+?>

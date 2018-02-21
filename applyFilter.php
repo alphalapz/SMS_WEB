@@ -4,7 +4,7 @@
 <script>
 	// Receive the $col for apply filter on this column 
 	//	THE FIRST COLUMN IS ZERO
-	function filterTable(col) {
+	function filterTable(col){
 		var input, filter, table, tr, td, i;
 		input = document.getElementById("myInput01");
 		filter = input.value.toUpperCase();
@@ -23,7 +23,7 @@
 	}
 
 	function next(){
-		<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($startrow + $numOfrows) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+		<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($startrow + $numOfrows) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 		var val = document.getElementById("range").value;
 		window.location.replace('<?php echo $url;?>' + val);
 	}
@@ -35,7 +35,7 @@
 			}
 		?>
 		
-		<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($sum) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+		<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($sum) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 		var val = document.getElementById("range").value;
 		window.location.replace('<?php echo $url;?>' + val);
 	}

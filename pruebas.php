@@ -8,7 +8,7 @@ Pruebas
 <div class="container-fluid">
 <?php
 include 'header.php';
-include 'logo.php';
+
 ?>
 	<div class="row">
 		<div class="col-md-4">
@@ -31,7 +31,7 @@ include 'logo.php';
 
 			$info_field = $result->fetch_fields();
 			$index = array();
-			printTableC($result, $buttons, $form, null, $index);
+			printTableC($result, $buttons, $form, null, $index, 2);
 		?>
 		</div>
 		<div class="col-md-4">

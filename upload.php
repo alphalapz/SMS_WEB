@@ -12,14 +12,14 @@ else{
 	<div class=\"container-fluid\">";
 
 	$txtResult = $txtResult . "<div class=\"row\">
-			<div class=\"col-md-4\">
+			<div class=\"col-md-2\">
 			</div>
-			<div class=\"col-md-4\">
+			<div class=\"col-md-8\">
 				<table>";
 					// validate $_POST 
 					if (isset($_POST['submit'])) {
 						//get the delivery_id
-						$sql3 = "SELECT id_row FROM S_SHIPT_ROW WHERE delivery_number = " . $_SESSION['Remision'] . " GROUP BY delivery_id;";
+						$sql3 = "SELECT id_row FROM S_SHIPT_ROW WHERE bol_id = " . $_SESSION['Remision'] . " GROUP BY delivery_id;";
 						$result3 = $conexion->query($sql3);
 						$row3 = $result3->fetch_array(MYSQLI_NUM);
 						$_SESSION['delivery_id'] = $row3[0];
@@ -47,13 +47,13 @@ else{
 							$mxFileSize=1000000 * 12;
 
 							if ($_FILES["file"]["size"][$i] > $mxFileSize) { //12MB aprox files can be uploaded.
-								$txtResult = $txtResult . 'Imagen ' . $j . ').<span class="error">La imagen excede el tamaño máximo permitido.' . $mxFileSize . '</span><br/><br/>';
+								$txtResult = $txtResult . '<span class="error">La imagen excede el tamaño máximo permitido.' . $mxFileSize . '</span><br/><br/>';
 								$_SESSION['CONTENT'] = $txtResult;
 								redirectPHP('result.php');
 							}
 							if (!in_array($file_extension, $validextensions)) {
 								is_dir($target_path)==false;
-								$txtResult = $txtResult . "<br>Imagen ' .$j. ').<span class=\"error\">El archivo posee una extensión no válida</span><br/><br/>";
+								//$txtResult = $txtResult . "<br>Imagen ' .$j. ').<span class=\"error\">El archivo posee una extensión no válida</span><br/><br/>";
 								$_SESSION['CONTENT'] = $txtResult;
 								redirectPHP('result.php');
 							}
@@ -89,26 +89,26 @@ else{
 										. $_SESSION['Folio'] . "," . $_SESSION['delivery_id'] . "," . $_SESSION['user_id'] . ", 1, 1, " . $_SESSION['user_id'] . ",
 										NOW(),NOW(),NOW(),NOW())";
 								$result = $conexion->query($sql);
-								$txtResult = $txtResult . '<th><br>Imagen ' . $j . ').<span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
-								$txtResult = $txtResult . "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></th>";
+								$txtResult = $txtResult . '<td><span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
+								$txtResult = $txtResult . "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></td>";
 								
 								//Verify if all Remissions had evidences with status B_ACCEPT equal to 1.
 								validateIfAllRemissionsHadEvidence($_SESSION['Folio']);
 
 							} else {//if file was not moved.
-							$txtResult = $txtResult . '<br>Imagen ' . $j . ').<span class="error">Error, por favor intenta de nuevo más tarde.</span><br/><br/>';
+							//$txtResult = $txtResult . '<br>Imagen ' . $j . ').<span class="error">Error, por favor intenta de nuevo más tarde.</span><br/><br/>';
 							}
 						}
 					} else {
-						$txtResult = $txtResult . "posiblemente ya ha sido cargado de manera previa.";
+						$txtResult = $txtResult . "Ya ha sido cargada una evidencia de manera previa.";
 					}
 					$txtResult = $txtResult . "</table>";
 				$txtResult = $txtResult . "</div>";
-				$txtResult = $txtResult . "<div class=\"col-md-4\">";
+				$txtResult = $txtResult . "<div class=\"col-md-2\">";
 				$txtResult = $txtResult . "</div>";
 				$txtResult = $txtResult . "<div class=\"row\">
 				<div class=\"col-md-12 text-center\">
-					<a href=\"index.php\"><span class=\"glyphicon glyphicon-home\"></span> Inicio</a>
+					<br><br><a href=\"index.php\"><span class=\"glyphicon glyphicon-home\"></span> Inicio</a>
 				</div>
 			</div>";
 			$txtResult = $txtResult . "</div>";

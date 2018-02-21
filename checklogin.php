@@ -60,10 +60,10 @@
 							
 							switch ($_SESSION['rol']) {
 								case ROL_ADMIN:
-									$_SESSION['name'] = "ADMINISTRADOR" ;
+									$_SESSION['name'] = "Administrador: " . $user;
 									break;
 								case ROL_CREDIT:
-									$_SESSION['name'] = "CREDITO Y COBRANZA" ;
+									$_SESSION['name'] = "Crédito y cobranza: " . $user;
 								break;
 								case ROL_TRANS:
 									$sql = "
@@ -82,7 +82,7 @@
 
 									$result = $conexion->query($sql);
 									$row = $result->fetch_array(MYSQLI_ASSOC);
-									$_SESSION['name'] = $row ['name2'];
+									$_SESSION['name'] = "Transportista: " . $row ['name2'];
 								break;
 								default:
 									echo "NO PUEDES PASAR";

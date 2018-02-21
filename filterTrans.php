@@ -12,7 +12,7 @@
 echo "<div class='container-fluid'>";
 
 	include 'menu.php';
-	include 'logo.php';
+	
 	echo "<div class='row'>";
 		echo "<div class='col-md-1'></div>";
 		echo "<div class='col-md-10 text-right'>";
@@ -64,11 +64,11 @@ echo "<div class='container-fluid'>";
 
 			$info_field = $result->fetch_fields();
 			##	THE VALUES for $index refers to the next values
-				// 8 = SH.m2 AS M2,
-				// 9 = SH.kg AS KILOGRAMOS
-			$index = array(11,12);
+				// 9 = SH.m2 AS M2,
+				// 10 = SH.kg AS KILOGRAMOS
+			$index = array(12,13);
 
-			printTableC($result, $buttons, $form, 4, $index);
+			printTableC($result, $buttons, $form, 5, $index, 2);
 			
 		echo "</div>";
 		echo "</div>";
@@ -87,36 +87,7 @@ echo "</div>";
     // .tablesorterPager({container: $("#pager")}); 
 	// });     
 
-	$(function() {
-		$('input[name="daterange"]').daterangepicker({
-			"ranges": {
-			"Hoy": [
-				new Date(),
-				new Date(),
-			],
-			"Ultima Semana": [
-				moment().subtract('days', 7), moment(),
-				new Date(),
-			],
-			"Ultimo mes": [
-				moment().subtract('months', 1), moment(),
-				new Date(),
-			],
-			"Ultimo año": [
-				moment().subtract('years', 1), moment(),
-				new Date(),
-			],
-			},
-			"alwaysShowCalendars": false,
-			"startDate": new Date(),
-			"endDate": new Date(),
-			"opens": "left",
-			
-			locale: {
-				format: 'YYYY-MM-DD'
-			},
-		});
-	});
+	<?php include 'dateRangePicker.php';?>
 	
 	function filterTable(col) {
 	  var input, filter, table, tr, td, i;

@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 	<div class="jumbotron">
-		<?php include 'logo.php'; ?>
+		
 		<div class="row">
 			<div class="col-sm-12 text-center">
 				<h3>ASIGNAR CONTRASEÑA <br><b> <?php echo strtoupper($_SESSION['username']);?></b></h3>

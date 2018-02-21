@@ -19,11 +19,11 @@
 	include 'menu.php';
 	?>
 	<div class="container-fluid" disabled>
-		<?php include 'logo.php'; ?>
+		
 		<div class="row">
 			<div class="col-md-4"></div>
 			<div class="col-md-4 text-center">
-			<p><h1><b>EVIDENCIAS:</b></h1></p>
+			<p><h1><b>Evidencias:</b></h1></p>
 			</div>
 			<div class="col-md-4"></div>
 		</div>
@@ -57,12 +57,13 @@
 		  </div>
 			<div class="col-md-4">
 			  <form action="filterTrans.php" method="POST" onSubmit="disableAllInputs()">
-				<input type="submit" class="btn btn-primary3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Mostrar todas">
+				<input type="submit" class="btn btn-primary3 button-xlarge btn3d" style="font-size:36px; font-weight:bold;" value="Todas las ordenes">
 					<input type="text" class="hidden" value="4" name="bf1dc"/>
 				</input>
 			</form>
 			</div>
-			<div class="col-md-2"></div>
+			<div class="col-md-2">
+			</div>
 		</div>
 		<br>
 		<br>

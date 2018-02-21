@@ -12,6 +12,10 @@ $(document).ready(function() {
 
 $('body').on('change', '#file', function(){
             if (this.files && this.files[0]) {
+				$('#add_more').before($("<div/>", {id: 'filediv'}).fadeIn('slow').append(
+					$("<input/>", {name: 'file[]', type: 'file', id: 'file', accept:'image/*'}),        
+					$("<br/><br/>")
+				));
                 //increment();
                 abc += 1;
                 var z = abc - 1;

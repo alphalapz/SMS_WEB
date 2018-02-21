@@ -4,7 +4,7 @@
 	include 'menu.php'; 
 ?>
 <div class="container-fluid">
-	<?php include 'logo.php';?>
+	
 	<div class="row">
 		<div class="col-md-4">
 		</div>
@@ -20,7 +20,8 @@
 			$sql ="
 				SELECT
 					SH.number AS Embarque,
-					SHR.delivery_number as Remision,
+					SH.shipt_date AS fecha_embarque,
+					SHR.bol_id as Remision,
 					SH.driver_name AS Nombre_chofer,
 					SHIP.name AS Transportista,
 					SHR.m2 as m2,
@@ -51,8 +52,9 @@
 					$_SESSION['fake'] = true;
 					$_SESSION['loggedin'] = true;
 					$_SESSION['rol'] = 99;
-					$_SESSION['name'] = 'Chofer de: ' . $row['Nombre_chofer'];
-
+					$_SESSION['name'] = "Chofers: " . $row['Nombre_chofer'];
+					$_SESSION['Embarque'] = $row['Embarque'];
+					$_SESSION['fecha_embarque'] = $row['fecha_embarque'];
 					redirectPHP('folios.php');
 				} else {
 					redirectPHP('isnAccepted.php');

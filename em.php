@@ -2,7 +2,7 @@
 	include 'database.php';
 	require 'functionsphp.php';
 	session_start();
-	canAccess($_SESSION['loggedin'], "panel-control.php", $_SESSION['rol']);
+	canAccess($_SESSION['loggedin'], "em.php", $_SESSION['rol']);
 ?>
 	<title>
 	EMERGENCIA | PANEL_CONTROL
@@ -27,7 +27,7 @@
 								*
 							FROM s_evidence
 							WHERE NOT b_del LIMIT $startrow, $numOfrows;";
-					echo $sql;
+					
 					$result = $conexion->query($sql);
 					
 					## VALIDATE IF HAD 0 ROWS THE $result, this indicate no more records and go back to the last "page";
@@ -53,7 +53,7 @@
 							);
 					$index = array();
 					$form = array('ja.php','Yes');
-					printTableC($result, $buttons, $form, 3, $index);
+					printTableC($result, $buttons, $form, 3, $index, 2);
 
 					
 			echo "</div>";
@@ -103,7 +103,7 @@
 	?>
 <script>
 	function next(){
-			<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($startrow + $numOfrows) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+			<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($startrow + $numOfrows) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 			var val = document.getElementById("range").value;
 			window.location.replace('<?php echo $url;?>' + val);
 	}
@@ -115,7 +115,7 @@
 					$sum = 0;
 				}
 			?>
-			<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($sum) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+			<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($sum) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 			var val = document.getElementById("range").value;
 			window.location.replace('<?php echo $url;?>' + val);
 	}

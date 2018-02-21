@@ -11,7 +11,7 @@
 	<body>
 	<?php include 'menu.php'; ?>
 	<div class="container-fluid	">
-		<?php include 'logo.php' ?>
+		
 		<div class="row">
 			<div class="col-sm-2">
 			</div>
@@ -26,6 +26,9 @@
 						//THIS 2 LINES FOR INCLUDE THE PAGER
 						$startrow = pagerStartrow();
 						$numOfrows = pagerNumOfRows();
+						if ($startrow < 0){
+							$startrow = 0;
+						}
 						$sql = "SELECT
 									CU.id_usr AS id,
 									CU.b_del AS b_del,
@@ -43,6 +46,9 @@
 						$totalRows = $result->num_rows;
 						if ($totalRows == 0){
 						$startrow = $startrow - $numOfrows;
+						if ($startrow < 0){
+							$startrow = 0;
+						}
 								$sql = "SELECT
 									CU.id_usr AS id,
 									CU.b_del AS b_del,
@@ -56,14 +62,13 @@
 						// RUN THE QUERY AGAIN FOR GET THE SAME LAST RESULT
 						$result = $conexion->query($sql);
 						}
-
 			$buttons = array(
 						array('↑', 'btn btn-success',"<span class='glyphicon glyphicon-refresh'></span>&nbsp;&nbsp;&nbsp;")
 					);
 			$index = array();
 			$form = array('deleteUser.php','');
 			// printTableC($result, $buttons, $form, 3, $index);
-
+			
 			while($row = $result->fetch_array(MYSQLI_ASSOC)) {
 				echo "<tr>";
 					?>
@@ -92,7 +97,7 @@
 
 				echo "</table>";
 			echo "</div>";
-			echo "<div class'row'>
+			echo "<div class='row'>
 					<div class='col-xs-5'>
 						<button type='button' class='btn btn-primary' onclick='prev()'><span class='glyphicon glyphicon-backward'>
 							</span>&nbsp;$numOfrows registros
@@ -138,7 +143,7 @@
 	?>
 <script>
 	function next(){
-			<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($startrow + $numOfrows) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+			<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($startrow + $numOfrows) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 			var val = document.getElementById("range").value;
 			window.location.replace('<?php echo $url;?>' + val);
 	}
@@ -149,8 +154,9 @@
 				if ($sum < 0){
 					$sum = 0;
 				}
+				
 			?>
-			<?php $url = $_SERVER['PHP_SELF'] . "?30fe55df3ab2abce7ba2dd920344c1a2&startrow=" . ($sum) . "&30fe55df3ab2abce7ba2dd920344c1a2&range="?>
+			<?php $url = $_SERVER['PHP_SELF'] . "?0d2366f384b6c702db8e9dd8b74534db&startrow=" . ($sum) . "&0d2366f384b6c702db8e9dd8b74534db&range="?>
 			var val = document.getElementById("range").value;
 			window.location.replace('<?php echo $url;?>' + val);
 	}

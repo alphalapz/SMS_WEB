@@ -9,7 +9,7 @@
 echo "<div class=\"container-fluid\">";
 
 	include 'menu.php';
-	include 'logo.php';
+	
 	echo "<div class='row'>";
 		echo "<div class='col-md-1'></div>";
 		echo "<div class='col-md-10 text-right'>";
@@ -18,7 +18,7 @@ echo "<div class=\"container-fluid\">";
 				echo "<p><h2> Filtrar por fecha</h2></p>";
 				echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
 				echo "<input type='text' class='hidden' name='bf1dc' value='" . $_REQUEST['bf1dc'] . "' >";
-				echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
+				echo "&nbsp;<button type='submit' class='btn btn-success'><span class='glyphicon glyphicon-play'></span>&nbsp;&nbsp;Aplicar</button>";
 			echo "</form>";
 		echo "</div>";
 		
@@ -85,7 +85,7 @@ echo "<div class=\"container-fluid\">";
 								<?php
 								echo "<input type='label' name='evidence' class='hidden' value='" . $row['id_evidence'] ."'>";
 								echo "<td>" . $row['number'] . "</td>";
-								echo "<td>" . $row['delivery_number'] . "</td>";
+								echo "<td>" . $row['bol_id'] . "</td>";
 								echo "<td><a id='single_image' href='" . $row['file_location'] . $row['file_name'] . "'>
 									<img class='img-rounded' src='" . $row['file_location'] . $row['file_name'] . "' style='width:30px;height:30px;border:2px solid transparent;border-color:white'/></a></td>";
 								echo "<td>";
@@ -118,36 +118,8 @@ echo "<div class=\"container-fluid\">";
 echo "</div>";
 ?>
 <script type="text/javascript">
-	$(function() {
-		$('input[name="daterange"]').daterangepicker({
-			"ranges": {
-			"Hoy": [
-				new Date(),
-				new Date(),
-			],
-			"Ultims 7 dias": [
-				moment().subtract('days', 7), moment(),
-				new Date(),
-			],
-			"Ultimos 30 dias": [
-				moment().subtract('months', 1), moment(),
-				new Date(),
-			],
-			"Ultimo año": [
-				moment().subtract('years', 1), moment(),
-				new Date(),
-			],
-			},
-			"alwaysShowCalendars": false,
-			"startDate": new Date(),
-			"endDate": new Date(),
-			"opens": "left",
-
-			locale: {
-				format: 'YYYY-MM-DD'
-			},
-		});
-	});
+	<?php include 'dateRangePicker.php';?>
+	
 	function filterTable(col) {
 	  var input, filter, table, tr, td, i;
 	  input = document.getElementById("myInput01");

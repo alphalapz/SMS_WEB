@@ -82,10 +82,12 @@ include 'const.php';
 		echo "</div>";
 		echo "<div class='col-xs-4'>";
 			echo "<div class='text-right'>";
-				echo "<form action='$url' metod='POST'>";
-			foreach($_REQUEST as $req){
-				echo "<input type='text' class='hidden' value='" . $req . "'/>";
-			}
+				echo "<form action='$url' method='POST'>";
+foreach ($_REQUEST as $name => $value) {
+   // echo $name; // email, for example
+   // echo $value; // the same as echo $_POST['email'], in this case
+echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value . "'/>";
+}
 				echo "<button type='submit' onclick=\"window.location='$url';\"; class='btn btn-danger btn-lg'><span class='glyphicon glyphicon-triangle-left'></span>&nbsp;Volver";
 			echo "</div>";
 		echo "</div>";
@@ -194,18 +196,19 @@ include 'const.php';
 		$sql = "
 		SELECT
 			SHR.ID_ROW as REMISION,
-			SH.ID_SHIPT AS FOLIO_EMBARQUE,
-			SHR.delivery_number as Remision,
+			SH.SHIPT_DATE AS Fecha_creación,
+			SH.ID_SHIPT AS FOLIO,
+			SHR.bol_id as Remisión,
 			sh.web_key as web_key,
-			SH.NUMBER AS FOLIO,
-			SH.SHIPT_DATE AS FECHA_CREACION,
-			SH.TS_USR_RELEASE AS FECHA_LIBERACION,
-			SH.DRIVER_NAME AS NOMBRE_CHOFER,
-			SHS.NAME AS ESTATUS,
-			SHP.NAME AS FLETE,
-			sum(SHR.ORDERS) AS N_ORDENES,
-			SH.m2 AS M2,
-			SH.kg AS KILOGRAMOS
+			SH.NUMBER AS Folio,
+			SH.SHIPT_DATE AS Fecha_creación,
+			SH.TS_USR_RELEASE AS Fecha_liberación,
+			SH.DRIVER_NAME AS Nombre_chofer,
+			SHS.NAME AS Estatus,
+			SHP.NAME AS Flete,
+			sum(SHR.ORDERS) AS N_ordenes,
+			SH.m2 AS m2,
+			SH.kg AS kg
 		FROM S_SHIPT AS SH
 			INNER JOIN SS_SHIPT_ST AS SHS ON SHS.ID_SHIPT_ST = SH.FK_SHIPT_ST
 			INNER JOIN SU_SHIPT_TP AS SHP ON SHP.ID_SHIPT_TP = SH.FK_SHIPT_TP
@@ -276,7 +279,7 @@ include 'const.php';
 			SELECT 
 				E.id_evidence,
 				SH.number,
-				SHR.delivery_number,
+				SHR.bol_id,
 				E.file_location,
 				E.file_name,
 				E.file_location,
@@ -416,9 +419,9 @@ include 'const.php';
 	//		$form = array('function.php','Warning Message?');
 	//		$hidden = Integer for hide the columns (initial column = 1) 
 	##	IF YOU DONT NEED TO HIDE ELEMENTS, CAN USE THE printTableB FUNCTION OR SET $HIDDEN TO ZERO
-	function printTableC($result, $buttons, $form, $hidden, $index){
+	function printTableC($result, $buttons, $form, $hidden, $index, $actionPosition){
 		$aNames = array();
-		$formAction = $hidden + 2;
+		$formAction = $hidden + $actionPosition;
 		$info_field = $result->fetch_fields();
 		echo " <table id='myTable' class='table table-hover table-condensed myTable tablesorter'>";
 			echo " <thead>";
@@ -433,7 +436,7 @@ include 'const.php';
 				echo "<th>" . $valor->name . "</th>";
 			}
 			if ($cont == $formAction){
-				echo "<th>ACCION</th>";
+				echo "<th>Acción</th>";
 			}
 			array_push($aNames, $valor->name);
 		}

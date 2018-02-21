@@ -6,36 +6,44 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">SMS_WEB</a>
+
+			<div class="outer">
+				<div class="middle">
+					<div class="inner">
+						<?php include 'logo.php';?>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="index.php"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+				<li class=""><a href="index.php"><span class="glyphicon glyphicon-home"></span>&nbsp;Inicio</a></li>
 				<?php 
 					switch ($_SESSION['rol']){
 						case ROL_ADMIN:
-							echo "<li class=''><a href='registry.php' class='navbar-brand btnMenu' >|NUEVO REGISTRO|</a></li>";
+							echo "<li class=''><a href='registry.php' class='navbar-brand btnMenu' >|Nuevo registro|</a></li>";
 						break;
 						case ROL_CREDIT:
 						echo "<li class='dropdown'>";
-							echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='glyphicon glyphicon-filter'></span>&nbsp;Filtros:";
+							echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='glyphicon glyphicon-filter'></span>&nbsp;Órdenes de embarque:";
 							echo "<span class='caret'></span></a>";
 							echo "<ul class='dropdown-menu'>";
-								echo "<li><a href='eviFolios.php?bf1dc=1'>Por Aprobar</a></li>";
+								echo "<li><a href='eviFolios.php?bf1dc=1'>Por aprobar</a></li>";
 								echo "<li><a href='eviFolios.php?bf1dc=2'>Aprobadas</a></li>";
-								echo "<li><a href='eviFolios.php?bf1dc=3'>Mostrar Todas</a></li>";
+								echo "<li><a href='eviFolios.php?bf1dc=3'>Todas las órdenes</a></li>";
 							echo "</ul>";
 						echo "</li>";
 						break;
 						case ROL_TRANS:
 							echo "<li class='dropdown'>";
-							echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='glyphicon glyphicon-filter'></span>&nbsp;Filtros:";
+							echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='glyphicon glyphicon-filter'></span>&nbsp;Órdenes de Embarque:";
 							echo "<span class='caret'></span></a>";
 							echo "<ul class='dropdown-menu'>";
-								echo "<li><a href='filterTrans.php?bf1dc=1'>Por Subir</a></li>";
-								echo "<li><a href='filterTrans.php?bf1dc=2'>Por Aceptar</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=1'>Por subir</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=2'>Por aceptar</a></li>";
 								echo "<li><a href='filterTrans.php?bf1dc=3'>Aceptadas</a></li>";
-								echo "<li><a href='filterTrans.php?bf1dc=4'>Mostrar Todas</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=4'>Todas las órdenes</a></li>";
 							echo "</ul>";
 						echo "</li>";
 						break;
@@ -46,10 +54,14 @@
 				?>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li class=""><a><?php echo strtoupper($_SESSION['name']);?></a></li>
+				<li class=""><a><?php echo $_SESSION['name'];?></a></li>
 				<li class="active"><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Salir</a></li>
 			</ul>
 		</div>
 	</div>
 </nav>
 <div class="vacio"></div>
+<br>	
+<br>
+<br>
+<br>

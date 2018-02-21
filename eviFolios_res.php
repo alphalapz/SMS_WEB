@@ -11,7 +11,7 @@
 		echo "<div class=\"container-fluid\">";
 
 		include 'menu.php';
-		include 'logo.php';
+		
 		echo "<div class='row'>";
 			echo "<div class='col-md-1'></div>";
 			echo "<div class='col-md-10 text-right'>";
@@ -19,7 +19,7 @@
 				echo "<form action='eviPorFolio.php' method='POST' >";
 					echo "<p><h2> Filtrar por fecha</h2></p>";
 					echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
-					echo "<input type='submit' class='btn btn-success' value='Aplicar Filtro'>";
+					echo "&nbsp;<button type='submit' class='btn btn-success'><span class='glyphicon glyphicon-play'></span>&nbsp;&nbsp;Aplicar</button>";
 				echo "</form>";
 			echo "</div>";
 			
@@ -82,7 +82,7 @@
 
 				$info_field = $result->fetch_fields();
 				$index = array();
-				printTableC($result, $buttons, $form, null, $index);
+				printTableC($result, $buttons, $form, null, $index, 2);
 				echo "</div>";
 				include 'pager_controls.php';
 			echo "</div>";
@@ -95,36 +95,7 @@
 
 
 <script type="text/javascript">
-	$(function() {
-		$('input[name="daterange"]').daterangepicker({
-			"ranges": {
-			"Hoy": [
-				new Date(),
-				new Date(),
-			],
-			"Ultims 7 dias": [
-				moment().subtract('days', 7), moment(),
-				new Date(),
-			],
-			"Ultimos 30 dias": [
-				moment().subtract('months', 1), moment(),
-				new Date(),
-			],
-			"Ultimo año": [
-				moment().subtract('years', 1), moment(),
-				new Date(),
-			],
-			},
-			"alwaysShowCalendars": false,
-			"startDate": new Date(),
-			"endDate": new Date(),
-			"opens": "left",
-
-			locale: {
-				format: 'YYYY-MM-DD'
-			},
-		});
-	});
+	<?php include 'dateRangePicker.php';?>
 	
 	function filterTable(col) {
 	  var input, filter, table, tr, td, i;

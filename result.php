@@ -5,7 +5,7 @@ require 'functionsphp.php';
 session_start();
 // Validate if $_SESSION['CONTENT'] was established ELSE REDIRECT TO INDEX
 if(isset($_SESSION['CONTENT'])){
-	include 'logo.php';
+	
     include 'menu.php';
 	//print the result of the upload
 	echo $_SESSION['CONTENT'];
@@ -15,8 +15,19 @@ if(isset($_SESSION['CONTENT'])){
 	echo "<br>";
 	echo "<br>";
 	
-	echo "Cargar otra evidencia de la misma orden de embarque:";
-	btnBack('folios.php');
+	echo "<div class='row text-left'>";
+		echo "<div class='col-md-2'>";
+		echo "</div>";
+		echo "<div class='col-md-8'>";
+			echo "<h2>Cargar otra evidencia de la misma remision:</h2>";
+			btnBack('cargar.php');
+			echo "<br>";
+			echo "<h2>Cargar evidencia para otra remision de la misma orden de embarque:</h2>";
+			btnBack('folios.php');
+		echo "</div>";
+		echo "<div class='col-md-2'>";
+		echo "</div>";
+	echo "</div>";
 	
 	echo "<br>";
 	echo "<br>";
