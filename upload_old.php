@@ -1,9 +1,8 @@
-<?php
+﻿<?php
 session_start();
 include 'header.php';
 require 'database.php';
 require 'functionsphp.php';
-require_once 'mail/mail.php';
 
 if (!isset($_SESSION['loggedin'])){
 	redirectPHP('noPermission.php');
@@ -20,9 +19,7 @@ else{
 					// validate $_POST 
 					if (isset($_POST['submit'])) {
 						//get the delivery_id
-						// $sql3 = "SELECT id_row FROM S_SHIPT_ROW WHERE bol_id = " . $_SESSION['Remision'] . " GROUP BY delivery_id;";
-						$sql3 = "SELECT id_row, mail FROM s_shipt_row AS shr INNER JOIN s_shipt as sh ON sh.id_shipt = shr.id_shipt INNER JOIN su_shipper as shp  ON shp.id_shipper = sh.fk_shipper WHERE bol_id = " . $_SESSION['Remision'] . " GROUP BY shr.delivery_id;";
-						
+						$sql3 = "SELECT id_row FROM S_SHIPT_ROW WHERE bol_id = " . $_SESSION['Remision'] . " GROUP BY delivery_id;";
 						$result3 = $conexion->query($sql3);
 						$row3 = $result3->fetch_array(MYSQLI_NUM);
 						$_SESSION['delivery_id'] = $row3[0];
@@ -40,7 +37,7 @@ else{
 
 						for ($i = 0; $i < count($_FILES['file']['name']); $i++) {//loop to get individual element from the array
 							$target_path = "";
-							$validextensions = array("jpeg", "jpg", "png", "gif","pdf");  //Extensions which are allowed
+							$validextensions = array("jpeg", "jpg", "png", "gif", "pdf");  //Extensions which are allowed
 							$ext = explode('.', basename($_FILES['file']['name'][$i]));//explode file name from dot(.) for get extension file
 							$file_extension = end($ext); //store extensions in the variable
 							$file_name = $_SESSION['Folio'] . "-000-00" . ($j + 1);
@@ -97,7 +94,7 @@ else{
 								
 								//Verify if all Remissions had evidences with status B_ACCEPT equal to 1.
 								validateIfAllRemissionsHadEvidence($_SESSION['Folio']);
-								sendMail($row3[1]);
+
 							} else {//if file was not moved.
 							//$txtResult = $txtResult . '<br>Imagen ' . $j . ').<span class="error">Error, por favor intenta de nuevo más tarde.</span><br/><br/>';
 							}

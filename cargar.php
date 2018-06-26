@@ -1,4 +1,4 @@
-	<?php
+﻿	<?php
 	echo "<title>";
 	echo "CARGA DE EVIDENCIAS";
 	echo "</title>";
@@ -44,12 +44,14 @@
 				EVI.id_evidence, 
 				EVI.b_accept 
 			FROM S_EVIDENCE as EVI 
-				INNER JOIN S_SHIPT_ROW as SHR ON EVI.fk_ship_row=SHR.id_row 
+				INNER JOIN S_SHIPT_ROW as SHR ON EVI.fk_ship_row=SHR.id_row AND
+				EVI.fk_ship_ship = SHR.id_shipt
+				
 			WHERE bol_id=" . $_SESSION['Remision'] . " 
 				AND SHR.id_shipt=" . $_SESSION['id'] . " 
 				AND NOT EVI.b_del 
 			GROUP BY SHR.bol_id, EVI.file_name ORDER BY EVI.b_accept DESC;";
-			
+
 			$result = $conexion->query($sql);
 			if ($result->num_rows > 0){
 				
@@ -100,6 +102,7 @@
 				SHR.bol_id=" . $_SESSION['Remision'] . " AND SH.id_shipt=" . $_SESSION['id'] . ";";
 			$result = $conexion->query($sql);
 			$row = $result->fetch_array(MYSQLI_NUM);
+
 			if ($row[0] != 12 ){
 		?>
 		<div class="row">
@@ -114,7 +117,7 @@
 				<div class="text-center" id="forxsiv"> 
 					<form class="text-center form-group" enctype="multipart/form-data" action="upload.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas cargar la(s) imagen(es)?')){return false;}">
 						<div id="filediv">
-							<input name="file[]" class="form-group" type="file" id="file" accept="image/*"/>
+							<input name="file[]" class="form-group" type="file" id="file" accept="image/*,application/pdf"/>
 						</div>
 						<br/>
 						<p class="text-center">

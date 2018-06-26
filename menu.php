@@ -19,7 +19,7 @@
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
 				<li class=""><a href="index.php"><span class="glyphicon glyphicon-home"></span>&nbsp;Inicio</a></li>
-				<?php 
+				<?php
 					switch ($_SESSION['rol']){
 						case ROL_ADMIN:
 							echo "<li class=''><a href='registry.php' class='navbar-brand btnMenu' >|Nuevo registro|</a></li>";
@@ -40,10 +40,10 @@
 							echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='glyphicon glyphicon-filter'></span>&nbsp;Órdenes de Embarque:";
 							echo "<span class='caret'></span></a>";
 							echo "<ul class='dropdown-menu'>";
-								echo "<li><a href='filterTrans.php?bf1dc=1'>Por subir</a></li>";
-								echo "<li><a href='filterTrans.php?bf1dc=2'>Por aceptar</a></li>";
-								echo "<li><a href='filterTrans.php?bf1dc=3'>Aceptadas</a></li>";
-								echo "<li><a href='filterTrans.php?bf1dc=4'>Todas las órdenes</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=" . FILTER_POR_SUBIR . "'>Por subir</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=" . FILTER_POR_ACEPTAR . "'>Por aceptar</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=" . FILTER_POR_ACEPTADAS . "'>Aceptadas</a></li>";
+								echo "<li><a href='filterTrans.php?bf1dc=" . FILTER_POR_ALL . "'>Todas las órdenes</a></li>";
 							echo "</ul>";
 						echo "</li>";
 						break;
@@ -61,7 +61,7 @@
 	</div>
 </nav>
 <div class="vacio"></div>
-<br>	
+<br>
 <br>
 <br>
 <br>

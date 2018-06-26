@@ -26,7 +26,7 @@ include 'const.php';
 				break;
 		}
 	}
-	
+
 	/*
 	 *	RETURN the value of the initial row for the queries when paginate apply
 	 */
@@ -37,7 +37,7 @@ include 'const.php';
 		  return (int)$_GET['startrow'];
 		}
 	}
-	
+
 	/*
 	 *	RETURN the value of the range for the queries when paginate apply
 	 */
@@ -48,29 +48,29 @@ include 'const.php';
 		  return (int)$_GET['range'];
 		}
 	}
-	
+
 	/*
 	 *	Print all images of a specific directory, include the function of the fancyBox JS
 	 *	$dir = myPath/.../...
 	 */
 	function printAllImg($dir){
-		$directory = "./$dir"; 
+		$directory = "./$dir";
 
 		$images = glob($directory . "*.{jpg,png,gif}", GLOB_BRACE);
 
 		foreach($images as $image)
 		{
 			?>
-			<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo?')){return false;}"> 
+			<form action="deleteFile.php" method="post" onSubmit="if(!confirm('¿Seguro que deseas eliminar el archivo?')){return false;}">
 				<a id="single-image" href="<?php echo $image; ?>"> <img style='width:50px;height:50px;' src="<?php echo $image; ?>"></a>
 				<input type="text" class="hidden" name="MyFile" id="MyFile" value="<?php echo $image; ?>"/>
 				<input type="submit" name='submit' id="btn" name="btn" class='btn btn-danger' value='ELIMINAR'/>
 			</form>
-			<?php 
+			<?php
 		}
-		
+
 	}
-	
+
 	/*
 	 *	This print a button into a form with all the $_REQUEST values for go back.
 	 *	i.e: $url = "www.myWeb.com.mx/myLastPage.php"
@@ -95,7 +95,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		echo "</div>";
 		echo "</div>";
 	}
-	
+
 	/*
 	 *	Delete the file
 	 *	$full_path = Full URL and file name including the extension of the file
@@ -115,7 +115,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 				echo $sql;
 			}
 		} else {
-			echo "EL ARCHIVO $full_path NO EXISTE!";			
+			echo "EL ARCHIVO $full_path NO EXISTE!";
 		}
 	}
 
@@ -135,7 +135,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	/*
 	 *	Verify if the current user can access to the current view.
 	 *	$Session = ROL_XXX
-	 *	
+	 *
 	 */
 	function canAccess($Session, $url, $rol){
 		if ($Session == 1) {
@@ -153,7 +153,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	}
 
 	/*
-	 *	Verify in the file urls.json if the current user can view the requested view. 
+	 *	Verify in the file urls.json if the current user can view the requested view.
 	 *	i.e:	$URL = "myPage.php"
 	 *			$rol_Session = ROL_ADMIN
 	 */
@@ -178,7 +178,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 					}
 				}
 			}
-		}	
+		}
 		return false;
 	}
 
@@ -220,45 +220,50 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 			INNER JOIN SU_DESTIN AS DE ON DE.ID_DESTIN = SHR.FK_DESTIN
 			INNER JOIN SU_SHIPPER AS SHIP ON SHIP.ID_SHIPPER = SH.FK_SHIPPER ";
 		switch ($type) {
-			case OPT_ONE:
+			case FILTER_POR_SUBIR:
 			echo "<div class='hidden-md-up'>";
 			echo "<h1 class='text-center'>Evidencias por subir:</h1><br>
 					</div>";
 			echo "<div class='hidden-md-down'>";
 			echo "<h3 class='text-center'>Evidencias por subir:</h3><br>
 					</div>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_LIBERADO;
 				break;
-			case OPT_TWO:
+			case FILTER_POR_ACEPTAR:
 			echo "<h1 class='text-center'>Evidencias por aceptar:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
-			case OPT_THREE:
+			case FILTER_POR_ACEPTADAS:
 			echo "<h1 class='text-center'>Evidencias aceptadas:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND SHS.id_shipt_st=" . S_ST_ACEPTADO;
 				break;
-			case OPT_FOUR:
+			case FILTER_POR_ALL:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					SHIP.fk_usr = " . $_SESSION['user_id'] . " AND (SHS.id_shipt_st=" . S_ST_ACEPTADO . " OR SHS.id_shipt_st=" . S_ST_POR_ACEPTAR . " OR SHS.id_shipt_st=" . S_ST_LIBERADO . ")";
 				break;
 			default:
 			break;
 		}
-		
-		if ($starDate == null OR $endDate == null){
-			$sql = $sql . " GROUP BY SH.ID_SHIPT;";
+		if ($type != FILTER_POR_SUBIR){
+			if (($starDate == null OR $endDate == null)){
+				$sql .= " GROUP BY SH.ID_SHIPT;";
+			}
+			else {
+				$sql .= " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY SH.ID_SHIPT;";
+			}
 		}
 		else {
-			$sql = $sql . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY SH.ID_SHIPT;";
+			$sql .= " GROUP BY SH.ID_SHIPT;";
 		}
+		echo $sql;
 		return $sql;
 	}
 
@@ -276,7 +281,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		$starDate = str_replace('-', ':', $starDate);
 		$endDate = str_replace('-', ':', $endDate);
 		$sql = "
-			SELECT 
+			SELECT
 				E.id_evidence,
 				SH.number,
 				SHR.bol_id,
@@ -290,28 +295,28 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 				E.ts_usr_upload,
 				E.ts_usr_accept,
 				E.ts_usr_upd
-			FROM 
+			FROM
 				S_EVIDENCE AS E
-				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt 
+				INNER JOIN S_SHIPT AS SH ON E.fk_ship_ship = SH.id_shipt
 				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
 					AND SHR.ID_SHIPT = SH.ID_SHIPT
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
 			case OPT_ONE:
 			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
 			case OPT_TWO:
 			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO;
 				break;
 			case OPT_THREE:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
-				$sql = $sql . "
+				$sql .= "
 				WHERE
 					NOT E.b_del AND (SH.fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR SH.fk_shipt_st=" . S_ST_ACEPTADO . ")";
 				break;
@@ -319,10 +324,10 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 				break;
 		}
 		if ($starDate == null OR $endDate == null){
-			$sql = $sql . " GROUP BY E.id_evidence;";
+			$sql .= " GROUP BY E.id_evidence;";
 		}
 		else {
-			$sql = $sql . " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY E.id_evidence;";
+			$sql .= " AND SH.shipt_date BETWEEN '$starDate' AND '$endDate' GROUP BY E.id_evidence;";
 		}
 		return $sql;
 	}
@@ -333,7 +338,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	 */
 	function printTable($result){
 		$info_field = $result->fetch_fields();
-		
+
 		echo " <table class='table table-hover myTable'>";
 			echo " <thead>";
 				echo "<tr>";
@@ -360,7 +365,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	 *	$buttons must be and array of arrays
 	 *	i.e: printableB
 	 *	$buttons = array(
-	 *	array('buttonText', 'button class') 
+	 *	array('buttonText', 'button class')
 	 *	);
 	 *	$form = array('action','Message?');
 	 */
@@ -371,7 +376,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		echo " <table class='table table-hover table-condensed myTable'>";
 			echo " <thead>";
 				echo "<tr>";
-			$cont = 0;			
+			$cont = 0;
 		foreach ($info_field as $valor) {
 			$cont++;
 			if ($cont <= 4){
@@ -410,14 +415,14 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		echo "</table>";
 		echo "</div>";
 	}
-	
+
 	//	$buttons must be and array of arrays
 	//	i.e: printableB
 	//		$buttons = array(
-	//			array('Text Button', 'Class Button') 
+	//			array('Text Button', 'Class Button')
 	//		);
 	//		$form = array('function.php','Warning Message?');
-	//		$hidden = Integer for hide the columns (initial column = 1) 
+	//		$hidden = Integer for hide the columns (initial column = 1)
 	##	IF YOU DONT NEED TO HIDE ELEMENTS, CAN USE THE printTableB FUNCTION OR SET $HIDDEN TO ZERO
 	function printTableC($result, $buttons, $form, $hidden, $index, $actionPosition){
 		$aNames = array();
@@ -426,7 +431,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		echo " <table id='myTable' class='table table-hover table-condensed myTable tablesorter'>";
 			echo " <thead>";
 				echo "<tr>";
-			$cont = 0;			
+			$cont = 0;
 
 		foreach ($info_field as $valor) {
 			$cont++;
@@ -463,7 +468,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 				// TAKE the $index value for
 				if (in_array($i,$index, true)){
 					$row[$i] = strcmp('double',getType($row[$i])) ? number_format($row[$i], 2, ".", ",") : $row[$i];
-				} 
+				}
 
 				if ($i < $hidden){
 					echo "<input type='text' class='hidden' name='" . array_pop($names) . "' value='$row[$i]'/>";
@@ -493,9 +498,9 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	function validateIfAllRemissionsHadEvidence($folio){
 		require 'database.php';
 		$sql = "
-			SELECT id_row 
-			FROM S_SHIPT_ROW 
-			WHERE id_shipt =" . $folio ." 
+			SELECT id_row
+			FROM S_SHIPT_ROW
+			WHERE id_shipt =" . $folio ."
 			GROUP BY id_row;";
 		$result = $conexion->query($sql);
 		$sql2 = "SELECT fk_ship_row FROM S_EVIDENCE WHERE NOT b_del;";
@@ -527,22 +532,22 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 			$result = $conexion->query($sql);
 		}
 	}
-	
+
 	/*
 	 *	This function is called when some evidence status change or if some evidence is deleted
-	 *	$del_id = etla_com.s_evidence.id_evidence 
+	 *	$del_id = etla_com.s_evidence.id_evidence
 	 */
 	function ifNecesaryChangeStatus($del_id) {
 		require 'database.php';
 		$sql = "
-		SELECT SH.id_shipt as folio, 
-			SHR.id_row as remision, 
+		SELECT SH.id_shipt as folio,
+			SHR.id_row as remision,
 			SH.fk_shipt_st as status
 		FROM S_EVIDENCE AS EVI
 			INNER JOIN S_SHIPT_ROW AS SHR ON EVI.fk_ship_row = SHR.id_row
 			INNER JOIN S_SHIPT AS SH ON EVI.fk_ship_ship = SH.id_shipt
-		WHERE EVI.id_evidence=$del_id 
-			
+		WHERE EVI.id_evidence=$del_id
+
 			AND NOT SH.b_del
 		GROUP BY EVI.id_evidence;";
 
@@ -554,9 +559,9 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		$status = $row[2];
 
 		$sql = "
-		SELECT b_accept 
-		FROM S_EVIDENCE 
-		WHERE NOT b_del 
+		SELECT b_accept
+		FROM S_EVIDENCE
+		WHERE NOT b_del
 			AND fk_ship_ship=$folio;";
 
 		$result = $conexion->query($sql);
@@ -569,7 +574,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 			$completo = false;
 			echo "<br>Folio completado.";
 			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_ACEPTADO . " WHERE id_shipt=$folio";
-			$result = $conexion->query($sql);		
+			$result = $conexion->query($sql);
 		}
 	}
 
@@ -583,7 +588,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		$row = $result->fetch_array(MYSQLI_NUM);
 		validateIfAllRemissionsHadEvidence($row[0]);
 	}
-	
+
 	/*
 	 *	Send Message via console use it for debug
 	 */
@@ -594,7 +599,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		}
 		echo "<script>console.log( 'Debug: " . $output . "' );</script>";
 	}
-	
+
 	/*
 	 *	Transaction queries mysqli
 	 *	Receive 2 queries, the first one is for validate at least one result row

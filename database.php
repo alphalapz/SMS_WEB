@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 //$host_db = "192.168.1.107";
 // $host_db = "10.83.32.129:3306";
- $host_db = "localhost";
+$host_db = "localhost";
 $user_db = "root";
 $pass_db = "msroot";
 $db_name = "etla_com";

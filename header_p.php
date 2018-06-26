@@ -1,5 +1,5 @@
-<?php 
-	error_reporting();
+<?php
+	//error_reporting(1);
 	date_default_timezone_set('America/Monterrey');
 ?>
 <html lang="es">
@@ -8,7 +8,7 @@
 	<meta charset = "utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="js/jquery.min.js"></script>
-	
+
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/validate.js"></script>
 	<script src="js/myJs.js"></script>
@@ -24,10 +24,10 @@
 	<link rel="stylesheet" href="css/daterangepicker.css" />
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon.png">
 	<script>
-$(document).ready(function() { 
-    $("table") 
-    .tablesorter({widthFixed: true, widgets: ['zebra']}) 
-    .tablesorterPager({container: $("#pager")}); 
-});		
+$(document).ready(function() {
+    $("table")
+    .tablesorter({widthFixed: true, widgets: ['zebra']})
+    .tablesorterPager({container: $("#pager")});
+});
 	</script>
 </head>

@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 session_start();
 echo "<title>";
 echo "Evidencias | Folio";
@@ -10,24 +10,22 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 	echo "<div class='container-fluid'>";
 
 	include 'menu.php';
-
+	
 	echo "<div class='row'>";
 		echo "<div class='col-md-4'></div>";
 		echo "<div class='col-md-4 text-left'>";
 		$bol = false;
-		
 		if(isset($_POST['FOLIO'])){
 			$bol = true;
 			$_SESSION['Embarque'] = $_POST['FOLIO'];
-			$_SESSION['FECHA_EMBARQUE'] = $_POST['Fecha'];
+			$_SESSION['FECHA_EMBARQUE'] = $_POST['FECHA_EMBARQUE'];
 			$_SESSION['TRANSPORTISTA'] = $_POST['TRANSPORTISTA'];	
 		}
 		if ($bol){
 			echo "Embarque: <b>" . $_SESSION['Embarque'] . "</b><br>";
-			echo "Fecha: <b>" . $_POST['Fecha'] . "</b><br>";
+			echo "Fecha: <b>" . $_SESSION['FECHA_EMBARQUE'] . "</b><br>";
 			echo "Transportista: <b>" . $_SESSION['TRANSPORTISTA'] . "</b><br>";
 		}
-
 		echo "</div>";
 		echo "<div class='col-md-3 text-left'>";
 		// echo "<br>";
@@ -49,7 +47,6 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 			echo isset($_POST['Folio']) ? $_SESSION['nFolio'] = $_POST['Folio'] : $_SESSION['nFolio'];
 			echo "</b><br>";
 			echo "Fecha: <b>";
-			echo $_POST['Fecha'];
 				echo isset($_POST['Fecha_embarque']) ? $_SESSION['nFecha_embarque'] = $_POST['Fecha_embarque'] : $_SESSION['nFecha_embarque'];
 			echo "</b><br>";
 			echo "Transportista: <b>";
@@ -84,7 +81,7 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 				INNER JOIN S_SHIPT_ROW AS SHR ON E.fk_ship_row = SHR.id_row
 				AND SHR.ID_SHIPT = SH.ID_SHIPT
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper
-				WHERE SHR.id_shipt = " . $_SESSION['nFolio'] . " " ;
+			WHERE";
 		if (isset($_REQUEST['daterange'])){
 			echo "<div class='text-right'>";
 				echo "<br>FILTRO APLICADO:";
@@ -94,13 +91,12 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 						echo "<input type='submit' class='btn btn-danger' value='Eliminar Filtro'>";
 					echo "</form>";
 			echo "</div>";
-			$sql = $sql . " AND NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12) AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
+			$sql = $sql . " NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12) AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
 		}
 		else{
-			$sql = $sql . " AND NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12)";
+			$sql = $sql . " NOT E.b_del AND (SH.fk_shipt_st=11 OR SH.fk_shipt_st=12)";
 		}
 			$sql = $sql . " GROUP BY E.id_evidence;";
-
 		$result = $conexion->query($sql);
 		
 		

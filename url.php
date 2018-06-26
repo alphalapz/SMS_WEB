@@ -52,7 +52,7 @@
 					$_SESSION['fake'] = true;
 					$_SESSION['loggedin'] = true;
 					$_SESSION['rol'] = 99;
-					$_SESSION['name'] = "Chofers: " . $row['Nombre_chofer'];
+					$_SESSION['name'] = "Chofer: " . $row['Nombre_chofer'];
 					$_SESSION['Embarque'] = $row['Embarque'];
 					$_SESSION['fecha_embarque'] = $row['fecha_embarque'];
 					redirectPHP('folios.php');

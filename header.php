@@ -1,5 +1,5 @@
-<?php 
-	error_reporting();
+<?php
+	//error_reporting(1);
 	date_default_timezone_set('America/Monterrey');
 ?>
 <html lang="es">
@@ -17,7 +17,7 @@
 	<script type="text/javascript" src="js/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/myCss.css">
-	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" media="screen" />	
+	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
 	<link rel="stylesheet" href="css/daterangepicker.css" />
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon.png">
@@ -34,15 +34,15 @@
 			});
 
 			/* Apply fancybox to multiple items */
-			
+
 			$("a.group").fancybox({
 				'transitionIn'	:	'elastic',
 				'transitionOut'	:	'elastic',
-				'speedIn'		:	600, 
-				'speedOut'		:	200, 
+				'speedIn'		:	600,
+				'speedOut'		:	200,
 				'overlayShow'	:	false
 			});
-			
+
 		});
 	</script>
 </head>

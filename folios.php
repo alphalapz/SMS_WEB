@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	session_start();
 	require 'functionsphp.php';
 	require 'database.php';
@@ -39,15 +39,16 @@
 				if (isset($_POST['web_key']))
 				$_SESSION['key'] = $_POST['web_key'];
 			}
+//				DE.name AS Destino,
 
-			$sql = "
+		$sql = "
 			SELECT
 				SHR.delivery_id AS delivery_id,
 				SH.number AS Embarque,
 				SH.id_shipt AS ID,
 				SHR.id_row AS Folio,
 				SHR.bol_id AS Remisión,
-				DE.name AS Destino,
+				cu.name AS Cliente,
 				SHR.bales AS Pacas,
 				SHR.m2 AS m2,
 				SHR.kg AS kg
@@ -57,7 +58,7 @@
 				INNER JOIN au_cus AS cu ON cu.id_cus = SHR.fk_customer
 				INNER JOIN su_destin AS DE ON DE.id_destin = SHR.fk_destin
 				INNER JOIN su_shipper AS SHIP ON SHIP.id_shipper = SH.fk_shipper
-			WHERE 
+			WHERE
 				SH.web_key='" . $_SESSION['key'] . "' 
 			ORDER BY SHR.bol_id;";# LIMIT $startrow, $numOfrows;";
 
