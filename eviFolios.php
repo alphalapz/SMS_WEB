@@ -36,20 +36,21 @@ if (!isset($_REQUEST['bf1dc'])){
 				INNER JOIN SS_SHIPT_ST AS SHS ON SH.fk_shipt_st=SHS.id_shipt_st
 			WHERE
 				NOT SH.b_del AND NOT E.B_DEL ";
+				
 		switch ($_REQUEST['bf1dc']){
-			case S_ST_POR_ACEPTAR:
+			case FILTER_POR_ACEPTAR:
 					$topTable = "Órdenes de embarque por aprobar";
 					$sql = $sql . " AND fk_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
-			case S_ST_ACEPTADO:
+			case FILTER_POR_ACEPTADAS:
 					$topTable = "Órdenes de embarque aprobadas";
 					$sql = $sql . " AND fk_shipt_st=" . S_ST_ACEPTADO;
 				break;
-			case S_ST_ALL:
+			case FILTER_POR_ALL:
 					$topTable = "Todas las órdenes de embarque";
 					$sql = $sql ." AND (fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR fk_shipt_st=" . S_ST_ACEPTADO . ")";
 				break;
-			default;
+			default:
 		}
 // Applying Date Range Filter
 if ($_REQUEST['bf1dc'] != 1){

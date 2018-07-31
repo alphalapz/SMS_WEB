@@ -26,6 +26,33 @@ include 'const.php';
 				break;
 		}
 	}
+	/**
+	 *	$fromfile: Path la imagen a convertir
+	 *	$tofile: ruta y / o nombre de la imagen a convertir  
+	 *	$type: Tipo de archivo para convertir:
+	 *	 *	"gif": Convertir a una imagen gif.
+	 *	 *	"jpeg": convierte a una imagen jpeg.
+	 *	 *	"png": Convertir a una imagen png.
+	 *	$calidad: Calidad de imagen (0-99).
+	 *	 *	Sólo usado si el $type es jpeg o png.
+	 *	 *	0 = calidad más baja y tamaño más pequeño.
+	 *	 *	99 = La mejor calidad y el tamaño más grande.
+	 *
+	 */
+	function PIPHP_ImageConvert($fromfile, $tofile, $type, $quality){
+	   $contents = file_get_contents($fromfile);
+	   $image    = imagecreatefromstring($contents);
+
+	   switch($type)
+	   {
+		  case "gif":  imagegif($image,  $tofile); 
+			break;
+		  case "jpeg": imagejpeg($image, $tofile, $quality); 
+			break;
+		  case "png":  imagepng($image,  $tofile, round(9 - $quality * .09)); 
+			break;
+	   }
+	}
 
 	/*
 	 *	RETURN the value of the initial row for the queries when paginate apply
@@ -37,6 +64,53 @@ include 'const.php';
 		  return (int)$_GET['startrow'];
 		}
 	}
+
+	/*
+	 *	Start Transaction
+	 */
+	function beginTransaction(){
+		mysql_query($conexion, "START TRANSACTION");
+	}
+
+	/*
+	 * Commit Transaction
+	 */
+	function commitTransaction($conexion){
+		mysql_query($conexion, "COMMIT");
+	}
+	
+	/*
+	 * Rollback 'commit'
+	 */
+	function rollbackTransaction($conexion){
+		mysql_query($conexion, "ROLLBACK");
+	}
+	
+	/*
+	 * Full transaction
+	 * $sqlArray = array();
+	 * array_push($sqlArray, "MYQUERY#;");
+	 * crateTransaction ($conexion, $sqlArray);
+	 */
+	function crateTransaction ($conexion, $sqlArray){
+        mysqli_query($conexion, "START TRANSACTION");
+
+        for ($i = 0; $i < count ($sqlArray); $i++){
+            if (!mysqli_query ($conexion, $sqlArray[$i])){
+                echo 'Error! Info: <' . mysqli_error ($conexion) . '> Query: <' . $sqlArray[$i] . '>';
+                break;
+            }   
+        }
+
+        if ($i == count ($sqlArray)){
+            mysqli_query($conexion, "COMMIT");
+            return 1;
+        }
+        else {
+            mysqli_query($conexion, "ROLLBACK");
+            return 0;
+        }
+    }
 
 	/*
 	 *	RETURN the value of the range for the queries when paginate apply
@@ -263,7 +337,6 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		else {
 			$sql .= " GROUP BY SH.ID_SHIPT;";
 		}
-		echo $sql;
 		return $sql;
 	}
 
@@ -274,8 +347,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	 *	$endDate = The final date range
 	 *	$type = OPT_ONE		:::::	Evidence for uploading
 	 *  $type = OPT_TWO		:::::	Evidence for accepting
-	 *  $type = OPT_THREE	:::::	Accepted evidence
-	 *  $type = OPT_FOUR	:::::	All the evidences
+	 *  $type = OPT_THREE	:::::	All the evidences
 	 */
 	function applyFilterCredit($type, $starDate, $endDate){
 		$starDate = str_replace('-', ':', $starDate);
@@ -302,19 +374,19 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 					AND SHR.ID_SHIPT = SH.ID_SHIPT
 				INNER JOIN SU_SHIPPER AS SHP ON SHP.id_shipper = SH.fk_shipper ";
 		switch ($type) {
-			case OPT_ONE:
+			case FILTER_POR_ACEPTAR:
 			echo "<h1 class='text-center'>Evidencias por aprobar:</h1><br>";
 				$sql .= "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
-			case OPT_TWO:
+			case FILTER_POR_ACEPTADAS:
 			echo "<h1 class='text-center'>Evidencias aprobadas:</h1><br>";
 				$sql .= "
 				WHERE
 					NOT E.b_del AND SH.fk_shipt_st=" . S_ST_ACEPTADO;
 				break;
-			case OPT_THREE:
+			case FILTER_POR_ALL:
 			echo "<h1 class='text-center'>Todas las evidencias:</h1><br>";
 				$sql .= "
 				WHERE
@@ -428,11 +500,11 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		$aNames = array();
 		$formAction = $hidden + $actionPosition;
 		$info_field = $result->fetch_fields();
+		$cont = 0;
+
 		echo " <table id='myTable' class='table table-hover table-condensed myTable tablesorter'>";
 			echo " <thead>";
 				echo "<tr>";
-			$cont = 0;
-
 		foreach ($info_field as $valor) {
 			$cont++;
 			if ($cont <= $hidden){
@@ -489,6 +561,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 
 	}
 
+
 	/*
 	 *Validate if all remissions have at least one evidence
 	 */
@@ -497,6 +570,8 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	 ###############################################
 	function validateIfAllRemissionsHadEvidence($folio){
 		require 'database.php';
+		mysqli_autocommit($conexion, false);
+
 		$sql = "
 			SELECT id_row
 			FROM S_SHIPT_ROW
@@ -511,6 +586,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		while ($row2 = $result2->fetch_array(MYSQLI_NUM)){
 			array_push($evidenceArray,$row2[0]);
 		}
+
 		while ($row = $result->fetch_array(MYSQLI_NUM)){
 			$found = false;
 			if(in_array($row[0],$evidenceArray)){
@@ -522,6 +598,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 				break;
 			}
 		}
+
 		if($completo){
 			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_POR_ACEPTAR . " WHERE id_shipt=$folio";
 			$result = $conexion->query($sql);
@@ -531,6 +608,8 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 			$sql = "UPDATE S_SHIPT SET fk_shipt_st = " . S_ST_LIBERADO . " WHERE id_shipt=$folio";
 			$result = $conexion->query($sql);
 		}
+
+		mysqli_commit($conexion);
 	}
 
 	/*
@@ -546,8 +625,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		FROM S_EVIDENCE AS EVI
 			INNER JOIN S_SHIPT_ROW AS SHR ON EVI.fk_ship_row = SHR.id_row
 			INNER JOIN S_SHIPT AS SH ON EVI.fk_ship_ship = SH.id_shipt
-		WHERE EVI.id_evidence=$del_id
-
+		WHERE EVI.id_evidence = $del_id
 			AND NOT SH.b_del
 		GROUP BY EVI.id_evidence;";
 
@@ -558,11 +636,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		$remision = $row[1];
 		$status = $row[2];
 
-		$sql = "
-		SELECT b_accept
-		FROM S_EVIDENCE
-		WHERE NOT b_del
-			AND fk_ship_ship=$folio;";
+		$sql = "SELECT b_accept	FROM S_EVIDENCE	WHERE NOT b_del	AND fk_ship_ship=$folio;";
 
 		$result = $conexion->query($sql);
 		$evidenceArray = array();

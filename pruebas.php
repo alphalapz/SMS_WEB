@@ -1,6 +1,8 @@
 <?php
 require 'database.php';
 require 'functionsphp.php';
+require 'imgFunctions.php';
+error_reporting(1);
 ?>
 <title>
 Pruebas
@@ -8,30 +10,45 @@ Pruebas
 <div class="container-fluid">
 <?php
 include 'header.php';
-
+    $imgTrans = new imageTransform();
+    $imgTrans->sourceFile = "C:/1/imgIN.jpg";
+    $imgTrans->targetFile = "C:/1/imgOut.jpg";
+    $imgTrans->resizeToHeight = 1200;
+    // $imgTrans->resizeToWeight = 800;
+	
+	if ($imgTrans->resize() == true){
+		echo "TODO OK";
+		$canSave = true;
+	}
+	else{
+		echo "FALLO!";
+		$canSave = false;
+	}
+	echo "<pre>";
+	var_dump($imgTrans);
+	echo "</pre>";
 ?>
 	<div class="row">
 		<div class="col-md-4">
 		</div>
 		<div class="col-md-4">
 		<?php
-			$sql="
-			SELECT
-				SH.number AS FOLIO,
-				SH.shipt_date AS FECHA_EMBARQUE,
-				SHS.name AS ESTATUS,
-				SHP.name AS TRANSPORTISTA
-			FROM S_SHIPT AS SH
-				INNER JOIN SU_SHIPPER AS SHP ON SH.fk_shipper= SHP.id_shipper
-				INNER JOIN SS_SHIPT_ST AS SHS ON SH.fk_shipt_st=SHS.id_shipt_st
-			WHERE NOT SH.b_del AND (fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR fk_shipt_st=2);";
-			$result = $conexion->query($sql);
-			$buttons = array(array('Ver Remisiones', 'btn btn-primary', "<span class='glyphicon glyphicon-eye-open'></span>&nbsp;&nbsp;&nbsp;Ver"));
-			$form = array('eviPorFolio.php','');
+			// $sql="
+			// ##PENDIENTES *LIBERADOS* y *POR ACEPTAR*\n
+			// SELECT
+				// SH.number AS FOLIO,
+				// SH.shipt_date AS FECHA_EMBARQUE,
+				// SHS.name AS ESTATUS,
+				// SHP.name AS TRANSPORTISTA
+			// FROM S_SHIPT AS SH
+				// INNER JOIN SU_SHIPPER AS SHP ON SH.fk_shipper= SHP.id_shipper
+				// INNER JOIN SS_SHIPT_ST AS SHS ON SH.fk_shipt_st=SHS.id_shipt_st
+			// WHERE NOT SH.b_del AND (fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR fk_shipt_st=2);";
+			// echo $sql;
+			// $result = $conexion->query($sql);
+			// $info_field = $result->fetch_fields();
+			// printTable($result);
 
-			$info_field = $result->fetch_fields();
-			$index = array();
-			printTableC($result, $buttons, $form, null, $index, 2);
 		?>
 		</div>
 		<div class="col-md-4">
