@@ -3,6 +3,7 @@ session_start();
 include 'header.php';
 require 'database.php';
 require 'functionsphp.php';
+require 'imgFunctions.php';
 require_once 'mail/mail.php';
 
 if (!isset($_SESSION['loggedin'])){
@@ -31,7 +32,7 @@ else{
 						$target_path_dir = "uploads/" . date("Y") . "/" . $_SESSION['Folio'] . "_" . $_SESSION['Remision'] . "/";
 						$sql = "SELECT COUNT(*) FROM S_EVIDENCE WHERE fk_ship_ship='" . $_SESSION['Folio'] . "' AND fk_ship_row = '" . $_SESSION['delivery_id'] . "';";
 						$result = $conexion->query($sql);
-						
+
 						$row = $result->fetch_array(MYSQLI_NUM);
 
 						if ($row[0] != 0){
@@ -41,7 +42,10 @@ else{
 							$j = 0;
 						}
 
-						for ($i = 0; $i < count($_FILES['file']['name']); $i++) {//loop to get individual element from the array
+							$txtResult .= "<br>i: <pre><t>" . $_FILES['file']['name'] . "</pre>";
+						for ($i = 0; $i < count($_FILES['file']['name']) - 1; $i++) {//loop to get individual element from the array
+							$txtResult .= "<br>i: <br><t>" . $i . "<br>";
+							$txtResult .= "<br>limit i: <br><t>" . count($_FILES['file']['name']) . "<br>";
 							$target_path = "";
 							$validextensions = array("jpeg", "jpg", "png", "gif","pdf");  //Extensions which are allowed
 							$ext = explode('.', basename($_FILES['file']['name'][$i]));//explode file name from dot(.) for get extension file
@@ -64,6 +68,7 @@ else{
 								$_SESSION['CONTENT'] = $txtResult;
 								redirectPHP('result.php');
 							}
+
 							$location = $_SERVER['DOCUMENT_ROOT'] . "/" . basename(__DIR__). "/" . $target_path;
 
 							if(file_exists($location)){
@@ -88,22 +93,23 @@ else{
 							}
 							else{
 								$imgTrans = new imageTransform();
-								$imgTrans->sourceFile = "C:/1/imgIN.jpg";
-								$imgTrans->targetFile = "C:/1/imgOut.jpg";
+								$imgTrans->sourceFile = $_FILES['file']['tmp_name'][$i];
+								$imgTrans->targetFile = $target_path;
 								$imgTrans->resizeToHeight = 1200;
 								// $imgTrans->resizeToWeight = 800;
-								
+								$txtResult .= $target_path;
 								if ($imgTrans->resize() == true){
 									$canSave = true;
 								}
 							}
-							
-							if ($canSave)) {//if file moved correctly to uploads folder
+
+							if ($canSave) {//if file moved correctly to uploads folder
 								$sql = "SELECT id_evidence as num FROM S_EVIDENCE ORDER BY id_evidence DESC LIMIT 1;";
 								$result = $conexion->query($sql);
+								$txtResult .= "<br>PRIMERA: <br><t>" . $sql . "<br>";
+								
 								$row = $result->fetch_array(MYSQLI_ASSOC);
 								$max = $row['num'] + 1;
-
 								$sql = "
 									INSERT INTO S_EVIDENCE 
 										(id_evidence, file_name, file_location, b_accept, b_del, b_sys, 
@@ -114,13 +120,15 @@ else{
 										. $_SESSION['Folio'] . "," . $_SESSION['delivery_id'] . "," . $_SESSION['user_id'] . ", 1, 1, " . $_SESSION['user_id'] . ",
 										NOW(),NOW(),NOW(),NOW())";
 								$result = $conexion->query($sql);
-								$txtResult = $txtResult . '<td><span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
-								$txtResult = $txtResult . "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></td>";
 								
+								$txtResult .= '<td><span class="noerror">Evidencia subida de manera correcta!!.</span><br/><br/>';
+								$txtResult .= "<a id='single_image' href='" . $target_path . "'><img src=" . $target_path . " class='deleteClass'/></a><br></td>";
+								$txtResult .= "<br>Segunda: <br><t>" . $sql . "<br>";
 								//Verify if all Remissions had evidences with status B_ACCEPT equal to 1.
 								$flag = validateIfAllRemissionsHadEvidence($_SESSION['Folio']);
-								sendMail($row3[1]);
-								if ($flag){	
+								//sendMail($row3[1]);
+								if ($flag){
+									$txtResult .= "<br>Commit: <br><t>TRUE<br>";
 									mysqli_commit($conexion);
 								}
 							} else {//if file was not moved.
@@ -128,9 +136,9 @@ else{
 							}
 						}
 					} else {
-						$txtResult = $txtResult . "Ya ha sido cargada una evidencia de manera previa.";
+						$txtResult .= "Ya ha sido cargada una evidencia de manera previa.";
 					}
-					$txtResult = $txtResult . 	"</table>
+					$txtResult .= "</table>
 												</div>
 													<div class=\"col-md-2\">
 													</div>

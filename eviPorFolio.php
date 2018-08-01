@@ -50,7 +50,7 @@ canAccess($_SESSION['loggedin'], 'eviPorFolio.php', $_SESSION['rol']);
 			echo "</b><br>";
 			echo "Fecha: <b>";
 			echo $_POST['Fecha'];
-				echo isset($_POST['Fecha_embarque']) ? $_SESSION['nFecha_embarque'] = $_POST['Fecha_embarque'] : $_SESSION['nFecha_embarque'];
+				// echo isset($_POST['Fecha_embarque']) ? $_SESSION['nFecha_embarque'] = $_POST['Fecha_embarque'] : $_SESSION['nFecha_embarque'];
 			echo "</b><br>";
 			echo "Transportista: <b>";
 				echo isset($_POST['Transportista']) ? $_SESSION['nTransportista'] = $_POST['Transportista'] : $_SESSION['nTransportista'];

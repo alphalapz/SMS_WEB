@@ -26,6 +26,7 @@ include 'const.php';
 				break;
 		}
 	}
+
 	/**
 	 *	$fromfile: Path la imagen a convertir
 	 *	$tofile: ruta y / o nombre de la imagen a convertir  
@@ -588,9 +589,9 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		}
 
 		while ($row = $result->fetch_array(MYSQLI_NUM)){
-			$found = false;
+			
 			if(in_array($row[0],$evidenceArray)){
-				$found = true;
+				
 			}
 			else{
 				echo "<br> El folio # : " . $row[0] . " esta pendiente de que se suban evidencias :(";
@@ -610,6 +611,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 		}
 
 		mysqli_commit($conexion);
+		return true;
 	}
 
 	/*
@@ -667,7 +669,7 @@ echo "<input type='text' class='hidden' name='" . $name . "' value='" . $value .
 	 *	Send Message via console use it for debug
 	 */
 	function debug_to_console( $data ) {
-		$output = $data;
+		$output = trim($data);
 		if ( is_array( $output ) ){
 			$output = implode( ',', $output);
 		}

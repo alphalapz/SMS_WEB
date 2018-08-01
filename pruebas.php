@@ -10,23 +10,55 @@ Pruebas
 <div class="container-fluid">
 <?php
 include 'header.php';
-    $imgTrans = new imageTransform();
-    $imgTrans->sourceFile = "C:/1/imgIN.jpg";
-    $imgTrans->targetFile = "C:/1/imgOut.jpg";
-    $imgTrans->resizeToHeight = 1200;
-    // $imgTrans->resizeToWeight = 800;
+    // $imgTrans = new imageTransform();
+    // $imgTrans->sourceFile = "C:/1/imgIn_.jpg";
+    // $imgTrans->targetFile = "C:/1/imgIn_.jpg";
+    // $imgTrans->resizeToHeight = 1200;
+    // // $imgTrans->resizeToWeight = 800;
+	// if ($imgTrans->resize() == true){
+		// echo "TODO OK";
+		// $canSave = true;
+	// }
+	// else{
+		// echo "FALLO!";
+		// $canSave = false;
+	// }
+	// echo "<pre>";
+	// var_dump($imgTrans);
+	// echo "</pre>";
+	set_time_limit(0);
+	$directorio = opendir("uploads/2018/"); //ruta actual
 	
-	if ($imgTrans->resize() == true){
-		echo "TODO OK";
-		$canSave = true;
+	$array = array();
+	$array2 = array();
+	
+
+	while ($archivo = readdir($directorio)){ //obtenemos un archivo y luego otro sucesivamente
+		if (is_dir($archivo)){//verificamos si es o no un directorio
+			// echo "[".$archivo . "]<br />"; //de ser un directorio lo envolvemos entre corchetes
+		}else{
+			// echo $archivo . "<br />";
+			array_push($array,$archivo);
+		}
 	}
-	else{
-		echo "FALLO!";
-		$canSave = false;
+				$imgTrans = new imageTransform();
+
+	for ( $j = 0; $j <= sizeof($array); $j++){
+		$currentDir= array_pop($array);
+		$directorio = opendir("uploads/2018/" . $currentDir); //ruta actual
+		while ($archivo = readdir($directorio)){ //obtenemos un archivo y luego otro sucesivamente
+			if (strlen($archivo)> 3){
+				// echo "SubFile: " . $archivo . "<br />";
+				$imgTrans->sourceFile = "uploads/2018/" . $currentDir . "/" . $archivo;
+				$imgTrans->targetFile = "uploads/2018/" . $currentDir . "/" . $archivo;
+				$imgTrans->resizeToHeight = 1200;
+				$imgTrans->resize();
+				// echo "<br>uploads/2018/" . "<br>CurrentDir: $currentDir <br> file: $archivo";
+				// exit();
+			}
+		}
 	}
-	echo "<pre>";
-	var_dump($imgTrans);
-	echo "</pre>";
+
 ?>
 	<div class="row">
 		<div class="col-md-4">

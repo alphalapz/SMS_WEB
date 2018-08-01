@@ -1,4 +1,4 @@
-﻿<?php
+﻿﻿<?php
 session_start();
 echo "<title>";
 echo "Evidencias | Folio";
@@ -22,7 +22,9 @@ if (!isset($_REQUEST['bf1dc'])){
 //				INNER JOIN SS_SHIPT_ST AS SHS ON SH.fk_shipt_st=SHS.id_shipt_st
 //			WHERE
 //				NOT SH.b_del AND ";
+
 		$sql = "SELECT
+
 				SH.number AS Folio,
 				SH.shipt_date AS Fecha,
 				SHS.name AS Estatus,
@@ -36,46 +38,49 @@ if (!isset($_REQUEST['bf1dc'])){
 				INNER JOIN SS_SHIPT_ST AS SHS ON SH.fk_shipt_st=SHS.id_shipt_st
 			WHERE
 				NOT SH.b_del AND NOT E.B_DEL ";
-				
 		switch ($_REQUEST['bf1dc']){
 			case FILTER_POR_ACEPTAR:
 					$topTable = "Órdenes de embarque por aprobar";
-					$sql = $sql . " AND fk_shipt_st=" . S_ST_POR_ACEPTAR;
+					$sql .=  " AND fk_shipt_st=" . S_ST_POR_ACEPTAR;
 				break;
 			case FILTER_POR_ACEPTADAS:
 					$topTable = "Órdenes de embarque aprobadas";
-					$sql = $sql . " AND fk_shipt_st=" . S_ST_ACEPTADO;
+					$sql .=  " AND fk_shipt_st=" . S_ST_ACEPTADO;
 				break;
 			case FILTER_POR_ALL:
 					$topTable = "Todas las órdenes de embarque";
-					$sql = $sql ." AND (fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR fk_shipt_st=" . S_ST_ACEPTADO . ")";
+					$sql .= " AND (fk_shipt_st=" . S_ST_POR_ACEPTAR . " OR fk_shipt_st=" . S_ST_ACEPTADO . ")";
 				break;
-			default:
+			default;
 		}
+
 // Applying Date Range Filter
-if ($_REQUEST['bf1dc'] != 1){
+if ($_REQUEST['bf1dc'] != FILTER_POR_ACEPTAR){
 	if (isset($_REQUEST['daterange'])){
 		$startDate = substr($_REQUEST['daterange'],0,10);
 		$endDate = substr($_REQUEST['daterange'],-10);
-		$sql = $sql . " AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
+		$sql .=  " AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
 	}else{
 		$currentDate = date("Y/m/d");
 		$startDate = date("Y-m-t", strtotime($currentDate));
 		$endDate = date("Y-m-1", strtotime($currentDate));
-		$sql = $sql . " AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
+		$sql .=  " AND SH.shipt_date BETWEEN '$startDate' AND '$endDate'";
 	}
 }
 //
-			$sql = $sql . " GROUP BY SH.number ORDER BY SH.number;";
+			$sql .=  " GROUP BY SH.number ORDER BY SH.number;";
 echo "<div class=\"container-fluid\">";
 
 	include 'menu.php';
 
 	echo "<div class='row'>";
 	echo "<div class='col-md-2'>";
+
+
+
 	echo "</div>";
 	echo "<div class='col-md-8'>";
-//echo $sql;
+//debug echo here!
 		$result = $conexion->query($sql);
 	echo "<h1 class='text-center hidden-xs hidden-sm'>" . $topTable."</h1><br>";
 	echo "<h2 class='text-center hidden-md hidden-lg'>" . $topTable."</h2><br>";
@@ -98,10 +103,12 @@ echo "<div class=\"container-fluid\">";
 		echo "<div class='col-md-2'>";
 		echo "<br>";
 		//	Date Range Step 1 of 3
-		if($_REQUEST['bf1dc'] != S_ST_POR_ACEPTAR){
+		if($_REQUEST['bf1dc'] != 1){
 			echo "<form action='eviFolios.php?bf1dc=" . $_REQUEST['bf1dc'] . "' method='POST' >";
 				echo "<input type='text' class='myBtnInputTex' name='daterange' value='' />";
-				echo "&nbsp;<button type='submit' class='btn btn-success'><span class='glyphicon glyphicon-play'></span>&nbsp;&nbsp;Aplicar</button>";
+				echo "&nbsp;<button type='submit' class='btn btn-success'><span class='glyphicon glyphicon-
+
+play'></span>&nbsp;&nbsp;Aplicar</button>";
 			echo "</form>";
 		}
 			//	Date Range Step 2 of 3

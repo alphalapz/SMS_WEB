@@ -51,7 +51,6 @@
 				AND SHR.id_shipt=" . $_SESSION['id'] . " 
 				AND NOT EVI.b_del 
 			GROUP BY SHR.bol_id, EVI.file_name ORDER BY EVI.b_accept DESC;";
-
 			$result = $conexion->query($sql);
 			if ($result->num_rows > 0){
 				
@@ -93,13 +92,8 @@
 		<?php 
 			##//Verify if the status is 0 or 1 for insert or not the button of Load Images\\##
 			
-			$sql = "
-			SELECT 
-				SH.fk_shipt_st 
-			FROM S_SHIPT_ROW AS SHR 
-				INNER JOIN S_SHIPT AS SH ON SH.id_shipt = SHR.id_shipt 
-			WHERE 
-				SHR.bol_id=" . $_SESSION['Remision'] . " AND SH.id_shipt=" . $_SESSION['id'] . ";";
+			$sql = "SELECT SH.fk_shipt_st FROM S_SHIPT_ROW AS SHR INNER JOIN S_SHIPT AS SH ON SH.id_shipt = SHR.id_shipt 
+					WHERE SHR.bol_id=" . $_SESSION['Remision'] . " AND SH.id_shipt=" . $_SESSION['id'] . ";";
 			$result = $conexion->query($sql);
 			$row = $result->fetch_array(MYSQLI_NUM);
 

@@ -446,12 +446,14 @@ class imageTransform
             }
             // writes image 
 				$this->output_target_image($targetImageIdentifier);
+				echo "<br>ok";
 				return true;
             // if new image resource could not be created 
         } else {
             // return false 
             // note that we do not set the error level as it has been already set 
             // by the create_image_from_source_file() method earlier 
+			echo "<br>fail";
             return false;
         }
     }
